@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace iapi
 {
-    public class Class1
+    class CoreHandler
     {
     }
 }
