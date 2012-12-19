@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iapi", "iapi\iapi.csproj", "{6A435D08-AC90-4897-8178-1AA2606AC6A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "driver", "driver\driver.csproj", "{4B959610-9F19-47A8-8A51-7498D20C0104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,10 @@ Global
 		{6A435D08-AC90-4897-8178-1AA2606AC6A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A435D08-AC90-4897-8178-1AA2606AC6A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A435D08-AC90-4897-8178-1AA2606AC6A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B959610-9F19-47A8-8A51-7498D20C0104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B959610-9F19-47A8-8A51-7498D20C0104}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B959610-9F19-47A8-8A51-7498D20C0104}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B959610-9F19-47A8-8A51-7498D20C0104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

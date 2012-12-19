@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>f3626821-73c0-45b5-8492-4fa840d0ccd1</ProjectGuid>
+    <ProjectGuid>{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>test</RootNamespace>
@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\lib\moq\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -50,9 +53,27 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ChatMessageUtilities\ChatMessageTest.cs" />
+    <Compile Include="ServerInterface\CommHandlerTest.cs" />
+    <Compile Include="Server\CommLayerTest.cs" />
+    <Compile Include="CoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FullCoreTest.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\core\core.csproj">
+      <Project>{66f21ec9-ebd1-4ed9-bb51-571ffa6c6225}</Project>
+      <Name>core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\iapi\iapi.csproj">
+      <Project>{6a435d08-ac90-4897-8178-1aa2606ac6a9}</Project>
+      <Name>iapi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

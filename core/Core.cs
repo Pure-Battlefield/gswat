@@ -4,36 +4,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using core.ChatMessageUtilities;
+using core.ServerInterface;
+using core.Server;
 
 namespace core
 {
+    // Handler for mocking ChatEvents
+    public delegate void ChatEventHandler(object sender, ChatEventArgs e);
+
     public class Core
     {
-        Queue<ChatMessage> _messageQueue;
-        CommHandler _commHandler;
-        IAPIHandler _iapiHandler;
+        // Current queue of messages
+        public Queue<ChatMessage> MessageQueue;
 
-        public Core()
+        // CommHandler that this Core instance is hooked to
+        public ICommHandler CommHandler;
+
+        // IAPIHandler that this Core instance is hooked to
+        public IAPI IAPIHandler;
+
+        /// <summary>
+        /// Constructs an instance of Core
+        /// Registers handlers to catch ChatMessage events
+        /// </summary>
+        /// <param name="comm">CommHandler object to register with</param>
+        public Core(ICommHandler comm)
         {
-            _commHandler = new CommHandler();
-            _iapiHandler = new IAPIHandler();
-            _messageQueue = new Queue<ChatMessage>();
-            _commHandler.MessageReceived += new CommHandler.ServerMessageEventHandler(MessageHandler);
+            CommHandler = comm;
+            IAPIHandler = new IAPI();
+            MessageQueue = new Queue<ChatMessage>();
+            if (comm != null)
+            {
+                CommHandler.CoreListener += new ChatEventHandler(MessageHandler);
+            }
         }
 
-        public void MessageHandler(ChatMessage msg)
+        /// <summary>
+        /// Process a received message
+        /// Triggered by CommHandler object
+        /// </summary>
+        /// <param name="msg">ChatMessage to process</param>
+        public void MessageHandler(object sender, ChatEventArgs e)
         {
-            _messageQueue.Enqueue(msg);
+            if (e != null)
+            {
+                MessageQueue.Enqueue(e.ServerMessage);
+            }
         }
 
+        /// <summary>
+        /// Retrieves the current message queue
+        /// </summary>
+        /// <returns>Current queue of ChatMessage objects</returns>
         public Queue<ChatMessage> GetMessageQueue()
         {
-            return _messageQueue;
-        }
-
-        public void Test()
-        {
-            _commHandler.Test();
+            return MessageQueue;
         }
     }
 }
