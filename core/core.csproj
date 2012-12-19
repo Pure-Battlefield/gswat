@@ -39,7 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ChatMessageUtilities\ChatMessage.cs" />
+    <Compile Include="ServerInterface\CommHandler.cs" />
+    <Compile Include="ServerInterface\ICommHandler.cs" />
+    <Compile Include="Server\ICommLayer.cs" />
+    <Compile Include="Server\IServerMock.cs" />
+    <Compile Include="Server\CommLayer.cs" />
+    <Compile Include="Server\ChatEventArgs.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="IAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
