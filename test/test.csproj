@@ -59,6 +59,7 @@
     <Compile Include="CoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FullCoreTest.cs" />
+    <Compile Include="Server\RConn\RConnPacketTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.csproj">

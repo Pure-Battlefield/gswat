@@ -49,6 +49,11 @@
     <Compile Include="Core.cs" />
     <Compile Include="IAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\RConn\PlainTextLogin.cs" />
+    <Compile Include="Server\RConn\BinaryEmission.cs" />
+    <Compile Include="Server\RConn\Packet.cs" />
+    <Compile Include="Server\RConn\Protocol.cs" />
+    <Compile Include="Server\RConn\Word.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
