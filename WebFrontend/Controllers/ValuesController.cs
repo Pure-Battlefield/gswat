@@ -16,8 +16,8 @@ namespace WebFrontend.Controllers
         public string Get()
         {
             //return new string[] { "value1", "value2" };
-            Core c = Core.StaticInstance;
-            Queue<ChatMessage> q = c.GetMessageQueue();
+            //Core c = Core.StaticInstance;
+            Queue<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
             return q.Dequeue().ToString();
         }
 

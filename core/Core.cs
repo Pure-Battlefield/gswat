@@ -14,9 +14,6 @@ namespace core
 
     public class Core
     {
-        // Static handler for web service access
-        public static Core StaticInstance;
-
         // Current queue of messages
         public Queue<ChatMessage> MessageQueue;
 
@@ -39,10 +36,6 @@ namespace core
             if (comm != null)
             {
                 CommHandler.CoreListener += new ChatEventHandler(MessageHandler);
-            }
-            if (StaticInstance == null)
-            {
-                StaticInstance = this;
             }
         }
 
