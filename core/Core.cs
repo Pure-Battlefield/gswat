@@ -56,9 +56,9 @@ namespace core
         /// Retrieves the current message queue
         /// </summary>
         /// <returns>Current queue of ChatMessage objects</returns>
-        public Queue<ChatMessage> GetMessageQueue()
+        public IList<ChatMessage> GetMessageQueue()
         {
-            return MessageQueue;
+            return MessageQueue.ToList<ChatMessage>();
         }
     }
 }

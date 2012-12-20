@@ -25,8 +25,8 @@ namespace test
             mockHandler.Raise(m => m.CoreListener += null, new ChatEventArgs(msg));
 
             // Retrieve message queue and check for message
-            Queue<ChatMessage> msgList = c.GetMessageQueue();
-            ChatMessage msgResult = msgList.Dequeue();
+            IList<ChatMessage> msgList = c.GetMessageQueue();
+            ChatMessage msgResult = msgList[0];
             Assert.AreEqual(msgResult.Speaker, msg.Speaker);
             Assert.AreEqual(msgResult.Timestamp, msg.Timestamp);
             Assert.AreEqual(msgResult.Text, msg.Text);
@@ -44,7 +44,7 @@ namespace test
             mockHandler.Raise(m => m.CoreListener += null, new ChatEventArgs(msg));
 
             // Retrieve message queue and check for empty queue
-            Queue<ChatMessage> msgList = c.GetMessageQueue();
+            IList<ChatMessage> msgList = c.GetMessageQueue();
             Assert.AreEqual(msgList.Count, 0);
 
             // Check for empty CommHandler reference in Core
