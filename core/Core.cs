@@ -21,9 +21,6 @@ namespace core
         // CommHandler that this Core instance is hooked to
         public ICommHandler CommHandler;
 
-        // IAPIHandler that this Core instance is hooked to
-        public IAPI IAPIHandler;
-
         /// <summary>
         /// Constructs an instance of Core
         /// Registers handlers to catch ChatMessage events
@@ -32,7 +29,6 @@ namespace core
         public Core(ICommHandler comm)
         {
             CommHandler = comm;
-            IAPIHandler = new IAPI();
             MessageQueue = new Queue<ChatMessage>();
             if (comm != null)
             {
