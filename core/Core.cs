@@ -9,6 +9,7 @@ using core.Server;
 
 namespace core
 {
+    // COMMENT!
     // Handler for mocking ChatEvents
     public delegate void ChatEventHandler(object sender, ChatEventArgs e);
 
