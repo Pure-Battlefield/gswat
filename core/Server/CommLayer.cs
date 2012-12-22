@@ -1,29 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using core.Server.RConn.Commands;
-using System.Net.Sockets;
-using System.Net;
-
+using core.ChatMessageUtilities;
 using core.Server.RConn;
+using core.Server.RConn.Commands;
 
 namespace core.Server
 {
     public class CommLayer : ICommLayer
     {
+        private Protocol RconProtocol { get; set; }
         public event ChatEventHandler CommHandler;
-        private Protocol _rconProtocol { get; set; }
 
         public void Connect(string address, int port, string password)
         {
-            _rconProtocol = new Protocol(address, port, password);
+            RconProtocol = new Protocol(address, port, password);
 
-            _rconProtocol.PacketEvent += RConnPacketHandler;
+            RconProtocol.PacketEvent += RConnPacketHandler;
 
-            _rconProtocol.Connect();
+            RconProtocol.Connect();
+        }
+
+
+        public void NotifyCommHandler(object sender, ChatEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Close()
+        {
+            throw new NotImplementedException();
         }
 
         private void RConnPacketHandler(Packet args)
@@ -31,27 +35,18 @@ namespace core.Server
             //Version .1 we only want player.onChat, admin.say, and admin.yell
             if (OnChat.IsOnChat(args))
             {
-                OnChat chat = new OnChat(args);
-                ChatMessageUtilities.ChatMessage message = new ChatMessageUtilities.ChatMessage();
-                message.Timestamp = DateTime.Now;
-                message.Text = chat.Text;
-                message.Speaker = chat.SoldierName;
+                var chat = new OnChat(args);
+                var message = new ChatMessage
+                    {
+                        MessageTimeStamp = DateTime.Now,
+                        Text = chat.Text,
+                        Speaker = chat.SoldierName,
+                        MessageType = chat.TargetPlayers
+                    };
 
-                ChatEventArgs chatArgs = new ChatEventArgs(message);
+                var chatArgs = new ChatEventArgs(message);
                 CommHandler(this, chatArgs);
             }
-        }
-
-        
-
-        public void NotifyCommHandler(object sender, ChatEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void close()
-        {
-            throw new NotImplementedException();
         }
     }
 }

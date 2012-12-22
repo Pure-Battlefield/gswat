@@ -1,9 +1,9 @@
-﻿using core.ChatMessageUtilities;
-using core.Server;
-using core.ServerInterface;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
+using core.ChatMessageUtilities;
+using core.Server;
+using core.ServerInterface;
 
 namespace test.ServerInterface
 {
@@ -22,7 +22,7 @@ namespace test.ServerInterface
             commHandler.CoreListener += delegate { raised = true; };
 
             // Raise MessageSent event in Server
-            ChatMessage msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message");
+            var msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message", "all");
             mockCommLayer.Raise(m => m.CommHandler += null, new ChatEventArgs(msg));
 
             // Check if CommHandler was successfully raised in response

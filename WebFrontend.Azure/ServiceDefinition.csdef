@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="WebFrontend.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-10.1.8">
-  <WebRole name="WebFrontend" vmsize="Small">
+  <WebRole name="WebFrontend" vmsize="ExtraSmall">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -14,5 +14,11 @@
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <LocalResources>
+      <LocalStorage name="DiagnosticStore" sizeInMB="20000" cleanOnRoleRecycle="false" />
+    </LocalResources>
+    <ConfigurationSettings>
+      <Setting name="StorageConnectionString" />
+    </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>

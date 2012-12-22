@@ -1,11 +1,11 @@
-﻿using core.ChatMessageUtilities;
-using core.Server;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
+using core.ChatMessageUtilities;
+using core.Server;
+using test.Properties;
 
-using core.Server.RConn;
-namespace test.CommMock
+namespace test.Server
 {
     [TestClass]
     public class CommLayerTest
@@ -22,7 +22,7 @@ namespace test.CommMock
             commLayer.CommHandler += delegate { raised = true; };
 
             // Raise MessageSent event in Server
-            ChatMessage msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message");
+            var msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message", "all");
             mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
 
             // Check if CommHandler was successfully raised in response
@@ -35,16 +35,11 @@ namespace test.CommMock
             // Create objects
             var commLayer = new CommLayer();
 
-            // Subscribe to CommHandler
-            bool raised = false;
-            commLayer.CommHandler += delegate { raised = true; };
-
             //This test succeeds if it logs in, any actual chat messages are only for
             //ad-hoc debugging.
-            commLayer.Connect(Properties.Settings.Default.ServerIP, 
-                                Properties.Settings.Default.ServerPort,
-                                Properties.Settings.Default.ServerPassword);
-            
+            commLayer.Connect(Settings.Default.ServerIP,
+                              Settings.Default.ServerPort,
+                              Settings.Default.ServerPassword);
         }
 
         [TestMethod]

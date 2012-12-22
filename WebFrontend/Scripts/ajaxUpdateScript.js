@@ -4,7 +4,7 @@
 
     window.setInterval(function () {
         xmlHttpRequestMessageQueue();
-    }, 10000 /* A.K.A. 10 seconds */);
+    }, 1000 /* A.K.A. 1 second */);
 }
 
 
@@ -26,7 +26,7 @@ function xmlHttpRequestMessageQueue() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             document.getElementById("chatContents").innerHTML = xmlhttp.responseText;
         }
-    }
+    };
     xmlhttp.open("GET", "/api/values", true);
     xmlhttp.send();
 }
