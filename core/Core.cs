@@ -9,6 +9,7 @@ using core.Server;
 
 namespace core
 {
+    // COMMENT!
     // Handler for mocking ChatEvents
     public delegate void ChatEventHandler(object sender, ChatEventArgs e);
 
@@ -20,9 +21,6 @@ namespace core
         // CommHandler that this Core instance is hooked to
         public ICommHandler CommHandler;
 
-        // IAPIHandler that this Core instance is hooked to
-        public IAPI IAPIHandler;
-
         /// <summary>
         /// Constructs an instance of Core
         /// Registers handlers to catch ChatMessage events
@@ -31,7 +29,6 @@ namespace core
         public Core(ICommHandler comm)
         {
             CommHandler = comm;
-            IAPIHandler = new IAPI();
             MessageQueue = new Queue<ChatMessage>();
             if (comm != null)
             {
@@ -56,9 +53,9 @@ namespace core
         /// Retrieves the current message queue
         /// </summary>
         /// <returns>Current queue of ChatMessage objects</returns>
-        public Queue<ChatMessage> GetMessageQueue()
+        public IList<ChatMessage> GetMessageQueue()
         {
-            return MessageQueue;
+            return MessageQueue.ToList<ChatMessage>();
         }
     }
 }
