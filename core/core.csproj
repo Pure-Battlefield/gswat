@@ -65,10 +65,24 @@
     <Compile Include="ServerInterface\ICommHandler.cs" />
     <Compile Include="Server\ICommLayer.cs" />
     <Compile Include="Server\IServerMock.cs" />
-    <Compile Include="Server\CommLayer.cs" />
+    <Compile Include="Server\CommLayerMock.cs" />
     <Compile Include="Server\ChatEventArgs.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\RConn\Commands\HashedLogin.cs" />
+    <Compile Include="Server\RConn\Commands\EnableEvents.cs" />
+    <Compile Include="Server\RConn\Commands\RequestVersion.cs" />
+    <Compile Include="Server\RConn\Commands\ResponseInvalid.cs" />
+    <Compile Include="Server\RConn\Commands\ResponseUnknown.cs" />
+    <Compile Include="Server\RConn\Commands\ResponseOK.cs" />
+    <Compile Include="Server\RConn\Commands\OnChat.cs" />
+    <Compile Include="Server\RConn\Commands\PlainTextLogin.cs" />
+    <Compile Include="Server\RConn\BinaryEmission.cs" />
+    <Compile Include="Server\CommLayer.cs" />
+    <Compile Include="Server\RConn\Packet.cs" />
+    <Compile Include="Server\RConn\PlayerSubset.cs" />
+    <Compile Include="Server\RConn\Protocol.cs" />
+    <Compile Include="Server\RConn\Word.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -76,6 +90,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

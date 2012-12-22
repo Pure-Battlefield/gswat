@@ -1,3 +1,10 @@
+#Ignore the settings file w/ test server credentials.  
+#We don't want those getting out in public on GitHub
+test/Properties/Settings.settings
+test/Properties/Settings.Designer.cs
+WebFrontEnd/Properties/Settings.settings
+WebFrontEnd/Properties/Settings.Designer.cs
+
 #################
 ## Eclipse
 #################

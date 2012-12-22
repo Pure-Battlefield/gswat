@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Storage;
 using core;
 using core.Server;
-using Moq;
 using core.ServerInterface;
-using core.ChatMessageUtilities;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Diagnostics;
 
 namespace WebFrontend
 {
@@ -32,9 +22,10 @@ namespace WebFrontend
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var mockServer = new Mock<IServerMock>();
-            var commLayer = new CommLayer(mockServer.Object);
+            var commLayer = new CommLayer();
             var commHandler = new CommHandler(commLayer);
+
+            /*
             var blah = RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString");
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blah);
             GlobalStaticVars.StaticRole = new Core(commHandler);
@@ -42,6 +33,12 @@ namespace WebFrontend
             mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
             msg = new ChatMessage(new DateTime(2013, 11, 19), "Webs", "This is another test message");
             mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
+             */
+            commLayer.Connect(Properties.Settings.Default.ServerIP, 
+                                Properties.Settings.Default.ServerPort, 
+                                Properties.Settings.Default.ServerPassword);
+
+            GlobalStaticVars.StaticRole = new Core(commHandler);
         }
     }
 }

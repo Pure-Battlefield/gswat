@@ -54,11 +54,18 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ChatMessageUtilities\ChatMessageTest.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ServerInterface\CommHandlerTest.cs" />
     <Compile Include="Server\CommLayerTest.cs" />
     <Compile Include="CoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FullCoreTest.cs" />
+    <Compile Include="Server\RConn\PlainTextLoginTest.cs" />
+    <Compile Include="Server\RConn\RConnPacketTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.csproj">
@@ -69,7 +76,13 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
