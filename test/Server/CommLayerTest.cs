@@ -45,9 +45,6 @@ namespace test.CommMock
                                 Properties.Settings.Default.ServerPort,
                                 Properties.Settings.Default.ServerPassword);
             
-
-            // Check if CommHandler was successfully raised in response
-            Assert.IsTrue(raised);
         }
 
         [TestMethod]

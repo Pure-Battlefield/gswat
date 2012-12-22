@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 
+using System.Threading;
+
 using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
@@ -34,7 +36,7 @@ namespace core.Server.RConn
         }
 
         
-        public async void Connect() 
+        public void Connect() 
         {
             try
             {
@@ -54,7 +56,8 @@ namespace core.Server.RConn
                     throw new Exception("Events not enabled.");
                 }
 
-                await ReceivePackets();
+                Thread messagePump = new Thread(this.ReceivePackets);
+                messagePump.Start();
             }
             catch (SocketException)
             {
@@ -63,7 +66,7 @@ namespace core.Server.RConn
         }
 
 
-        public Task ReceivePackets()
+        public void ReceivePackets()
         {
             while (_sock.Connected)
             {
@@ -81,9 +84,6 @@ namespace core.Server.RConn
                     }
                 }
             }
-
-            // Not interested in the return value of this function.
-            return null;
         }
 
         private void HandleResponse(Packet packet)
