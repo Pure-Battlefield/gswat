@@ -27,7 +27,7 @@ namespace test
             IList<ChatMessage> msgList = c.GetMessageQueue();
             ChatMessage msgResult = msgList[0];
             Assert.AreEqual(msgResult.Speaker, msg.Speaker);
-            Assert.AreEqual(msgResult.Timestamp, msg.Timestamp);
+            Assert.AreEqual(msgResult.MessageTimeStamp, msg.MessageTimeStamp);
             Assert.AreEqual(msgResult.Text, msg.Text);
         }
 

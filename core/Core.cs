@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Storage.Table;
 using core.ChatMessageUtilities;
 using core.ServerInterface;
 using core.Server;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Diagnostics;
 
 namespace core
 {
@@ -21,11 +26,15 @@ namespace core
         // CommHandler that this Core instance is hooked to
         public ICommHandler CommHandler;
 
+        // CloudQueue object for ChatMessages
+        public CloudTable MessageTable;
+
         /// <summary>
         /// Constructs an instance of Core
         /// Registers handlers to catch ChatMessage events
         /// </summary>
         /// <param name="comm">CommHandler object to register with</param>
+        /// <param name="storageConnectionString">Storage string for Azure settings</param>
         public Core(ICommHandler comm)
         {
             CommHandler = comm;
@@ -34,6 +43,10 @@ namespace core
             {
                 CommHandler.CoreListener += new ChatEventHandler(MessageHandler);
             }
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            CloudTableClient queueClient = storageAccount.CreateCloudTableClient();
+            MessageTable = queueClient.GetTableReference("chatMessages");
+            MessageTable.CreateIfNotExists();
         }
 
         /// <summary>
@@ -45,7 +58,10 @@ namespace core
         {
             if (e != null)
             {
-                MessageQueue.Enqueue(e.ServerMessage);
+                //MessageQueue.Enqueue(e.ServerMessage);
+                //CloudQueueMessage msg = new CloudQueueMessage(e.ServerMessage.SerializeMe());
+                TableOperation insertOp = TableOperation.Insert(e.ServerMessage);
+                MessageTable.Execute(insertOp);
             }
         }
 
@@ -55,7 +71,18 @@ namespace core
         /// <returns>Current queue of ChatMessage objects</returns>
         public IList<ChatMessage> GetMessageQueue()
         {
-            return MessageQueue.ToList<ChatMessage>();
+            string rowKey = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
+            TableQuery<ChatMessage> query =
+                new TableQuery<ChatMessage>().Where(TableQuery.GenerateFilterCondition("PartitionKey",
+                                                                                       QueryComparisons.Equal,
+                                                                                       "PlayerChatMessage"));
+            IList<ChatMessage> list = new List<ChatMessage>();
+            foreach (ChatMessage msg in MessageTable.ExecuteQuery(query))
+            {
+                list.Add(msg);
+            }
+            return list;
+            //return MessageQueue.ToList<ChatMessage>();
         }
     }
 }

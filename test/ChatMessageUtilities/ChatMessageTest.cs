@@ -13,7 +13,7 @@ namespace test.ChatMessageUtilities
             ChatMessage msg = new ChatMessage();
             Assert.AreEqual(msg.Speaker, "");
             Assert.AreEqual(msg.Text, "");
-            Assert.AreEqual<DateTime>(msg.Timestamp, new DateTime());
+            Assert.AreEqual<DateTime>(msg.MessageTimeStamp, new DateTime());
         }
 
         [TestMethod]
@@ -22,7 +22,7 @@ namespace test.ChatMessageUtilities
             ChatMessage msg = new ChatMessage(new DateTime(), null, null);
             Assert.AreEqual(msg.Speaker, "");
             Assert.AreEqual(msg.Text, "");
-            Assert.AreEqual<DateTime>(msg.Timestamp, new DateTime());
+            Assert.AreEqual<DateTime>(msg.MessageTimeStamp, new DateTime());
         }
 
         [TestMethod]

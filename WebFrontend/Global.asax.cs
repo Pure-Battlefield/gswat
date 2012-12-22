@@ -6,11 +6,15 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Storage;
 using core;
 using core.Server;
 using Moq;
 using core.ServerInterface;
 using core.ChatMessageUtilities;
+using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Diagnostics;
 
 namespace WebFrontend
 {
@@ -31,10 +35,12 @@ namespace WebFrontend
             var mockServer = new Mock<IServerMock>();
             var commLayer = new CommLayer(mockServer.Object);
             var commHandler = new CommHandler(commLayer);
+            var blah = RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString");
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blah);
             GlobalStaticVars.StaticRole = new Core(commHandler);
             ChatMessage msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message, generated at server-mock level");
             mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
-            msg = new ChatMessage(new DateTime(2011, 11, 19), "Webs", "This is another test message");
+            msg = new ChatMessage(new DateTime(2013, 11, 19), "Webs", "This is another test message");
             mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
         }
     }
