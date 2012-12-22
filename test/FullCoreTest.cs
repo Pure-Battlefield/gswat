@@ -21,8 +21,8 @@ namespace test
             Core c = new Core(commHandler);
             ChatMessage msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message");
             mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
-            Queue<ChatMessage> msgList = c.GetMessageQueue();
-            ChatMessage msgResult = msgList.Dequeue();
+            IList<ChatMessage> msgList = c.GetMessageQueue();
+            ChatMessage msgResult = msgList[0];
             Assert.AreEqual(msgResult.Speaker, msg.Speaker);
             Assert.AreEqual(msgResult.Timestamp, msg.Timestamp);
             Assert.AreEqual(msgResult.Text, msg.Text);

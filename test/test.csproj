@@ -72,10 +72,6 @@
       <Project>{66f21ec9-ebd1-4ed9-bb51-571ffa6c6225}</Project>
       <Name>core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\iapi\iapi.csproj">
-      <Project>{6a435d08-ac90-4897-8178-1aa2606ac6a9}</Project>
-      <Name>iapi</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

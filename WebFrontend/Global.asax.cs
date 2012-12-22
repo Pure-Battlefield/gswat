@@ -34,6 +34,8 @@ namespace WebFrontend
             GlobalStaticVars.StaticRole = new Core(commHandler);
             ChatMessage msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message, generated at server-mock level");
             mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
+            msg = new ChatMessage(new DateTime(2011, 11, 19), "Webs", "This is another test message");
+            mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
         }
     }
 }

@@ -12,13 +12,14 @@ namespace WebFrontend.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        //public IEnumerable<string> Get()
         public string Get()
         {
-            //return new string[] { "value1", "value2" };
-            //Core c = Core.StaticInstance;
-            Queue<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
-            return q.Dequeue().ToString();
+            IList<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
+            string output = "";
+            foreach (ChatMessage msg in q) {
+                output += msg.ToString() + "<br>";
+            }
+            return output;
         }
 
         // GET api/values/5

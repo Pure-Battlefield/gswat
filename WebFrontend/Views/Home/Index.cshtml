@@ -12,6 +12,25 @@
             <hgroup class="title">
                 <h1>Server Chat</h1>
             </hgroup>
+            <!-- Start edits by Conner -->
+            <img src="/Images/chatRefreshBtn.png" onclick="xmlHttpRequestMessageQueue();refreshChatPopup()" alt="Refresh Chatlogs" title="Refresh Chat log" id="chatRefreshBtn" />
+            <script type="text/javascript">
+                // Toggle button image 
+                // TODO Do this in a better way?
+                document.getElementById('chatRefreshBtn').onmouseover = function () {
+                    document.getElementById('chatRefreshBtn').src = '/Images/chatRefreshBtn_hover.png'
+                };
+                document.getElementById('chatRefreshBtn').onmouseout = function () {
+                    document.getElementById('chatRefreshBtn').src = '/Images/chatRefreshBtn.png'
+                };
+
+                function refreshChatPopup() {
+                    $('#chatRefreshPopup').fadeIn('slow', function () {
+                        return $(this).delay(3500).fadeOut('slow');
+                    });
+                }
+            </script>
+            <!-- End edits by Conner -->
         </div>
     </section>
     <section class="content-wrapper main-content clear-fix" id="chatContents">
@@ -38,4 +57,9 @@
             </li>
         </ol>
     </section>
+    <!-- Start edits by Conner -->
+    <div id="chatRefreshPopup" style="display:none">
+        Chat refreshed.
+    </div>
+    <!-- End edits by Conner -->
 </div>

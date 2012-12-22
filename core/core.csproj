@@ -47,7 +47,6 @@
     <Compile Include="Server\CommLayerMock.cs" />
     <Compile Include="Server\ChatEventArgs.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="IAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\RConn\Commands\HashedLogin.cs" />
     <Compile Include="Server\RConn\Commands\EnableEvents.cs" />
