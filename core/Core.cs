@@ -78,12 +78,30 @@ namespace core
         ///     Returns a larger chunk of messages from TableStore
         /// </summary>
         /// <param name="numMessages">Number of messages to return</param>
-        /// <returns></returns>
+        /// <returns>List of last numMessages messages</returns>
         public IEnumerable<ChatMessage> GetMoreMessages(int numMessages)
         {
             var query =
                 new TableQuery<ChatMessage>().Take(numMessages);
-            return _messageTable.ExecuteQuery(query).ToList();
+            var output = _messageTable.ExecuteQuery(query).ToList();
+            output.Reverse();
+            return output;
+        }
+
+        /// <summary>
+        ///     Returns the messages from a given day
+        /// </summary>
+        /// <param name="date">DateTime object specifying day (all other properties such as Time are ignored)</param>
+        /// <returns>List of messages on that day</returns>
+        public IEnumerable<ChatMessage> GetMessagesFromDate(DateTime date)
+        {
+            var query =
+                new TableQuery<ChatMessage>().Where(TableQuery.GenerateFilterCondition("PartitionKey",
+                                                                                       QueryComparisons.Equal,
+                                                                                       date.Date.ToString("yyyyMMdd")));
+            var output = _messageTable.ExecuteQuery(query).ToList();
+            output.Reverse();
+            return output;
         } 
     }
 }
