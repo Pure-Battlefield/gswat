@@ -3,9 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using core.Server.RConn;
 using core.Server.RConn.Commands;
 
-using System.Net.Sockets;
-using System.Net;
-
 namespace test.Server.RConn
 {
     [TestClass]
@@ -14,36 +11,40 @@ namespace test.Server.RConn
         [TestMethod]
         public void PacketFlagTest()
         {
-            Packet packet = new Packet();
+            var packet = new Packet();
 
-            Assert.IsTrue(packet.IsResponse != packet.IsRequest, "Packet is a request and a response, after initialization!");
-            Assert.IsTrue(packet.OriginatesFromServer != packet.OrigininatesFromClient, "Packet is from server and client, after initialization!");
+            Assert.IsTrue(packet.IsResponse != packet.IsRequest,
+                          "Packet is a request and a response, after initialization!");
+            Assert.IsTrue(packet.OriginatesFromServer != packet.OrigininatesFromClient,
+                          "Packet is from server and client, after initialization!");
 
             packet.IsResponse = !packet.IsResponse;
             packet.OrigininatesFromClient = !packet.OrigininatesFromClient;
 
             Assert.IsTrue(packet.IsResponse != packet.IsRequest, "Packet is a request and a response, after flipping!");
-            Assert.IsTrue(packet.OriginatesFromServer != packet.OrigininatesFromClient, "Packet is from server and client, after flipping!");
+            Assert.IsTrue(packet.OriginatesFromServer != packet.OrigininatesFromClient,
+                          "Packet is from server and client, after flipping!");
 
             packet.IsResponse = packet.IsResponse;
             packet.OrigininatesFromClient = packet.OrigininatesFromClient;
 
             Assert.IsTrue(packet.IsResponse != packet.IsRequest, "Packet is a request and a response!");
-            Assert.IsTrue(packet.OriginatesFromServer != packet.OrigininatesFromClient, "Packet is from server and client!");
+            Assert.IsTrue(packet.OriginatesFromServer != packet.OrigininatesFromClient,
+                          "Packet is from server and client!");
         }
 
         [TestMethod]
         public void PacketWordCountTest()
         {
-            Packet packet = new Packet();
+            var packet = new Packet();
 
-            Word word1 = new Word();
-            Word word2 = new Word();
-            Word word3 = new Word();
+            var word1 = new Word();
+            var word2 = new Word();
+            var word3 = new Word();
 
-            word1.Content = new char[] { 'h', 'e', 'l', 'l', 'o' };
-            word2.Content = new char[] { ' ', ',', ' ' };
-            word3.Content = new char[] { 'w', 'o', 'r', 'l', 'd' };
+            word1.Content = new[] {'h', 'e', 'l', 'l', 'o'};
+            word2.Content = new[] {' ', ',', ' '};
+            word3.Content = new[] {'w', 'o', 'r', 'l', 'd'};
 
             Assert.IsTrue(packet.WordCount == 0);
             Assert.IsTrue(packet.Size == 12, "Packet size, expected: {0}, actual: {1}", 12, packet.Size);
@@ -67,15 +68,15 @@ namespace test.Server.RConn
         [TestMethod]
         public void PacketEmissionTest()
         {
-            Packet packet = new Packet();
+            var packet = new Packet();
 
-            Word word1 = new Word();
-            Word word2 = new Word();
-            Word word3 = new Word();
+            var word1 = new Word();
+            var word2 = new Word();
+            var word3 = new Word();
 
-            word1.Content = new char[] { 'h', 'e', 'l', 'l', 'o' };
-            word2.Content = new char[] { ' ', ',', ' ' };
-            word3.Content = new char[] { 'w', 'o', 'r', 'l', 'd' };
+            word1.Content = new[] {'h', 'e', 'l', 'l', 'o'};
+            word2.Content = new[] {' ', ',', ' '};
+            word3.Content = new[] {'w', 'o', 'r', 'l', 'd'};
 
             packet.Words.Add(word1);
             packet.Words.Add(word2);
@@ -83,13 +84,14 @@ namespace test.Server.RConn
 
             byte[] bytes = packet.Emit();
 
-            Assert.IsTrue(bytes.Length == packet.Size, "Packet binary size, expected: {0}, actual: {1}", packet.Size, bytes.Length);
+            Assert.IsTrue(bytes.Length == packet.Size, "Packet binary size, expected: {0}, actual: {1}", packet.Size,
+                          bytes.Length);
         }
-        
+
         [TestMethod]
         public void ByteToUInt32Test()
         {
-            byte[] bytes = new byte[] { 0xff, 0x00, 0x00, 0x00 };
+            var bytes = new byte[] {0xff, 0x00, 0x00, 0x00};
             UInt32 result = bytes.BytesToUInt();
 
             Assert.IsTrue(result == 0xff, "Byte to UInt32, expected: {0}, actual: {1}", 0xff, result);
@@ -99,22 +101,21 @@ namespace test.Server.RConn
         public void ByteToWordTest()
         {
             //                           size: 4,              'h',   'e', 'y',    'o', '\0'
-            byte[] bytes = new byte[] { 0x04, 0x00, 0x00, 0x00, 0x48, 0x45, 0x59, 0x4f, 0x00 };
-            Word word = bytes.BytesToWord(0);
+            var bytes = new byte[] {0x04, 0x00, 0x00, 0x00, 0x48, 0x45, 0x59, 0x4f, 0x00};
+            Word word = bytes.BytesToWord();
 
             Assert.IsTrue(word.Size == 4, "Byte to Word, expected size: {0}, actual: {1}", 4, word.Size);
-            char[] expected = new char[] { 'H', 'E', 'Y', 'O' };
+            var expected = new[] {'H', 'E', 'Y', 'O'};
 
             Assert.IsTrue(CompareCharArrays(expected, word.Content),
-                        "Byte to Word, expected content: {0}, actual: {1}",
-                        expected, word.Content);
-
+                          "Byte to Word, expected content: {0}, actual: {1}",
+                          expected, word.Content);
         }
 
         [TestMethod]
         public void ByteToPacketTest()
         {
-            PlainTextLogin login = new PlainTextLogin("DEADBEEF");
+            var login = new PlainTextLogin("DEADBEEF");
 
             byte[] bytes = login.Emit();
 

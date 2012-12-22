@@ -61,6 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatMessageUtilities\ChatMessage.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ServerInterface\CommHandler.cs" />
     <Compile Include="ServerInterface\ICommHandler.cs" />
     <Compile Include="Server\ICommLayer.cs" />
@@ -86,6 +91,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

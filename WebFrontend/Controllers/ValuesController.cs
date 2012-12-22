@@ -9,10 +9,10 @@ namespace WebFrontend.Controllers
         // GET api/values
         public string Get()
         {
-            IList<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
+            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
             string output = "";
             foreach (ChatMessage msg in q) {
-                output += msg.ToString() + "<br>";
+                output += msg + "<br>";
             }
             return output;
         }

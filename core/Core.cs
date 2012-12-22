@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.ChatMessageUtilities;
-using core.ServerInterface;
 using core.Server;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Diagnostics;
+using core.ServerInterface;
 
 namespace core
 {
@@ -20,69 +16,74 @@ namespace core
 
     public class Core
     {
-        // Current queue of messages
-        public Queue<ChatMessage> MessageQueue;
-
         // CommHandler that this Core instance is hooked to
-        public ICommHandler CommHandler;
+        private readonly ICommHandler _commHandler;
 
-        // CloudQueue object for ChatMessages
-        public CloudTable MessageTable;
+        // CloudTable object for ChatMessages
+        private readonly CloudTable _messageTable;
+
+        // Current queue of messages
+        private Queue<ChatMessage> _messageQueue;
 
         /// <summary>
-        /// Constructs an instance of Core
-        /// Registers handlers to catch ChatMessage events
+        ///     Constructs an instance of Core
+        ///     Registers handlers to catch ChatMessage events
         /// </summary>
         /// <param name="comm">CommHandler object to register with</param>
-        /// <param name="storageConnectionString">Storage string for Azure settings</param>
         public Core(ICommHandler comm)
         {
-            CommHandler = comm;
-            MessageQueue = new Queue<ChatMessage>();
+            _commHandler = comm;
+            _messageQueue = new Queue<ChatMessage>();
             if (comm != null)
             {
-                CommHandler.CoreListener += new ChatEventHandler(MessageHandler);
+                _commHandler.CoreListener += MessageHandler;
             }
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            CloudStorageAccount storageAccount =
+                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             CloudTableClient queueClient = storageAccount.CreateCloudTableClient();
-            MessageTable = queueClient.GetTableReference("chatMessages");
-            MessageTable.CreateIfNotExists();
+            _messageTable = queueClient.GetTableReference("chatMessages");
+            _messageTable.CreateIfNotExists();
         }
 
         /// <summary>
-        /// Process a received message
-        /// Triggered by CommHandler object
+        ///     Process a received message
+        ///     Triggered by CommHandler object
         /// </summary>
-        /// <param name="msg">ChatMessage to process</param>
-        public void MessageHandler(object sender, ChatEventArgs e)
+        /// <param name="sender">Object that sent the event</param>
+        /// <param name="e">ChatEventArgs object containing the ChatMessage</param>
+        private void MessageHandler(object sender, ChatEventArgs e)
         {
             if (e != null)
             {
-                //MessageQueue.Enqueue(e.ServerMessage);
-                //CloudQueueMessage msg = new CloudQueueMessage(e.ServerMessage.SerializeMe());
+                _messageQueue.Enqueue(e.ServerMessage);
+                if (_messageQueue.Count > 10)
+                {
+                    _messageQueue.Dequeue();
+                }
                 TableOperation insertOp = TableOperation.Insert(e.ServerMessage);
-                MessageTable.Execute(insertOp);
+                _messageTable.Execute(insertOp);
             }
         }
 
         /// <summary>
-        /// Retrieves the current message queue
+        ///     Retrieves the current message queue
         /// </summary>
         /// <returns>Current queue of ChatMessage objects</returns>
-        public IList<ChatMessage> GetMessageQueue()
+        public IEnumerable<ChatMessage> GetMessageQueue()
         {
-            string rowKey = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
-            TableQuery<ChatMessage> query =
-                new TableQuery<ChatMessage>().Where(TableQuery.GenerateFilterCondition("PartitionKey",
-                                                                                       QueryComparisons.Equal,
-                                                                                       "PlayerChatMessage"));
-            IList<ChatMessage> list = new List<ChatMessage>();
-            foreach (ChatMessage msg in MessageTable.ExecuteQuery(query))
-            {
-                list.Add(msg);
-            }
-            return list;
-            //return MessageQueue.ToList<ChatMessage>();
+            return _messageQueue.ToList<ChatMessage>();
         }
+
+        /// <summary>
+        ///     Returns a larger chunk of messages from TableStore
+        /// </summary>
+        /// <param name="numMessages">Number of messages to return</param>
+        /// <returns></returns>
+        public IEnumerable<ChatMessage> GetMoreMessages(int numMessages)
+        {
+            var query =
+                new TableQuery<ChatMessage>().Take(numMessages);
+            return _messageTable.ExecuteQuery(query).ToList();
+        } 
     }
 }
