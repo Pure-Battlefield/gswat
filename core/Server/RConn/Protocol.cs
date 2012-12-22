@@ -1,26 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Net;
 using System.Net.Sockets;
-
 using System.Threading;
-
 using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
 {
     public class Protocol
     {
-        private UInt32 _sequenceCounter { get; set; }
-        private Socket _sock { get; set; }
-        private string _password { get; set; }
-
         public delegate void PacketEventHandler(Packet args);
-        public event PacketEventHandler PacketEvent;
 
         public Protocol(string address, int port, string password)
         {
@@ -30,20 +18,26 @@ namespace core.Server.RConn
                 throw new ArgumentException("Invalid address specified");
             }
 
-            _sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _sock.Connect(addr, port);
-            _password = password;
+            Sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Sock.Connect(addr, port);
+            Password = password;
         }
 
-        
-        public void Connect() 
+        private UInt32 SequenceCounter { get; set; }
+        private Socket Sock { get; set; }
+        private string Password { get; set; }
+
+        public event PacketEventHandler PacketEvent;
+
+
+        public void Connect()
         {
             try
             {
-                Packet login = new PlainTextLogin(_password);
+                Packet login = new PlainTextLogin(Password);
                 SendRequest(login);
 
-                if (!ResponseOK.IsPacketResponseOK(ReceivePacket()))
+                if (!ResponseOk.IsPacketResponseOk(ReceivePacket()))
                 {
                     throw new Exception("Password incorrect.");
                 }
@@ -51,12 +45,12 @@ namespace core.Server.RConn
                 Packet enableEvents = new EnableEvents();
                 SendRequest(enableEvents);
 
-                if (!ResponseOK.IsPacketResponseOK(ReceivePacket()))
+                if (!ResponseOk.IsPacketResponseOk(ReceivePacket()))
                 {
                     throw new Exception("Events not enabled.");
                 }
 
-                Thread messagePump = new Thread(this.ReceivePackets);
+                var messagePump = new Thread(ReceivePackets);
                 messagePump.Start();
             }
             catch (SocketException)
@@ -66,9 +60,9 @@ namespace core.Server.RConn
         }
 
 
-        public void ReceivePackets()
+        private void ReceivePackets()
         {
-            while (_sock.Connected)
+            while (Sock.Connected)
             {
                 Packet packet = ReceivePacket();
 
@@ -91,7 +85,7 @@ namespace core.Server.RConn
             PacketEvent(packet);
         }
 
-        public void HandleRequest(Packet packet)
+        private void HandleRequest(Packet packet)
         {
             //All requests we'll be getting for version .1 will be events.
             SendOkResponse(packet);
@@ -100,10 +94,10 @@ namespace core.Server.RConn
 
         private Packet ReceivePacket()
         {
-            byte[] buffer = new byte[Packet.MAX_SIZE];
-            int received = _sock.Receive(buffer, Packet.HEADER_SIZE, SocketFlags.None);
+            var buffer = new byte[Packet.MaxSize];
+            Sock.Receive(buffer, Packet.HeaderSize, SocketFlags.None);
             UInt32 size = buffer.BytesToUInt(4);
-            _sock.Receive(buffer, Packet.HEADER_SIZE, (int)size-Packet.HEADER_SIZE, SocketFlags.None);
+            Sock.Receive(buffer, Packet.HeaderSize, (int) size - Packet.HeaderSize, SocketFlags.None);
 
             return buffer.BytesToPacket();
         }
@@ -112,8 +106,8 @@ namespace core.Server.RConn
         {
             packet.OrigininatesFromClient = true;
             packet.IsRequest = true;
-            packet.SequenceNumber = _sequenceCounter++;
-            _sock.Send(packet.Emit());
+            packet.SequenceNumber = SequenceCounter++;
+            Sock.Send(packet.Emit());
         }
 
         private void SendOkResponse(Packet packet)
@@ -121,7 +115,7 @@ namespace core.Server.RConn
             packet.OrigininatesFromClient = packet.OrigininatesFromClient;
             packet.IsRequest = false;
             packet.SequenceNumber = packet.SequenceNumber;
-            _sock.Send(packet.Emit());
+            Sock.Send(packet.Emit());
         }
     }
 }

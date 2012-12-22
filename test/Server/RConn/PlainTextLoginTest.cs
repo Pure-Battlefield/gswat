@@ -1,9 +1,7 @@
-﻿using System;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using core.Server.RConn;
 using core.Server.RConn.Commands;
+using test.Properties;
 
 namespace test.Server.RConn
 {
@@ -11,15 +9,15 @@ namespace test.Server.RConn
     public class PlainTextLoginText
     {
         /// <summary>
-        /// An exception will be thrown if Connect() fails.
+        ///     An exception will be thrown if Connect() fails.
         /// </summary>
         [TestMethod]
         public void ProtocolLoginTest()
         {
             Packet first = new HashedLogin();
-            Protocol protocol = new Protocol(Properties.Settings.Default.ServerIP, 
-                                                Properties.Settings.Default.ServerPort, 
-                                                Properties.Settings.Default.ServerPassword);
+            var protocol = new Protocol(Settings.Default.ServerIP,
+                                        Settings.Default.ServerPort,
+                                        Settings.Default.ServerPassword);
             protocol.Connect();
         }
     }

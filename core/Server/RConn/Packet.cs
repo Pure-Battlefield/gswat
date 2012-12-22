@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace core.Server.RConn
 {
     public class Packet
     {
+        private UInt32 _sequenceNumber;
 
         /// <summary>
-        /// Generates an empty packet.
+        ///     Generates an empty packet.
         /// </summary>
         public Packet()
         {
@@ -21,16 +20,17 @@ namespace core.Server.RConn
         }
 
         /// <summary>
-        /// Generates a packet given the specified command.
+        ///     Generates a packet given the specified command.
         /// </summary>
         /// <param name="command">The string representation of the command.</param>
-        public Packet(string command, params string[] parameters)
+        /// <param name="parameters">Parameters of the command</param>
+        protected Packet(string command, params string[] parameters)
         {
             OriginatesFromServer = false;
             IsRequest = true;
             SequenceNumber = 0;
 
-            if (parameters != null & parameters.Length > 0)
+            if (parameters != null && parameters.Length > 0)
             {
                 command = String.Format(command, parameters);
             }
@@ -39,57 +39,47 @@ namespace core.Server.RConn
         }
 
         /// <summary>
-        /// Did this packet originate from the server?
+        ///     Did this packet originate from the server?
         /// </summary>
-        public bool OriginatesFromServer { get; set; }
+        public bool OriginatesFromServer { get; protected set; }
 
         /// <summary>
-        /// Did this packet originate from the client?
+        ///     Did this packet originate from the client?
         /// </summary>
-        public bool OrigininatesFromClient 
-        { 
-            get 
-            { 
-                return !OriginatesFromServer; 
-            }
- 
-            set 
-            { 
-                OriginatesFromServer = !value; 
-            }
+        public bool OrigininatesFromClient
+        {
+            get { return !OriginatesFromServer; }
+
+            set { OriginatesFromServer = !value; }
         }
 
         /// <summary>
-        /// Is the packet a request in a request - response pair?
+        ///     Is the packet a request in a request - response pair?
         /// </summary>
         public bool IsRequest { get; set; }
-        
-        /// <summary>
-        /// Is the packet a response to a request?
-        /// </summary>
-        public bool IsResponse { get { return !IsRequest; } set { IsRequest = !value; } }
-
-        private UInt32 _sequenceNumber;
 
         /// <summary>
-        /// Represents the seqence number of this packet for a given connection.
-        /// The 2 greatest order bits are reserved as flags.
+        ///     Is the packet a response to a request?
         /// </summary>
-        public UInt32 SequenceNumber 
-        { 
-            get 
-            { 
-                return _sequenceNumber & 0x3fffffff; 
-            } 
-
-            set 
-            { 
-                _sequenceNumber = value; 
-            }
+        public bool IsResponse
+        {
+            get { return !IsRequest; }
+            set { IsRequest = !value; }
         }
 
         /// <summary>
-        /// The size of the entire packet in bytes.
+        ///     Represents the seqence number of this packet for a given connection.
+        ///     The 2 greatest order bits are reserved as flags.
+        /// </summary>
+        public UInt32 SequenceNumber
+        {
+            get { return _sequenceNumber & 0x3fffffff; }
+
+            set { _sequenceNumber = value; }
+        }
+
+        /// <summary>
+        ///     The size of the entire packet in bytes.
         /// </summary>
         public UInt32 Size
         {
@@ -103,7 +93,7 @@ namespace core.Server.RConn
 
                 foreach (Word word in Words)
                 {
-                    byteCount += (UInt32)word.Emit().Length;
+                    byteCount += (UInt32) word.Emit().Length;
                 }
 
                 return byteCount;
@@ -124,30 +114,42 @@ namespace core.Server.RConn
         }
 
         /// <summary>
-        /// The number of RConnWords in the packet.
-        /// Note this has absolutely no relation to the number of 
-        /// machine words in the packet.
+        ///     The number of RConnWords in the packet.
+        ///     Note this has absolutely no relation to the number of
+        ///     machine words in the packet.
         /// </summary>
-        public UInt32 WordCount { get { return (UInt32)Words.Count; } }
+        public UInt32 WordCount
+        {
+            get { return (UInt32) Words.Count; }
+        }
 
         /// <summary>
-        /// Set of RConnWords that make up the packet.
+        ///     Set of RConnWords that make up the packet.
         /// </summary>
-        public List<Word> Words { get; set; }
+        public List<Word> Words { get; protected set; }
 
         /// <summary>
-        /// Maximum size of any given packet.
+        ///     Maximum size of any given packet.
         /// </summary>
-        public static int MAX_SIZE { get { return 16384; } }
+        public static int MaxSize
+        {
+            get { return 16384; }
+        }
 
         /// <summary>
-        /// Size of header parameters for a packet.
+        ///     Size of header parameters for a packet.
         /// </summary>
-        public static int HEADER_SIZE { get { return 12; } }
+        public static int HeaderSize
+        {
+            get { return 12; }
+        }
 
         /// <summary>
-        /// The offset for the size field in a packet header.
+        ///     The offset for the size field in a packet header.
         /// </summary>
-        public static int SIZE_OFFSET { get { return 4; } }
+        public static int SizeOffset
+        {
+            get { return 4; }
+        }
     }
 }

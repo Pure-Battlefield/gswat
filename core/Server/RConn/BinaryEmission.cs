@@ -1,54 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace core.Server.RConn
 {
     /// <summary>
-    /// This class stores all the logic for converting to and from byte arrays for RConn primitives.
-    /// E.G. Word, Int, and Packet.
+    ///     This class stores all the logic for converting to and from byte arrays for RConn primitives.
+    ///     E.G. Word, Int, and Packet.
     /// </summary>
     public static class BinaryEmission
     {
-        public static byte[] Emit(this UInt32 value)
+        private static byte[] Emit(this UInt32 value)
         {
             byte[] valueBytes = BitConverter.GetBytes(value);
 
             if (!BitConverter.IsLittleEndian)
             {
-                valueBytes.Reverse();
+                valueBytes = valueBytes.Reverse().ToArray();
             }
 
             return valueBytes;
         }
+
         public static UInt32 BytesToUInt(this byte[] bytes, int start = 0)
         {
             if (BitConverter.IsLittleEndian)
             {
                 return BitConverter.ToUInt32(bytes, start);
             }
-            else
-            {
-                //
-                // BitConverter will assume byte stream is same endianess as itself.
-                //
+            //
+            // BitConverter will assume byte stream is same endianess as itself.
+            //
 
-                byte[] integer = new byte[4];
-                System.Array.Copy(bytes, start, integer, 0, 4);
-                integer.Reverse();
-                return BitConverter.ToUInt32(integer, 0);
-            }
+            var integer = new byte[4];
+            Array.Copy(bytes, start, integer, 0, 4);
+            integer = integer.Reverse().ToArray();
+            return BitConverter.ToUInt32(integer, 0);
         }
 
         public static byte[] Emit(this Word word)
         {
             byte[] sizeBytes = word.Size.Emit();
-            byte[] wordBytes = word.Content.Select(c => (byte)c).ToArray();
-            byte[] terminator = new byte[] { 0 };
+            byte[] wordBytes = word.Content.Select(c => (byte) c).ToArray();
+            var terminator = new byte[] {0};
 
-            byte[] resultBytes = new byte[sizeBytes.Length + wordBytes.Length + 1];
+            var resultBytes = new byte[sizeBytes.Length + wordBytes.Length + 1];
 
             sizeBytes.CopyTo(resultBytes, 0);
             wordBytes.CopyTo(resultBytes, sizeBytes.Length);
@@ -56,38 +52,39 @@ namespace core.Server.RConn
 
             return resultBytes;
         }
+
         public static Word BytesToWord(this byte[] bytes, int start = 0)
         {
-            Word result = new Word();
+            var result = new Word();
             UInt32 size = bytes.BytesToUInt(start);
             result.Content = new char[size];
-            System.Array.Copy(bytes, start+4, result.Content, 0, size);
+            Array.Copy(bytes, start + 4, result.Content, 0, size);
 
             return result;
         }
 
         public static byte[] Emit(this Packet packet)
         {
-            UInt32 isFromClientFlag = (UInt32)(packet.OrigininatesFromClient ? 1 : 0);
-            UInt32 isResponseFlag = (UInt32)(packet.IsResponse ? 1 : 0);
+            var isFromClientFlag = (UInt32) (packet.OrigininatesFromClient ? 1 : 0);
+            var isResponseFlag = (UInt32) (packet.IsResponse ? 1 : 0);
 
-            UInt32 SequenceValue = isFromClientFlag << 31 | isResponseFlag << 30 | packet.SequenceNumber;
+            UInt32 sequenceValue = isFromClientFlag << 31 | isResponseFlag << 30 | packet.SequenceNumber;
 
-            byte[] sequenceBytes = SequenceValue.Emit();
+            byte[] sequenceBytes = sequenceValue.Emit();
             byte[] sizeBytes = packet.Size.Emit();
             byte[] wordCountBytes = packet.WordCount.Emit();
 
-            List<byte[]> wordBytes = new List<byte[]>();
+            var wordBytes = new List<byte[]>();
 
             int wordByteCount = 0;
-            foreach(Word word in packet.Words)
+            foreach (Word word in packet.Words)
             {
                 byte[] bytes = word.Emit();
                 wordBytes.Add(bytes);
                 wordByteCount += bytes.Length;
             }
 
-            byte[] resultBytes = new byte[sequenceBytes.Length + sizeBytes.Length + wordCountBytes.Length + wordByteCount];
+            var resultBytes = new byte[sequenceBytes.Length + sizeBytes.Length + wordCountBytes.Length + wordByteCount];
 
             sequenceBytes.CopyTo(resultBytes, 0);
             sizeBytes.CopyTo(resultBytes, sequenceBytes.Length);
@@ -95,22 +92,24 @@ namespace core.Server.RConn
 
             wordByteCount = 0;
 
-            foreach(byte[] bytes in wordBytes)
+            foreach (var bytes in wordBytes)
             {
-                bytes.CopyTo(resultBytes, sequenceBytes.Length + sizeBytes.Length + wordCountBytes.Length + wordByteCount);
+                bytes.CopyTo(resultBytes,
+                             sequenceBytes.Length + sizeBytes.Length + wordCountBytes.Length + wordByteCount);
                 wordByteCount += bytes.Length;
             }
 
             return resultBytes;
         }
-        public static Packet BytesToPacket(this byte[] bytes, int start = 0)
+
+        public static Packet BytesToPacket(this byte[] bytes)
         {
-            if (bytes.Length < Packet.HEADER_SIZE)
+            if (bytes.Length < Packet.HeaderSize)
             {
                 return null;
             }
 
-            UInt32 sequenceNumber = bytes.BytesToUInt(0);
+            UInt32 sequenceNumber = bytes.BytesToUInt();
             UInt32 size = bytes.BytesToUInt(4);
             UInt32 numWords = bytes.BytesToUInt(8);
 
@@ -119,15 +118,17 @@ namespace core.Server.RConn
                 return null;
             }
 
-            Packet result = new Packet();
-            result.OrigininatesFromClient = (sequenceNumber & 0x80000000) > 0 ? true : false;
-            result.IsResponse = (sequenceNumber & 0x40000000) > 0 ? true : false;
+            var result = new Packet
+                {
+                    OrigininatesFromClient = (sequenceNumber & 0x80000000) > 0,
+                    IsResponse = (sequenceNumber & 0x40000000) > 0
+                };
 
             int offset = 12;
             for (int i = 0; i < numWords; i++)
             {
                 Word word = bytes.BytesToWord(offset);
-                offset += (int)word.Size + 5; //Include the null terminator and the size int
+                offset += (int) word.Size + 5; //Include the null terminator and the size int
                 result.Words.Add(word);
             }
 

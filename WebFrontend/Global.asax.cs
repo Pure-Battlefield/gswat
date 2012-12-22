@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using core;
 using core.Server;
-using Moq;
 using core.ServerInterface;
-using core.ChatMessageUtilities;
 
 namespace WebFrontend
 {
@@ -30,6 +24,16 @@ namespace WebFrontend
 
             var commLayer = new CommLayer();
             var commHandler = new CommHandler(commLayer);
+
+            /*
+            var blah = RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString");
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blah);
+            GlobalStaticVars.StaticRole = new Core(commHandler);
+            ChatMessage msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message, generated at server-mock level");
+            mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
+            msg = new ChatMessage(new DateTime(2013, 11, 19), "Webs", "This is another test message");
+            mockServer.Raise(m => m.MessageSent += null, new ChatEventArgs(msg));
+             */
             commLayer.Connect(Properties.Settings.Default.ServerIP, 
                                 Properties.Settings.Default.ServerPort, 
                                 Properties.Settings.Default.ServerPassword);

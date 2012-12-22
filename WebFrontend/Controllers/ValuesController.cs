@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
-using core;
 using core.ChatMessageUtilities;
 
 namespace WebFrontend.Controllers
@@ -14,10 +9,10 @@ namespace WebFrontend.Controllers
         // GET api/values
         public string Get()
         {
-            IList<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
+            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
             string output = "";
             foreach (ChatMessage msg in q) {
-                output += msg.ToString() + "<br>";
+                output += msg + "<br>";
             }
             return output;
         }
