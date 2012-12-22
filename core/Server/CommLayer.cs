@@ -3,48 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using core.ChatMessageUtilities;
+
+using core.Server.RConn.Commands;
+using System.Net.Sockets;
+using System.Net;
+
+using core.Server.RConn;
 
 namespace core.Server
 {
     public class CommLayer : ICommLayer
     {
-        // Implements ICommLayer
-        public IServerMock Server { get; set; }
         public event ChatEventHandler CommHandler;
+        private Protocol _rconProtocol { get; set; }
 
-        /// <summary>
-        /// Constructs a CommLayer object with a predefined server
-        /// </summary>
-        /// <param name="server">Server for this CommLayer to hook to</param>
-        public CommLayer(IServerMock server)
+        public void Connect(string address, int port, string password)
         {
-            Server = server;
-            if (server != null)
+            _rconProtocol = new Protocol(address, port, password);
+
+            _rconProtocol.PacketEvent += RConnPacketHandler;
+
+            _rconProtocol.Connect();
+        }
+
+        private void RConnPacketHandler(Packet args)
+        {
+            //Version .1 we only want player.onChat, admin.say, and admin.yell
+            if (OnChat.IsOnChat(args))
             {
-                Server.MessageSent += new ChatEventHandler(NotifyCommHandler);
+                OnChat chat = new OnChat(args);
+                ChatMessageUtilities.ChatMessage message = new ChatMessageUtilities.ChatMessage();
+                message.Timestamp = DateTime.Now;
+                message.Text = chat.Text;
+                message.Speaker = chat.SoldierName;
+
+                ChatEventArgs chatArgs = new ChatEventArgs(message);
+                CommHandler(this, chatArgs);
             }
         }
 
-        // Implements ICommLayer
-        public void Connect(string address, uint port)
-        {
+        
 
-        }
-
-        // Implements ICommLayer
         public void NotifyCommHandler(object sender, ChatEventArgs e)
         {
-            if (CommHandler != null)
-            {
-                CommHandler(this, e);
-            }
+            throw new NotImplementedException();
         }
 
-        // Implements ICommLayer
         public void close()
         {
-
+            throw new NotImplementedException();
         }
     }
 }
