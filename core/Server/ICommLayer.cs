@@ -10,9 +10,6 @@ namespace core.Server
 {
     public interface ICommLayer
     {
-        // Mocked server that this ICommLayer is hooked to
-        IServerMock Server { get; set; }
-
         // Event handler to pass ChatMessages to CommHandler
         event ChatEventHandler CommHandler;
 
@@ -21,7 +18,7 @@ namespace core.Server
         /// </summary>
         /// <param name="address">IP address of the server</param>
         /// <param name="port">Port number to connect to</param>
-        void Connect(string address, uint port);
+        void Connect(string address, int port, string password);
 
         /// <summary>
         /// Notifies Core with a ChatMessage

@@ -37,6 +37,6 @@ namespace core.Server.RConn
         /// The bytes containing data, this byte cannot contain a null-byte.
         /// A null byte terminates this array upon being emitted.
         /// </summary>
-        public char[] Content;
+        public char[] Content { get; set; }
     }
 }

@@ -105,9 +105,19 @@ namespace core.Server.RConn
         }
         public static Packet BytesToPacket(this byte[] bytes, int start = 0)
         {
+            if (bytes.Length < Packet.HEADER_SIZE)
+            {
+                return null;
+            }
+
             UInt32 sequenceNumber = bytes.BytesToUInt(0);
             UInt32 size = bytes.BytesToUInt(4);
             UInt32 numWords = bytes.BytesToUInt(8);
+
+            if (bytes.Length < size)
+            {
+                return null;
+            }
 
             Packet result = new Packet();
             result.OrigininatesFromClient = (sequenceNumber & 0x80000000) > 0 ? true : false;

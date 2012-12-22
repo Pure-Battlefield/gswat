@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using core.Server.RConn;
+using core.Server.RConn.Commands;
 
 using System.Net.Sockets;
 using System.Net;
@@ -114,18 +115,17 @@ namespace test.Server.RConn
         public void ByteToPacketTest()
         {
             PlainTextLogin login = new PlainTextLogin("DEADBEEF");
-            Packet expected = login.Command;
 
-            byte[] bytes = expected.Emit();
+            byte[] bytes = login.Emit();
 
             Packet actual = bytes.BytesToPacket();
 
-            Assert.IsTrue(expected.OrigininatesFromClient == actual.OrigininatesFromClient);
-            Assert.IsTrue(expected.IsResponse == actual.IsResponse);
-            Assert.IsTrue(expected.SequenceNumber == actual.SequenceNumber);
-            Assert.IsTrue(expected.WordCount == actual.WordCount);
+            Assert.IsTrue(login.OrigininatesFromClient == actual.OrigininatesFromClient);
+            Assert.IsTrue(login.IsResponse == actual.IsResponse);
+            Assert.IsTrue(login.SequenceNumber == actual.SequenceNumber);
+            Assert.IsTrue(login.WordCount == actual.WordCount);
 
-            Assert.IsTrue(CompareCharArrays(expected.Words[0].Content, actual.Words[0].Content));
+            Assert.IsTrue(CompareCharArrays(login.Words[0].Content, actual.Words[0].Content));
         }
 
         private bool CompareCharArrays(char[] first, char[] second)

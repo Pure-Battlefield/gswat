@@ -15,9 +15,27 @@ namespace core.Server.RConn
         public Packet()
         {
             OriginatesFromServer = false;
-            IsRequest = false;
+            IsRequest = true;
             SequenceNumber = 0;
             Words = new List<Word>();
+        }
+
+        /// <summary>
+        /// Generates a packet given the specified command.
+        /// </summary>
+        /// <param name="command">The string representation of the command.</param>
+        public Packet(string command, params string[] parameters)
+        {
+            OriginatesFromServer = false;
+            IsRequest = true;
+            SequenceNumber = 0;
+
+            if (parameters != null & parameters.Length > 0)
+            {
+                command = String.Format(command, parameters);
+            }
+
+            Words = command.Split(' ').Select(w => new Word(w)).ToList();
         }
 
         /// <summary>
@@ -92,6 +110,18 @@ namespace core.Server.RConn
             }
         }
 
+        public string FirstWord
+        {
+            get
+            {
+                if (Words != null && Words.Count > 0)
+                {
+                    return new string(Words[0].Content);
+                }
+
+                return "";
+            }
+        }
 
         /// <summary>
         /// The number of RConnWords in the packet.
@@ -104,5 +134,20 @@ namespace core.Server.RConn
         /// Set of RConnWords that make up the packet.
         /// </summary>
         public List<Word> Words { get; set; }
+
+        /// <summary>
+        /// Maximum size of any given packet.
+        /// </summary>
+        public static int MAX_SIZE { get { return 16384; } }
+
+        /// <summary>
+        /// Size of header parameters for a packet.
+        /// </summary>
+        public static int HEADER_SIZE { get { return 12; } }
+
+        /// <summary>
+        /// The offset for the size field in a packet header.
+        /// </summary>
+        public static int SIZE_OFFSET { get { return 4; } }
     }
 }

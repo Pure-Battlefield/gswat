@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace core.Server.RConn
+namespace core.Server.RConn.Commands
 {
     /// <summary>
     /// Request:  login.plainText [password: string]
@@ -16,22 +16,12 @@ namespace core.Server.RConn
     /// Comments:  If you are connecting to the admin interface over the internet, then use login.hashed instead to avoid 
     /// having evildoers sniff the admin password
     /// </summary>
-    public class PlainTextLogin
+    public class EnableEvents : Packet
     {
-        public PlainTextLogin(string password)
+        public EnableEvents(bool enable = true) : base("admin.eventsEnabled {0}", enable.ToString())
         {
-            Command = new Packet();
-            Command.IsRequest = true;
-            Command.OrigininatesFromClient = true;
-
-            Command.Words.Add(new Word("login.plainText"));
-            Command.Words.Add(new Word(password));
-        }
-
-        public Packet Command
-        {
-            get;
-            set;
+            OriginatesFromServer = false;
+            IsRequest = true;
         }
     }
 }
