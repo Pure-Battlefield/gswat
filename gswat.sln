@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{66F21EC9-EBD1-4ED9-BB51-571FFA6C6225}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iapi", "iapi\iapi.csproj", "{6A435D08-AC90-4897-8178-1AA2606AC6A9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFrontend", "WebFrontend\WebFrontend.csproj", "{01292740-B5ED-4566-A91F-4FC0842800AC}"
@@ -21,10 +19,6 @@ Global
 		{66F21EC9-EBD1-4ED9-BB51-571FFA6C6225}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66F21EC9-EBD1-4ED9-BB51-571FFA6C6225}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66F21EC9-EBD1-4ED9-BB51-571FFA6C6225}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A435D08-AC90-4897-8178-1AA2606AC6A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A435D08-AC90-4897-8178-1AA2606AC6A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A435D08-AC90-4897-8178-1AA2606AC6A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A435D08-AC90-4897-8178-1AA2606AC6A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43DC4FA2-2ED9-4ED5-80FF-1A6D4F88BAFF}.Release|Any CPU.ActiveCfg = Release|Any CPU

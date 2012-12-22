@@ -47,7 +47,6 @@
     <Compile Include="Server\CommLayer.cs" />
     <Compile Include="Server\ChatEventArgs.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="IAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

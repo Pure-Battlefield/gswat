@@ -115,7 +115,7 @@ h5, h6 {
     }
 
 header .content-wrapper {
-    padding-top: 20px; 
+    padding-top: 20px;
 }
 
 footer {
@@ -221,6 +221,7 @@ ul#menu {
         background-image: linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
         color: #3e5667;
         padding: 20px 40px 30px 40px;
+        position: relative; /* edit to align refresh buttons at bottom right of div */
     }
 
         .featured hgroup.title h1, .featured hgroup.title h2 {
@@ -753,4 +754,26 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+}
+
+#chatRefreshBtn
+{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer; /* simulate a button */
+}
+
+#chatRefreshPopup
+{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 48px;
+    background-color: #7AC0DA;
+    color: #fff;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    padding-top: 16px;
 }
