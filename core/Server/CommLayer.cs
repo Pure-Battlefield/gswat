@@ -12,10 +12,12 @@ namespace core.Server
 
         public void Connect(string address, int port, string password)
         {
+            if (RconProtocol != null)
+            {
+                RconProtocol.Dispose();
+            }
             RconProtocol = new Protocol(address, port, password);
-
             RconProtocol.PacketEvent += RConnPacketHandler;
-
             RconProtocol.Connect();
         }
 

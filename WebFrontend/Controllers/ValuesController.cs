@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Script.Serialization;
+using System.Diagnostics;
+using WebFrontend.Models;
 using core.ChatMessageUtilities;
 
 namespace WebFrontend.Controllers
@@ -9,12 +13,9 @@ namespace WebFrontend.Controllers
         // GET api/values
         public string Get()
         {
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
-            string output = "";
-            foreach (ChatMessage msg in q) {
-                output += msg + "<br>";
-            }
-            return output;
+            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            return json.Serialize(q);
         }
 
         // GET api/values/5
@@ -24,8 +25,16 @@ namespace WebFrontend.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public void Post([FromBody]ConnectionInfo connection)
         {
+            try
+            {
+                GlobalStaticVars.StaticCommLayer.Connect(connection.ServerIP, connection.ServerPort, connection.Password);
+            }
+            catch (ArgumentException e)
+            {
+                
+            }
         }
 
         // PUT api/values/5

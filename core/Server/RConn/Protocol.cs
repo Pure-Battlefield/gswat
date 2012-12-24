@@ -6,7 +6,7 @@ using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
 {
-    public class Protocol
+    public class Protocol : IDisposable
     {
         public delegate void PacketEventHandler(Packet args);
 
@@ -116,6 +116,12 @@ namespace core.Server.RConn
             packet.IsRequest = false;
             packet.SequenceNumber = packet.SequenceNumber;
             Sock.Send(packet.Emit());
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Sock.Close();
         }
     }
 }

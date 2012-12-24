@@ -14,7 +14,7 @@ namespace core.ChatMessageUtilities
             get { return _messageTimeStamp; }
             set
             {
-                PartitionKey = value.Day + "";
+                PartitionKey = value.Date.ToString("yyyyMMdd");
                 RowKey = (DateTime.MaxValue.Ticks - value.Ticks).ToString(CultureInfo.InvariantCulture);
                 _messageTimeStamp = value;
             }
@@ -57,7 +57,7 @@ namespace core.ChatMessageUtilities
             Speaker = (speaker ?? "");
             Text = (text ?? "");
             MessageType = (messageType ?? "all");
-            PartitionKey = time.Day + "";
+            PartitionKey = time.Date.ToString("yyyyMMdd");
             RowKey = (DateTime.MaxValue.Ticks - time.Ticks).ToString(CultureInfo.InvariantCulture);
         }
 

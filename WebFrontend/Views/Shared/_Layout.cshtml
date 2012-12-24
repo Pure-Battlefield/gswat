@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
+    @Script("jquery-ui-1.9.2.custom.min.js")
+    @Script("moment.min.js") <!-- this is for date formatting for chat messages -->
     @Script("ajaxUpdateScript.js")
 </head>
 <body onload="loadMessageQueue()">
     @RenderBody()
 
-    @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
 </body>
 </html>
