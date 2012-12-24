@@ -31,6 +31,8 @@ function parseJSON() {
             var text = data[message].Text;
 
             var stmt = "<p>[%ts] [%c] <strong>%s</strong>: %t</p>";
+            //start conditionals for each message (all, squad team etc)
+            
             stmt = stmt.replace('%ts', timestamp)
                 .replace('%c', channel)
                 .replace('%s', speaker)

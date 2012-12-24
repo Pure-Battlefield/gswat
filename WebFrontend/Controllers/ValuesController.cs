@@ -11,6 +11,7 @@ namespace WebFrontend.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
+        [HttpGet]
         public string Get()
         {
             IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
@@ -19,9 +20,14 @@ namespace WebFrontend.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        [HttpGet]
+        [ActionName("GetByDay")]
+        public string GetByDay([FromBody]DateTimeInfo dateTime)
         {
-            return "value";
+                DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
+                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                JavaScriptSerializer json = new JavaScriptSerializer();
+                return json.Serialize(q);
         }
 
         // POST api/values

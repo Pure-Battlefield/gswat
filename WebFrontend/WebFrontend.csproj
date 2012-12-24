@@ -157,6 +157,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalStaticVars.cs" />
+    <Compile Include="Models\DateTimeInfo.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -222,12 +223,18 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\cal.gif" />
+    <Content Include="Images\chatRefreshBtn.png" />
+    <Content Include="Images\chatRefreshBtn_hover.png" />
+    <Content Include="Images\settingsBtn.png" />
+    <Content Include="Images\settingsBtn_active.png" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\ajaxUpdateScript.js" />
+    <Content Include="Scripts\datetimepicker.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

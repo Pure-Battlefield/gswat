@@ -97,8 +97,75 @@
         </div>
     </section>
     <section class="content-wrapper main-content clear-fix" id="chatContents">
+
         <h3 style="text-align:center">We're loading the chat, give us a sec..</h3>
     </section>
+    <div id="buttons">
+            <form id="chat">
+            <label>Enter Chat Date:</label><input id="chatDate" type="text" size="25"><a href="javascript:NewCal('chatDate','ddmmyyyy')"><img src="Images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+            
+            <br />
+            <button type="submit" value="Submit">Submit</button>
+           
+
+        </form>
+         <script type="text/javascript">
+             $('#chat').submit(function (event) {
+                 event.preventDefault();
+
+                 var date = $('#chatDate').val();
+                 var splitdate = date.split("-");
+
+                 var day = splitdate[0];
+                 var month = splitdate[1];
+                 var year = splitdate[2];
+
+                 var dateTimeObject = { Day:day, Month:month, Year:year };
+
+                 //$.ajax({
+                 //    type: 'GetByDay',
+                 //    beforeSend: function (xhr) {
+                 //        xhr.setRequestHeader('Content-type', 'application/json')
+                 //    },
+                 //    contentType: 'application/json; charset=utf-8',
+                 //    url: '/api/values',
+                 //    data: JSON.stringify(dateTimeObject),
+                 //    dataType: 'json',
+                 //    success: footerPopup('rconn_settings')
+                 //});
+
+
+                 $.get('/api/values/GetByDay', dateTimeObject, function(data) {
+                     data = JSON.parse(data);
+
+                     var content = "";
+                     for (var message in data) {
+                         var timestamp = moment(new Date(parseInt(data[message].MessageTimeStamp.replace('/Date(', ''))));
+                         timestamp = timestamp.format("MM/DD/YYYY HH:mm:ss");
+                         var channel = data[message].MessageType.toUpperCase();
+                         var speaker = data[message].Speaker;
+                         var text = data[message].Text;
+
+                         var stmt = "<p>[%ts] [%c] <strong>%s</strong>: %t</p>";
+                         //start conditionals for each message (all, squad team etc)
+
+                         stmt = stmt.replace('%ts', timestamp)
+                             .replace('%c', channel)
+                             .replace('%s', speaker)
+                             .replace('%t', text);
+                         content += stmt;
+                     }
+                     $('#chatContents').empty().append(content);
+                 });
+
+            
+             });
+
+            </script>
+        </div>
+            <div id="scroll">
+            Keep scrolling to load another 300 chat messages.
+        </div>
     <!-- Start edits by Conner -->
     <div id="footerPopup" style="display:none"></div>
     <!-- End edits by Conner -->
