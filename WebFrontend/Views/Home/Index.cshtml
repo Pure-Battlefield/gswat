@@ -17,15 +17,6 @@
             <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
             <script type="text/javascript">
                 var refreshRate = 1;
-
-                $('#settingsBtn').on('click', function () {
-                    $('#settingsBox').toggle();
-                    $('#settingsBtn').attr('src',
-                        $(this).attr('src').indexOf('_') == -1?
-                        '/Images/settingsBtn_active.png':
-                        '/Images/settingsBtn.png'
-                    );
-                });
             </script>
             <div id="settingsBox">
                 <input type="text" id="refreshRateInput" value="1" onclick="this.select()"/>
@@ -44,6 +35,18 @@
                 </div>
             </div>
             <script type="text/javascript">
+                function toggleSettingsBox() {
+                    $('#settingsBox').toggle();
+                    $('#settingsBtn').attr('src',
+                        $('#settingsBtn').attr('src').indexOf('_') == -1 ?
+                        '/Images/settingsBtn_active.png' :
+                        '/Images/settingsBtn.png'
+                    );
+                }
+                $('#settingsBtn').on('click', function () {
+                    toggleSettingsBox();
+                });
+
                 $('#changeRConnSettings').submit(function (event) {
                     event.preventDefault();
 
@@ -65,13 +68,13 @@
                         success: footerPopup('rconn_settings')
                     });
                     
-                    $('#settingsBox').toggle();
+                    toggleSettingsBox();
                 });
                 $('#refreshRateSubmit').on('click', function () {
                     refreshRate = $('#refreshRateInput').val();
                     loadMessageQueue(refreshRate);
                     footerPopup('chat_refresh_rate');
-                    $('#settingsBox').toggle();
+                    toggleSettingsBox();
                 });
                 $('#forceRefreshBtn').on('click', function () {
                     loop = true;
