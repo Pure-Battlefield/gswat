@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
+
+    @Script("moment.min.js") <!-- this is for date formatting for chat messages -->
+    @Script("datetimepicker.js") <!-- this is to pick days of the month to get chat messages -->
+
     @Script("ajaxUpdateScript.js")
 </head>
 <body onload="loadMessageQueue()">
     @RenderBody()
 
-    @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
+    @Script("chatSettings.js")
 </body>
 </html>
 

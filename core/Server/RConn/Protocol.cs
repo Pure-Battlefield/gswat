@@ -6,7 +6,7 @@ using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
 {
-    public class Protocol
+    public class Protocol : IDisposable
     {
         public delegate void PacketEventHandler(Packet args);
 
@@ -95,9 +95,22 @@ namespace core.Server.RConn
         private Packet ReceivePacket()
         {
             var buffer = new byte[Packet.MaxSize];
-            Sock.Receive(buffer, Packet.HeaderSize, SocketFlags.None);
+
+            int bytesReceived = 0;
+            while (bytesReceived < (int) Packet.HeaderSize)
+            {
+                bytesReceived += Sock.Receive(buffer, Packet.HeaderSize, SocketFlags.None);
+            }
+
             UInt32 size = buffer.BytesToUInt(4);
-            Sock.Receive(buffer, Packet.HeaderSize, (int) size - Packet.HeaderSize, SocketFlags.None);
+
+            while (bytesReceived < (int)size)
+            {
+                bytesReceived += Sock.Receive(buffer,
+                        bytesReceived,
+                        ((int)size) - bytesReceived,
+                        SocketFlags.None);
+            }
 
             return buffer.BytesToPacket();
         }
@@ -116,6 +129,12 @@ namespace core.Server.RConn
             packet.IsRequest = false;
             packet.SequenceNumber = packet.SequenceNumber;
             Sock.Send(packet.Emit());
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Sock.Close();
         }
     }
 }

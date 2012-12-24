@@ -32,14 +32,6 @@ namespace test.Server
         [TestMethod]
         public void CommLayerTest_Live_Server()
         {
-            // Create objects
-            var commLayer = new CommLayer();
-
-            //This test succeeds if it logs in, any actual chat messages are only for
-            //ad-hoc debugging.
-            commLayer.Connect(Settings.Default.ServerIP,
-                              Settings.Default.ServerPort,
-                              Settings.Default.ServerPassword);
         }
 
         [TestMethod]

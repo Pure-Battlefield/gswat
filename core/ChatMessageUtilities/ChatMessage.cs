@@ -7,6 +7,9 @@ namespace core.ChatMessageUtilities
     public class ChatMessage : TableEntity
     {
         private DateTime _messageTimeStamp;
+        private String _speaker;
+        private String _text;
+        private String _messageType;
 
         // TimeStamp for the message
         public DateTime MessageTimeStamp
@@ -14,20 +17,32 @@ namespace core.ChatMessageUtilities
             get { return _messageTimeStamp; }
             set
             {
-                PartitionKey = value.Day + "";
+                PartitionKey = value.Date.ToString("yyyyMMdd");
                 RowKey = (DateTime.MaxValue.Ticks - value.Ticks).ToString(CultureInfo.InvariantCulture);
                 _messageTimeStamp = value;
             }
         }
 
         // Speaker name for the message
-        public String Speaker { get; set; }
+        public String Speaker
+        {
+            get { return _speaker; }
+            set { _speaker = value.Trim(); }
+        }
 
         // Full message text
-        public String Text { get; set; }
+        public String Text
+        {
+            get { return _text; }
+            set { _text = value.Trim(); }
+        }
 
         // MessageType of the ChatMessage
-        public String MessageType { get; set; }
+        public String MessageType
+        {
+            get { return _messageType; }
+            set { _messageType = value.Trim(); }
+        }
 
         /// <summary>
         ///     Construct an empty ChatMessage object
@@ -54,10 +69,10 @@ namespace core.ChatMessageUtilities
         public ChatMessage(DateTime time, String speaker, String text, String messageType)
         {
             MessageTimeStamp = time;
-            Speaker = (speaker ?? "");
-            Text = (text ?? "");
-            MessageType = (messageType ?? "all");
-            PartitionKey = time.Day + "";
+            Speaker = (speaker.Trim() ?? "");
+            Text = (text.Trim() ?? "");
+            MessageType = (messageType.Trim() ?? "all");
+            PartitionKey = time.Date.ToString("yyyyMMdd");
             RowKey = (DateTime.MaxValue.Ticks - time.Ticks).ToString(CultureInfo.InvariantCulture);
         }
 

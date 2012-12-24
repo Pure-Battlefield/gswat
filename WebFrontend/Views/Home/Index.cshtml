@@ -13,53 +13,43 @@
                 <h1>Server Chat</h1>
             </hgroup>
             <!-- Start edits by Conner -->
-            <img src="/Images/chatRefreshBtn.png" onclick="xmlHttpRequestMessageQueue();refreshChatPopup(); " alt="Refresh Chatlogs" title="Refresh Chat log" id="chatRefreshBtn" />
-            <script type="text/javascript">
-                // Toggle button image 
-                // TODO Do this in a better way?
-                document.getElementById('chatRefreshBtn').onmouseover = function () {
-                    document.getElementById('chatRefreshBtn').src = '/Images/chatRefreshBtn_hover.png';
-                };
-                document.getElementById('chatRefreshBtn').onmouseout = function () {
-                    document.getElementById('chatRefreshBtn').src = '/Images/chatRefreshBtn.png';
-                };
-
-                function refreshChatPopup() {
-                    $('#chatRefreshPopup').fadeIn('slow', function () {
-                        return $(this).delay(3500).fadeOut('slow');
-                    });
-                }
-            </script>
+            <img src="/Images/settingsBtn.png" alt="Settings" title="Settings" id="settingsBtn" />
+            <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
+            <div id="settingsBox">
+                <input type="text" id="refreshRateInput" value="1" />
+                <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit" />
+                <hr />
+                <div id="serverSettingsBox">
+                    <form id="serverSettingsForm">
+                        <input type="text" name="ipInput" id="ipInput" value="IP" />
+                        <input type="text" name="portInput" id="portInput" value="Port" />
+                        <br />
+                        <input type="password" name="passwdInput" id="passwdInput" value="password" />
+                        <input type="submit" value="Connect to Server" id="serverSettingsSubmit" />
+                    </form>
+                </div>
+            </div>
             <!-- End edits by Conner -->
         </div>
     </section>
     <section class="content-wrapper main-content clear-fix" id="chatContents">
-        <h3>We suggest the following steps:</h3>
-        <ol class="round">
-            <li class="one">
-                <h5>Getting Started</h5>
-                ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-                a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-                is an ideal platform for building RESTful applications on the .NET Framework.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245160">Learn more…</a>
-            </li>
-
-            <li class="two">
-                <h5>Add NuGet packages and jump-start your coding</h5>
-                NuGet makes it easy to install and update free libraries and tools.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245161">Learn more…</a>
-            </li>
-            <li class="three">
-                <h5>Find Web Hosting</h5>
-                You can easily find a web hosting company that offers the right mix of features
-                and price for your applications.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245164">Learn more…</a>
-            </li>
-        </ol>
+        <h3 style="text-align:center">We're loading the chat, give us a sec..</h3>
     </section>
+    <div id="buttons">
+        <form id="chat">
+            <label>Enter Chat Date:</label>
+            <input id="chatDate" type="text" size="25" />
+            <a href="javascript:NewCal('chatDate','ddmmyyyy')">
+                <img src="Images/cal.gif" width="16" height="16" border="0" alt="Pick a date" />
+            </a>
+            <br />
+            <input type="submit" value="Submit" />
+        </form>
+        </div>
+            <div id="scroll">
+            Keep scrolling to load another 300 chat messages.
+        </div>
     <!-- Start edits by Conner -->
-    <div id="chatRefreshPopup" style="display:none">
-        Chat refreshed.
-    </div>
+    <div id="footerPopup" style="display:none"></div>
     <!-- End edits by Conner -->
 </div>

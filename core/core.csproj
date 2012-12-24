@@ -60,7 +60,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthHandler\AuthHandler.cs" />
+    <Compile Include="AuthHandler\IAuthHandler.cs" />
     <Compile Include="ChatMessageUtilities\ChatMessage.cs" />
+    <Compile Include="ICore.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ServerInterface\CommHandler.cs" />
     <Compile Include="ServerInterface\ICommHandler.cs" />
     <Compile Include="Server\ICommLayer.cs" />

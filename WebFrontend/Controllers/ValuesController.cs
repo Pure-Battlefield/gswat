@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Script.Serialization;
+using System.Diagnostics;
+using WebFrontend.Models;
 using core.ChatMessageUtilities;
 
 namespace WebFrontend.Controllers
@@ -7,35 +11,39 @@ namespace WebFrontend.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        public string Get()
+        [HttpGet]
+        [ActionName("GetAllMessages")]
+        public string GetAllMessages()
         {
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticRole.GetMessageQueue();
-            string output = "";
-            foreach (ChatMessage msg in q) {
-                output += msg + "<br>";
-            }
-            return output;
+            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            return json.Serialize(q);
         }
 
         // GET api/values/5
-        public string Get(int id)
+        [HttpGet]
+        [ActionName("GetByDay")]
+        public string GetByDay([FromUri]DateTimeInfo dateTime)
         {
-            return "value";
+                DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
+                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                JavaScriptSerializer json = new JavaScriptSerializer();
+                return json.Serialize(q);
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        [HttpPost]
+        [ActionName("SetServerInfo")]
+        public void SetServerInfo([FromBody]ConnectionInfo connection)
         {
-        }
-
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        public void Delete(int id)
-        {
+            try
+            {
+                GlobalStaticVars.StaticCommLayer.Connect(connection.ServerIP, connection.ServerPort, connection.Password);
+            }
+            catch (ArgumentException e)
+            {
+                
+            }
         }
     }
 }
