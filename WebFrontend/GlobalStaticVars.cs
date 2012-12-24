@@ -1,9 +1,11 @@
 ﻿using core;
+using core.Server;
 
 namespace WebFrontend
 {
     public static class GlobalStaticVars
     {
-        public static Core StaticRole { get; set; }
+        public static ICore StaticCore { get; set; }
+        public static ICommLayer StaticCommLayer { get; set; }
     }
 }
