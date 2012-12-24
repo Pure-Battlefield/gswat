@@ -52,6 +52,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ChatMessageUtilities\ChatMessageTest.cs" />
+    <Compile Include="Controllers\ValuesControllerTest.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -75,7 +76,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -1,32 +1,44 @@
-﻿function loadMessageQueue()
-{
-    xmlHttpRequestMessageQueue();
+﻿var parser;
 
-    window.setInterval(function () {
-        xmlHttpRequestMessageQueue();
-    }, 1000 /* A.K.A. 1 second */);
+function loadMessageQueue(interval)
+{
+    // Default is 1 second
+    if (interval === undefined) {
+        interval = 1;
+    }
+
+    if (parser !== undefined) { // Clear the old parser interval, if it existed.
+        window.clearInterval(parser);
+    }
+       
+    parseJSON();
+    parser = window.setInterval(parseJSON, interval * 1000);
+    console.log('Chat refresh rate set to ' + interval + ' seconds');
 }
 
 
 // Avoid having to write the same code twice
-// TODO Change the name of this function to something else that's not as long
-function xmlHttpRequestMessageQueue() {
-    // Testing purposes
-    console.log('Refreshing..');
+function parseJSON() {
+    $.get('/api/values', function (data) {
+        data = JSON.parse(data);
 
-    var xmlhttp;
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }
-    else {// code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
+        var content = "";
+        for (var message in data) {
+            var timestamp = moment(new Date(parseInt(data[message].MessageTimeStamp.replace('/Date(', ''))));
+            timestamp = timestamp.format("MM/DD/YYYY HH:mm:ss");
+            var channel = data[message].MessageType.toUpperCase();
+            var speaker = data[message].Speaker;
+            var text = data[message].Text;
 
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("chatContents").innerHTML = xmlhttp.responseText;
+            var stmt = "<p>[%ts] [%c] <strong>%s</strong>: %t</p>";
+            stmt = stmt.replace('%ts', timestamp)
+                .replace('%c', channel)
+                .replace('%s', speaker)
+                .replace('%t', text);
+            content += stmt;
         }
-    };
-    xmlhttp.open("GET", "/api/values", true);
-    xmlhttp.send();
+        $('#chatContents').empty().append(content);
+    });
+
+    console.log('Refreshing chat..');
 }

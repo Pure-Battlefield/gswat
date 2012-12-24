@@ -13,20 +13,83 @@
                 <h1>Server Chat</h1>
             </hgroup>
             <!-- Start edits by Conner -->
-            <img src="/Images/chatRefreshBtn.png" onclick="xmlHttpRequestMessageQueue();refreshChatPopup(); " alt="Refresh Chatlogs" title="Refresh Chat log" id="chatRefreshBtn" />
+            <img src="/Images/settingsBtn.png" alt="Settings" title="Settings" id="settingsBtn" />
+            <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
             <script type="text/javascript">
-                // Toggle button image 
-                // TODO Do this in a better way?
-                document.getElementById('chatRefreshBtn').onmouseover = function () {
-                    document.getElementById('chatRefreshBtn').src = '/Images/chatRefreshBtn_hover.png';
-                };
-                document.getElementById('chatRefreshBtn').onmouseout = function () {
-                    document.getElementById('chatRefreshBtn').src = '/Images/chatRefreshBtn.png';
-                };
+                var refreshRate = 1;
 
-                function refreshChatPopup() {
-                    $('#chatRefreshPopup').fadeIn('slow', function () {
-                        return $(this).delay(3500).fadeOut('slow');
+                $('#settingsBtn').on('click', function () {
+                    $('#settingsBox').toggle();
+                    $('#settingsBtn').attr('src',
+                        $(this).attr('src').indexOf('_') == -1?
+                        '/Images/settingsBtn_active.png':
+                        '/Images/settingsBtn.png'
+                    );
+                });
+            </script>
+            <div id="settingsBox">
+                <input type="text" id="refreshRateInput" value="1" onclick="this.select()"/>
+                <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit"/>
+
+                <hr />
+
+                <div id="rConnSettings">
+                    <form id="changeRConnSettings">
+                        <input type="text" name="ipInput" id="ipInput" value="IP" onclick="this.select()"/>
+                        <input type="text" name="portInput" id="portInput" value="Port" onclick="this.select()"/>
+                        <br />
+                        <input type="password" name="passwdInput" id="passwdInput" value="password" onclick="this.select()"/>
+                        <input type="submit" value="Connect to Server" id="rConnSubmit" />
+                    </form>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $('#changeRConnSettings').submit(function (event) {
+                    event.preventDefault();
+
+                    var ip = $('#ipInput').val(),
+                        port = $('#portInput').val(),
+                        passwd = $('#passwdInput').val();
+
+                    var connectionObject = { ServerIP: ip, ServerPort: port, Password: passwd };
+
+                    $.ajax({
+                        type: 'POST',
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('Content-type', 'application/json')
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        url: '/api/values',
+                        data: JSON.stringify(connectionObject),
+                        dataType: 'json',
+                        success: footerPopup('rconn_settings')
+                    });
+                    
+                    $('#settingsBox').toggle();
+                });
+                $('#refreshRateSubmit').on('click', function () {
+                    refreshRate = $('#refreshRateInput').val();
+                    loadMessageQueue(refreshRate);
+                    footerPopup('chat_refresh_rate');
+                    $('#settingsBox').toggle();
+                });
+                $('#forceRefreshBtn').on('click', function () {
+                    footerPopup('chat_forced');
+                });
+
+                // Shows a 3.5 second footer pop-up to notify successful settings change
+                function footerPopup(type) {
+                    var text = '';
+                    if (type === 'chat_refresh_rate') {
+                        text = 'Chat will now refresh every ' + refreshRate + ' seconds.';
+                    } else if (type === 'chat_forced') {
+                        text = 'Chat messages refreshed.';
+                    } else if (type === 'rconn_settings') {
+                        text = 'RConn settings changed; connected to new server successfully.';
+                    }
+
+                    $('#footerPopup').text(text).fadeIn('slow', function () {
+                        return $(this).delay(3500).fadeOut('slow')
                     });
                 }
             </script>
@@ -34,32 +97,9 @@
         </div>
     </section>
     <section class="content-wrapper main-content clear-fix" id="chatContents">
-        <h3>We suggest the following steps:</h3>
-        <ol class="round">
-            <li class="one">
-                <h5>Getting Started</h5>
-                ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-                a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-                is an ideal platform for building RESTful applications on the .NET Framework.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245160">Learn more…</a>
-            </li>
-
-            <li class="two">
-                <h5>Add NuGet packages and jump-start your coding</h5>
-                NuGet makes it easy to install and update free libraries and tools.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245161">Learn more…</a>
-            </li>
-            <li class="three">
-                <h5>Find Web Hosting</h5>
-                You can easily find a web hosting company that offers the right mix of features
-                and price for your applications.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245164">Learn more…</a>
-            </li>
-        </ol>
+        <h3 style="text-align:center">We're loading the chat, give us a sec..</h3>
     </section>
     <!-- Start edits by Conner -->
-    <div id="chatRefreshPopup" style="display:none">
-        Chat refreshed.
-    </div>
+    <div id="footerPopup" style="display:none"></div>
     <!-- End edits by Conner -->
 </div>

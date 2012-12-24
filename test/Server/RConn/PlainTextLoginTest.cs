@@ -14,11 +14,6 @@ namespace test.Server.RConn
         [TestMethod]
         public void ProtocolLoginTest()
         {
-            Packet first = new HashedLogin();
-            var protocol = new Protocol(Settings.Default.ServerIP,
-                                        Settings.Default.ServerPort,
-                                        Settings.Default.ServerPassword);
-            protocol.Connect();
         }
     }
 }
