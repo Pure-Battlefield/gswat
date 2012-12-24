@@ -846,3 +846,17 @@ tr.pager td {
 {
     margin-top: 20px;
 }
+
+#scroll {
+    width:640px;
+    padding:10px;
+    border:5px double #7ac0da;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#buttons {
+    text-align: center;
+    padding: 10px;
+}
