@@ -59,7 +59,7 @@
                             xhr.setRequestHeader('Content-type', 'application/json')
                         },
                         contentType: 'application/json; charset=utf-8',
-                        url: '/api/values',
+                        url: '/api/values/setserverinfo',
                         data: JSON.stringify(connectionObject),
                         dataType: 'json',
                         success: footerPopup('rconn_settings')
@@ -74,6 +74,7 @@
                     $('#settingsBox').toggle();
                 });
                 $('#forceRefreshBtn').on('click', function () {
+                    loop = true;
                     footerPopup('chat_forced');
                 });
 
@@ -111,31 +112,22 @@
         </form>
          <script type="text/javascript">
              $('#chat').submit(function (event) {
+                 
+                 // For the love of all things holy, this is ugly, but it works
+                 // "loop" is a var defined in ajaxUpdateScript that dictates whether or not to keep looping
+                 // Leave me alone
+                 loop = false;
+                 
                  event.preventDefault();
-
                  var date = $('#chatDate').val();
                  var splitdate = date.split("-");
-
                  var day = splitdate[0];
                  var month = splitdate[1];
                  var year = splitdate[2];
 
                  var dateTimeObject = { Day:day, Month:month, Year:year };
 
-                 //$.ajax({
-                 //    type: 'GetByDay',
-                 //    beforeSend: function (xhr) {
-                 //        xhr.setRequestHeader('Content-type', 'application/json')
-                 //    },
-                 //    contentType: 'application/json; charset=utf-8',
-                 //    url: '/api/values',
-                 //    data: JSON.stringify(dateTimeObject),
-                 //    dataType: 'json',
-                 //    success: footerPopup('rconn_settings')
-                 //});
-
-
-                 $.get('/api/values/GetByDay', dateTimeObject, function(data) {
+                 $.get('/api/values/getbyday', dateTimeObject, function(data) {
                      data = JSON.parse(data);
 
                      var content = "";
