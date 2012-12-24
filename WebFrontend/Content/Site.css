@@ -812,7 +812,7 @@ tr.pager td {
     text-align: right;
 }
 
-#refreshRateSubmit, #rConnSubmit
+#settingsBox input[type="submit"]
 {
     border: 0;
     font-weight: normal;
@@ -835,14 +835,14 @@ tr.pager td {
     float: left;
     display: block;
 }
-#rConnSubmit
+#serverSettingsSubmit
 {
     display: block;
     position: relative;
     top: 4px;
 }
 
-#rConnSettings
+#serverSettingsBox
 {
     margin-top: 20px;
 }
