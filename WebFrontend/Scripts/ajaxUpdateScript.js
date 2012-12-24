@@ -1,5 +1,7 @@
 ﻿var parser;
 
+var loop;
+
 function loadMessageQueue(interval)
 {
     // Default is 1 second
@@ -10,7 +12,8 @@ function loadMessageQueue(interval)
     if (parser !== undefined) { // Clear the old parser interval, if it existed.
         window.clearInterval(parser);
     }
-       
+
+    loop = true;
     parseJSON();
     parser = window.setInterval(parseJSON, interval * 1000);
     console.log('Chat refresh rate set to ' + interval + ' seconds');
@@ -19,26 +22,29 @@ function loadMessageQueue(interval)
 
 // Avoid having to write the same code twice
 function parseJSON() {
-    $.get('/api/values', function (data) {
-        data = JSON.parse(data);
+    if (loop == true) {
+        $.get('/api/values/getallmessages', function(data) {
+            data = JSON.parse(data);
 
-        var content = "";
-        for (var message in data) {
-            var timestamp = moment(new Date(parseInt(data[message].MessageTimeStamp.replace('/Date(', ''))));
-            timestamp = timestamp.format("MM/DD/YYYY HH:mm:ss");
-            var channel = data[message].MessageType.toUpperCase();
-            var speaker = data[message].Speaker;
-            var text = data[message].Text;
+            var content = "";
+            for (var message in data) {
+                var timestamp = moment(new Date(parseInt(data[message].MessageTimeStamp.replace('/Date(', ''))));
+                timestamp = timestamp.format("MM/DD/YYYY HH:mm:ss");
+                var channel = data[message].MessageType.toUpperCase();
+                var speaker = data[message].Speaker;
+                var text = data[message].Text;
 
-            var stmt = "<p>[%ts] [%c] <strong>%s</strong>: %t</p>";
-            stmt = stmt.replace('%ts', timestamp)
-                .replace('%c', channel)
-                .replace('%s', speaker)
-                .replace('%t', text);
-            content += stmt;
-        }
-        $('#chatContents').empty().append(content);
-    });
+                var stmt = "<p>[%ts] [%c] <strong>%s</strong>: %t</p>";
+                //start conditionals for each message (all, squad team etc)
 
-    console.log('Refreshing chat..');
+                stmt = stmt.replace('%ts', timestamp)
+                    .replace('%c', channel)
+                    .replace('%s', speaker)
+                    .replace('%t', text);
+                content += stmt;
+            }
+            $('#chatContents').empty().append(content);
+        });
+        console.log('Refreshing chat..');
+    }
 }

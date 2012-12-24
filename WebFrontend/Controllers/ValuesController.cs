@@ -11,7 +11,9 @@ namespace WebFrontend.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        public string Get()
+        [HttpGet]
+        [ActionName("GetAllMessages")]
+        public string GetAllMessages()
         {
             IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             JavaScriptSerializer json = new JavaScriptSerializer();
@@ -19,13 +21,20 @@ namespace WebFrontend.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        [HttpGet]
+        [ActionName("GetByDay")]
+        public string GetByDay([FromUri]DateTimeInfo dateTime)
         {
-            return "value";
+                DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
+                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                JavaScriptSerializer json = new JavaScriptSerializer();
+                return json.Serialize(q);
         }
 
         // POST api/values
-        public void Post([FromBody]ConnectionInfo connection)
+        [HttpPost]
+        [ActionName("SetServerInfo")]
+        public void SetServerInfo([FromBody]ConnectionInfo connection)
         {
             try
             {
@@ -35,16 +44,6 @@ namespace WebFrontend.Controllers
             {
                 
             }
-        }
-
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        public void Delete(int id)
-        {
         }
     }
 }
