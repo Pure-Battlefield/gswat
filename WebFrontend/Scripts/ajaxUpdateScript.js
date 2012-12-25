@@ -69,22 +69,18 @@ function parseJSON(data) {
         var text = data[message].Text;
 
         // Prepare the HTML statement to be written.
-         var stmt = '<p>[%ts] [%c] <strong>%s</strong>: %t</p>';
-       // var stmt;
-         if (channel == 'TEAM1') {
-             stmt = '<p>[%ts]  <span style ="color:#0000FF">[%c]</span> <strong>%s</strong>: %t</p>';
-         }
-         else if (channel == 'TEAM2') {
-             stmt = '<p>[%ts]  <span style ="color:#EC5800">[%c]</span> <strong>%s</strong>: %t</p>';
-         }
-         else if (channel == 'SQUAD1' || channel == 'SQUAD2') {
-             stmt = '<p>[%ts]  <span style ="color:#00FF00">[%c]</span> <strong>%s</strong>: %t</p>';
-         }
-       
-        //else if (channel == 'TEAM1')
+        var stmt = '<p>[%ts] [%c] <strong>%s</strong>: %t</p>';
+
+        // Jesus the last commit by ratdart was atrocious..
+        var colorCodes = {
+            TEAM1: '0000ff',  // This is TODO for Alvin
+            TEAM2: 'EC5800',  // As is this
+            SQUAD1: '00ff00',
+            SQUAD2: '00ff00'
+        };
 
         stmt = stmt.replace('%ts', timestamp)
-            .replace('%c', channel)
+            .replace('%c', '<span style="color:#' + colorCodes[channel] + '">' + channel + '</span>')
             .replace('%s', speaker)
             .replace('%t', text);
 
