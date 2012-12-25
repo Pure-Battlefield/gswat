@@ -36,9 +36,11 @@ function loadMessageQueue(interval)
 // Get all current chat messages.
 function getCurrentChat()
 {
-    $.get('/api/values/getallmessages', function (data) {
-        parseJSON(data);
-    });
+    if (loop) {
+        $.get('/api/values/getallmessages', function(data) {
+            parseJSON(data);
+        });
+    }
 }
 
 
