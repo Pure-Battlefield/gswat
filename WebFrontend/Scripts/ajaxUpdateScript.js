@@ -69,7 +69,20 @@ function parseJSON(data) {
         var text = data[message].Text;
 
         // Prepare the HTML statement to be written.
-        var stmt = '<p>[%ts] [%c] <strong>%s</strong>: %t</p>';
+         var stmt = '<p>[%ts] [%c] <strong>%s</strong>: %t</p>';
+       // var stmt;
+         if (channel == 'TEAM1') {
+             stmt = '<p>[%ts]  <span style ="color:#0000FF">[%c]</span> <strong>%s</strong>: %t</p>';
+         }
+         else if (channel == 'TEAM2') {
+             stmt = '<p>[%ts]  <span style ="color:#EC5800">[%c]</span> <strong>%s</strong>: %t</p>';
+         }
+         else if (channel == 'SQUAD1' || channel == 'SQUAD2') {
+             stmt = '<p>[%ts]  <span style ="color:#00FF00">[%c]</span> <strong>%s</strong>: %t</p>';
+         }
+       
+        //else if (channel == 'TEAM1')
+
         stmt = stmt.replace('%ts', timestamp)
             .replace('%c', channel)
             .replace('%s', speaker)
