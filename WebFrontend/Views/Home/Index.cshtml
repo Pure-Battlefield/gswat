@@ -15,148 +15,36 @@
             <!-- Start edits by Conner -->
             <img src="/Images/settingsBtn.png" alt="Settings" title="Settings" id="settingsBtn" />
             <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
-            <script type="text/javascript">
-                var refreshRate = 1;
-            </script>
             <div id="settingsBox">
-                <input type="text" id="refreshRateInput" value="1" onclick="this.select()"/>
-                <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit"/>
-
+                <input type="text" id="refreshRateInput" value="1" />
+                <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit" />
                 <hr />
-
-                <div id="rConnSettings">
-                    <form id="changeRConnSettings">
-                        <input type="text" name="ipInput" id="ipInput" value="IP" onclick="this.select()"/>
-                        <input type="text" name="portInput" id="portInput" value="Port" onclick="this.select()"/>
+                <div id="serverSettingsBox">
+                    <form id="serverSettingsForm">
+                        <input type="text" name="ipInput" id="ipInput" value="IP" />
+                        <input type="text" name="portInput" id="portInput" value="Port" />
                         <br />
-                        <input type="password" name="passwdInput" id="passwdInput" value="password" onclick="this.select()"/>
-                        <input type="submit" value="Connect to Server" id="rConnSubmit" />
+                        <input type="password" name="passwdInput" id="passwdInput" value="password" />
+                        <input type="submit" value="Connect to Server" id="serverSettingsSubmit" />
                     </form>
                 </div>
             </div>
-            <script type="text/javascript">
-                function toggleSettingsBox() {
-                    $('#settingsBox').toggle();
-                    $('#settingsBtn').attr('src',
-                        $('#settingsBtn').attr('src').indexOf('_') == -1 ?
-                        '/Images/settingsBtn_active.png' :
-                        '/Images/settingsBtn.png'
-                    );
-                }
-                $('#settingsBtn').on('click', function () {
-                    toggleSettingsBox();
-                });
-
-                $('#changeRConnSettings').submit(function (event) {
-                    event.preventDefault();
-
-                    var ip = $('#ipInput').val(),
-                        port = $('#portInput').val(),
-                        passwd = $('#passwdInput').val();
-
-                    var connectionObject = { ServerIP: ip, ServerPort: port, Password: passwd };
-
-                    $.ajax({
-                        type: 'POST',
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader('Content-type', 'application/json')
-                        },
-                        contentType: 'application/json; charset=utf-8',
-                        url: '/api/values/setserverinfo',
-                        data: JSON.stringify(connectionObject),
-                        dataType: 'json',
-                        success: footerPopup('rconn_settings')
-                    });
-                    
-                    toggleSettingsBox();
-                });
-                $('#refreshRateSubmit').on('click', function () {
-                    refreshRate = $('#refreshRateInput').val();
-                    loadMessageQueue(refreshRate);
-                    footerPopup('chat_refresh_rate');
-                    toggleSettingsBox();
-                });
-                $('#forceRefreshBtn').on('click', function () {
-                    loop = true;
-                    footerPopup('chat_forced');
-                });
-
-                // Shows a 3.5 second footer pop-up to notify successful settings change
-                function footerPopup(type) {
-                    var text = '';
-                    if (type === 'chat_refresh_rate') {
-                        text = 'Chat will now refresh every ' + refreshRate + ' seconds.';
-                    } else if (type === 'chat_forced') {
-                        text = 'Chat messages refreshed.';
-                    } else if (type === 'rconn_settings') {
-                        text = 'RConn settings changed; connected to new server successfully.';
-                    }
-
-                    $('#footerPopup').text(text).fadeIn('slow', function () {
-                        return $(this).delay(3500).fadeOut('slow')
-                    });
-                }
-            </script>
             <!-- End edits by Conner -->
         </div>
     </section>
     <section class="content-wrapper main-content clear-fix" id="chatContents">
-
         <h3 style="text-align:center">We're loading the chat, give us a sec..</h3>
     </section>
     <div id="buttons">
-            <form id="chat">
-            <label>Enter Chat Date:</label><input id="chatDate" type="text" size="25"><a href="javascript:NewCal('chatDate','ddmmyyyy')"><img src="Images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
-            
+        <form id="chat">
+            <label>Enter Chat Date:</label>
+            <input id="chatDate" type="text" size="25" />
+            <a href="javascript:NewCal('chatDate','ddmmyyyy')">
+                <img src="Images/cal.gif" width="16" height="16" border="0" alt="Pick a date" />
+            </a>
             <br />
-            <button type="submit" value="Submit">Submit</button>
-           
-
+            <input type="submit" value="Submit" />
         </form>
-         <script type="text/javascript">
-             $('#chat').submit(function (event) {
-                 
-                 // For the love of all things holy, this is ugly, but it works
-                 // "loop" is a var defined in ajaxUpdateScript that dictates whether or not to keep looping
-                 // Leave me alone
-                 loop = false;
-                 
-                 event.preventDefault();
-                 var date = $('#chatDate').val();
-                 var splitdate = date.split("-");
-                 var day = splitdate[0];
-                 var month = splitdate[1];
-                 var year = splitdate[2];
-
-                 var dateTimeObject = { Day:day, Month:month, Year:year };
-
-                 $.get('/api/values/getbyday', dateTimeObject, function(data) {
-                     data = JSON.parse(data);
-
-                     var content = "";
-                     for (var message in data) {
-                         var timestamp = moment(new Date(parseInt(data[message].MessageTimeStamp.replace('/Date(', ''))));
-                         timestamp = timestamp.format("MM/DD/YYYY HH:mm:ss");
-                         var channel = data[message].MessageType.toUpperCase();
-                         var speaker = data[message].Speaker;
-                         var text = data[message].Text;
-
-                         var stmt = "<p>[%ts] [%c] <strong>%s</strong>: %t</p>";
-                         //start conditionals for each message (all, squad team etc)
-
-                         stmt = stmt.replace('%ts', timestamp)
-                             .replace('%c', channel)
-                             .replace('%s', speaker)
-                             .replace('%t', text);
-                         content += stmt;
-                     }
-                     $('#chatContents').empty().append(content);
-                 });
-
-            
-             });
-
-            </script>
         </div>
             <div id="scroll">
             Keep scrolling to load another 300 chat messages.
