@@ -40,7 +40,7 @@ namespace WebFrontend.Controllers
             {
                 GlobalStaticVars.StaticCommLayer.Connect(connection.ServerIP, connection.ServerPort, connection.Password);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 
             }

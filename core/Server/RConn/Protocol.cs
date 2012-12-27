@@ -99,7 +99,7 @@ namespace core.Server.RConn
             int bytesReceived = 0;
             while (bytesReceived < (int) Packet.HeaderSize)
             {
-                bytesReceived += Sock.Receive(buffer, Packet.HeaderSize, SocketFlags.None);
+                bytesReceived += Sock.Receive(buffer, bytesReceived, Packet.HeaderSize - bytesReceived, SocketFlags.None);
             }
 
             UInt32 size = buffer.BytesToUInt(4);
