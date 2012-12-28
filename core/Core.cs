@@ -44,10 +44,11 @@ namespace core
         // Implements ICore
         public void MessageHandler(object sender, ChatEventArgs e)
         {
-            if (e != null)
+            // Filter for server messages here - do not want the spam
+            if (e != null && e.ServerMessage.Speaker != "Server")
             {
                 MessageQueue.Enqueue(e.ServerMessage);
-                if (MessageQueue.Count > 10)
+                if (MessageQueue.Count > 25)
                 {
                     MessageQueue.Dequeue();
                 }
