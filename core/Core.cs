@@ -19,25 +19,23 @@ namespace core
         // Implements ICore
         public ICommHandler CommHandler { get; set; }
         public CloudTable MessageTable { get; set; }
+        public CloudTable CredTable { get; set; }
         public Queue<ChatMessage> MessageQueue { get; set; }
 
         /// <summary>
         ///     Constructs an instance of Core
         ///     Registers handlers to catch ChatMessage events
         /// </summary>
-        /// <param name="comm">CommHandler object to register with</param>
-        public Core(ICommHandler comm)
+        public Core()
         {
-            CommHandler = comm;
+            CommHandler = new CommHandler();
+            CommHandler.CoreListener += MessageHandler;
+
             MessageQueue = new Queue<ChatMessage>();
-            if (comm != null)
-            {
-                CommHandler.CoreListener += MessageHandler;
-            }
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-            CloudTableClient queueClient = storageAccount.CreateCloudTableClient();
-            MessageTable = queueClient.GetTableReference("chatMessages");
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            MessageTable = tableClient.GetTableReference("chatMessages");
             MessageTable.CreateIfNotExists();
         }
 
@@ -83,6 +81,38 @@ namespace core
             var output = MessageTable.ExecuteQuery(query).ToList();
             output.Reverse();
             return output;
-        } 
+        }
+
+        // Implements ICore
+        public void Connect(string address, int port, string password, string oldPass)
+        {
+            CloudStorageAccount storageAccount =
+                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CredTable = tableClient.GetTableReference("serverSettings");
+            CredTable.CreateIfNotExists();
+            TableOperation retrieveOp = TableOperation.Retrieve<ServerSetting>(address, port + "");
+            TableResult result = CredTable.Execute(retrieveOp);
+            if (result.Result != null)
+            {
+                var settings = (ServerSetting) result.Result;
+                if (oldPass == settings.Password)
+                {
+                    settings.Password = password;
+                    TableOperation updateOp = TableOperation.Replace(settings);
+                    CredTable.Execute(updateOp);
+                }
+            }
+            else
+            {
+                var settings = new ServerSetting(address, port, password);
+                TableOperation insertOp = TableOperation.Insert(settings);
+                CredTable.Execute(insertOp);
+            }
+
+            MessageQueue.Clear();
+            CommHandler.Disconnect();
+            CommHandler.Connect(address, port, password);
+        }
     }
 }
