@@ -63,7 +63,7 @@ $('#settingsBtn').click(function () {
 $('#serverSettingsForm').submit(function (event) {
     // Prevent default form submission
     event.preventDefault();
-
+    
     // Store the form's data into memory
     var ip = $('#ip').val(),
         port = $('#port').val(),

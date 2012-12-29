@@ -56,6 +56,7 @@ namespace core
         /// <param name="address">Address of the server</param>
         /// <param name="port">Port to connect to</param>
         /// <param name="password">Password to use</param>
-        void Connect(string address, int port, string password);
+        /// <param name="oldpass">Old password to verify with</param>
+        void Connect(string address, int port, string password, string oldPass);
     }
 }
