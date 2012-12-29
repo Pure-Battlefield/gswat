@@ -13,8 +13,7 @@ var loop;
  * 
  * @param interval      How often to refresh the queue.
  */
-function loadMessageQueue(interval)
-{
+function loadMessageQueue(interval) {
     if (interval === undefined) { // Set the interval to the default if it's not defined explicitly.
         interval = 1;
     }
@@ -34,10 +33,9 @@ function loadMessageQueue(interval)
 
 
 // Get all current chat messages.
-function getCurrentChat()
-{
+function getCurrentChat() {
     if (loop) {
-        $.get('/api/values/getallmessages', function(data) {
+        $.get('/api/values/getallmessages', function (data) {
             parseJSON(data);
         });
     }
@@ -87,7 +85,7 @@ function parseJSON(data) {
         // Append the prepared statement to 'content', which is the chunk of HTML data of all the messages.
         content += stmt;
     }
-    
+
     // Clean out the chat div and add the new stuff.  This is significantly faster than it sounds it would be.
     $('#chatContents').empty().append(content);
 }

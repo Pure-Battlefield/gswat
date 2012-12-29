@@ -65,17 +65,25 @@ $('#serverSettingsForm').submit(function (event) {
     event.preventDefault();
 
     // Store the form's data into memory
-    var ip = $('#ipInput').val(),
-        port = $('#portInput').val(),
-        passwd = $('#passwdInput').val();
+    var ip = $('#ip').val(),
+        port = $('#port').val(),
+        passwd = $('#passwd').val(),
+        oldPasswd = $('#oldPasswd').val();
 
     // Pack the above data into something that can be sent over JSON
-    var packedData = { ServerIP: ip, ServerPort: port, Password: passwd };
+    var packedData = {
+        ServerIP: ip,
+        ServerPort: port,
+        Password: passwd,
+        OldPassword: oldPasswd
+    };
 
     // Send the AJAX POST data (as stringified JSON)
     $.ajax({
         type: 'POST',
-        beforeSend: function (xhr) { xhr.setRequestHeader('Content-type', 'application/json') },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Content-type', 'application/json')
+        },
         contentType: 'application/json; charset=utf-8',
         url: '/api/values/setserverinfo',
         data: JSON.stringify(packedData),
@@ -111,18 +119,20 @@ $('#forceRefreshBtn').click(function () {
 });
 
 
-$('#chat').submit(function (event) {
+$('#historicalChatForm').submit(function (data) {
     // Do NOT try to continuously load messages (these are historical chat messages!)
     loop = false;
 
     event.preventDefault();
     var date = $('#chatDate').val();
-    var splitDate = date.split("-");
+    console.log(date);
+    var splitDate = date.split("/");
     var dateTime = {
         Day: splitDate[0],
         Month: splitDate[1],
         Year: splitDate[2]
     };
+    console.log(dateTime);
 
     $.get('/api/values/getbyday', dateTime, function (data) {
         parseJSON(data);
