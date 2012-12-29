@@ -34,7 +34,7 @@
         }
 
         // Implements ICommLayer
-        public void Close()
+        public void Disconnect()
         {
         }
     }

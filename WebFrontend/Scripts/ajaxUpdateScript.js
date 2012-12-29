@@ -68,7 +68,8 @@ function parseJSON(data) {
 
         // Prepare the HTML statement to be written.
         var stmt = '<p>[%ts] [%c] <strong>%s</strong>: %t</p>';
-        
+
+        // Color codes for channels
         var colorCodes = {
             TEAM1: '0000ff',  // This is TODO for Alvin
             TEAM2: 'EC5800',  // As is this
