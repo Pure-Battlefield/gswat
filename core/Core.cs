@@ -112,7 +112,11 @@ namespace core
                     settings.RowKey = "Server";
                     TableOperation updateOp = TableOperation.Replace(settings);
                     CredTable.Execute(updateOp);
-                    CommHandler.Connect(address, port, password);
+                    try
+                    {
+                        CommHandler.Connect(address, port, password);
+                    }
+                    catch (Exception e) {}
                 }
             }
             else
@@ -127,7 +131,11 @@ namespace core
                 settings.RowKey = "Server";
                 TableOperation insertOp = TableOperation.Insert(settings);
                 CredTable.Execute(insertOp);
-                CommHandler.Connect(address, port, password);
+                try
+                {
+                    CommHandler.Connect(address, port, password);
+                }
+                catch (Exception e) {}
             }
         }
 
@@ -144,7 +152,11 @@ namespace core
             if (result.Result != null)
             {
                 var settings = (ServerConfig)result.Result;
-                CommHandler.Connect(settings.Address, settings.Port, settings.Password);
+                try
+                {
+                    CommHandler.Connect(settings.Address, settings.Port, settings.Password);
+                }
+                catch (Exception e) {}
             }
         }
     }
