@@ -69,12 +69,23 @@ function parseJSON(data) {
         // Prepare the HTML statement to be written.
         var stmt = '<p>[%ts] [%c] <strong>%s</strong>: %t</p>';
 
+        // Rename channels to more verbose names.
+        switch (channel) {
+            case 'TEAM1':
+                channel = 'US';
+                break;
+            case 'TEAM2':
+                channel = 'RU';
+                break;
+            default:
+                channel = 'SQUAD';
+        }
+
         // Color codes for channels
         var colorCodes = {
-            TEAM1: '0000ff',  // This is TODO for Alvin
-            TEAM2: 'EC5800',  // As is this
-            SQUAD1: '00ff00',
-            SQUAD2: '00ff00'
+            US: '0000ff',
+            RU: 'ce2323', // ec5800
+            SQUAD: '28ae00' // 00ff00
         };
 
         stmt = stmt.replace('%ts', timestamp)
