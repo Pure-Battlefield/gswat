@@ -70,6 +70,12 @@ $('#serverSettingsForm').submit(function (event) {
         passwd = $('#passwd').val(),
         oldPasswd = $('#oldPasswd').val();
 
+    // Clear form data
+    $('#ip').val("");
+    $('#port').val("");
+    $('#passwd').val("");
+    $('#oldPasswd').val("");
+
     // Pack the above data into something that can be sent over JSON
     var packedData = {
         ServerIP: ip,

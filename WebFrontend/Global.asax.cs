@@ -23,6 +23,7 @@ namespace WebFrontend
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             GlobalStaticVars.StaticCore = new Core();
+            GlobalStaticVars.StaticCore.LoadExistingConnection();
         }
     }
 }

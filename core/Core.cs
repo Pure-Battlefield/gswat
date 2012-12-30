@@ -7,6 +7,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using core.ChatMessageUtilities;
 using core.Server;
 using core.ServerInterface;
+using core.TableStore;
 
 namespace core
 {
@@ -86,33 +87,65 @@ namespace core
         // Implements ICore
         public void Connect(string address, int port, string password, string oldPass)
         {
+            // Check for a last-saved connection - if present, oldPass must match
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CredTable = tableClient.GetTableReference("serverSettings");
             CredTable.CreateIfNotExists();
-            TableOperation retrieveOp = TableOperation.Retrieve<ServerSetting>(address, port + "");
+            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>("Last", "Server");
             TableResult result = CredTable.Execute(retrieveOp);
             if (result.Result != null)
             {
-                var settings = (ServerSetting) result.Result;
-                if (oldPass == settings.Password)
+                var settings = (ServerConfig)result.Result;
+                // Only overwrite the last-saved connection if the passwords match
+                if (settings.Password == oldPass)
                 {
+                    // Disconnect from current server
+                    MessageQueue.Clear();
+                    CommHandler.Disconnect();
+
+                    settings.Address = address;
+                    settings.Port = port;
                     settings.Password = password;
+                    settings.PartitionKey = "Last";
+                    settings.RowKey = "Server";
                     TableOperation updateOp = TableOperation.Replace(settings);
                     CredTable.Execute(updateOp);
+                    CommHandler.Connect(address, port, password);
                 }
             }
             else
             {
-                var settings = new ServerSetting(address, port, password);
+                // Disconnect from current server
+                MessageQueue.Clear();
+                CommHandler.Disconnect();
+
+                // If there is no last-saved connection, add one
+                var settings = new ServerConfig(address, port, password);
+                settings.PartitionKey = "Last";
+                settings.RowKey = "Server";
                 TableOperation insertOp = TableOperation.Insert(settings);
                 CredTable.Execute(insertOp);
+                CommHandler.Connect(address, port, password);
             }
+        }
 
-            MessageQueue.Clear();
-            CommHandler.Disconnect();
-            CommHandler.Connect(address, port, password);
+        public void LoadExistingConnection()
+        {
+            // Check for a last-saved connection
+            CloudStorageAccount storageAccount =
+                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CredTable = tableClient.GetTableReference("serverSettings");
+            CredTable.CreateIfNotExists();
+            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>("Last", "Server");
+            TableResult result = CredTable.Execute(retrieveOp);
+            if (result.Result != null)
+            {
+                var settings = (ServerConfig)result.Result;
+                CommHandler.Connect(settings.Address, settings.Port, settings.Password);
+            }
         }
     }
 }

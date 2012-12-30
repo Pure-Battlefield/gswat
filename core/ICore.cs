@@ -58,5 +58,7 @@ namespace core
         /// <param name="password">Password to use</param>
         /// <param name="oldpass">Old password to verify with</param>
         void Connect(string address, int port, string password, string oldPass);
+
+        void LoadExistingConnection();
     }
 }

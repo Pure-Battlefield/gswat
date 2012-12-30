@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace core.ServerInterface
+namespace core.TableStore
 {
-    class ServerSetting : TableEntity
+    public class ServerConfig : TableEntity
     {
         private String _address;
         private int _port;
@@ -32,11 +28,16 @@ namespace core.ServerInterface
 
         public string Password { get; set; }
 
-        public ServerSetting(String address, int port, String password)
+        public ServerConfig(String address, int port, String password)
         {
             Address = address;
             Port = port;
             Password = password;
+        }
+
+        public ServerConfig()
+        {
+            
         }
     }
 }
