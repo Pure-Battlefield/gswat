@@ -135,7 +135,10 @@ namespace core.Server.RConn
         public void Disconnect()
         {
             Sock.Close();
-            MessagePump.Abort();
+            if (MessagePump != null)
+            {
+                MessagePump.Abort();
+            }
         }
     }
 }
