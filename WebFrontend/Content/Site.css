@@ -819,29 +819,6 @@ tr.pager td {
     background-color: #E2E2E2;
 }
 
-#ipInput
-{
-    width: 30%;
-    float: left;
-}
-#portInput
-{
-    width: 27%;
-    float: left;
-}
-#passwdInput
-{
-    width: 60%;
-    float: left;
-    display: block;
-}
-#serverSettingsSubmit
-{
-    display: block;
-    position: relative;
-    top: 4px;
-}
-
 #serverSettingsBox
 {
     margin-top: 20px;
@@ -859,4 +836,9 @@ tr.pager td {
 #buttons {
     text-align: center;
     padding: 10px;
+}
+
+#chatDate
+{
+    width: 140px;
 }

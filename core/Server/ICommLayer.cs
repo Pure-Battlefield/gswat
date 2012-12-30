@@ -21,8 +21,8 @@
         void NotifyCommHandler(object sender, ChatEventArgs e);
 
         /// <summary>
-        ///     Close server connection
+        ///     Disconnect server connection
         /// </summary>
-        void Close();
+        void Disconnect();
     }
 }

@@ -16,5 +16,18 @@ namespace core.ServerInterface
         /// <param name="sender">Sender of the notification</param>
         /// <param name="e">ChatEventArgs containing message</param>
         void NotifyCore(object sender, ChatEventArgs e);
+
+        /// <summary>
+        ///     Connects to a new server
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="port"></param>
+        /// <param name="password"></param>
+        void Connect(string address, int port, string password);
+
+        /// <summary>
+        ///     Disconnects from current server
+        /// </summary>
+        void Disconnect();
     }
 }

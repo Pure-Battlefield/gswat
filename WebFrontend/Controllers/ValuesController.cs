@@ -38,7 +38,7 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                GlobalStaticVars.StaticCommLayer.Connect(connection.ServerIP, connection.ServerPort, connection.Password);
+                GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
             }
             catch (ArgumentException)
             {
