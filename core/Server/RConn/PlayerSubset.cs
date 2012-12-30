@@ -11,10 +11,10 @@
     /// </summary>
     public class PlayerSubset
     {
-        private PlayerScope Scope { get; set; }
-        private int TeamId { get; set; }
-        private int SquadId { get; set; }
-        private string Player { get; set; }
+        public PlayerScope Scope { get; set; }
+        public int TeamId { get; set; }
+        public int SquadId { get; set; }
+        public string Player { get; set; }
 
         public override string ToString()
         {
@@ -23,7 +23,7 @@
                 case (PlayerScope.Team):
                     return "team" + TeamId;
                 case (PlayerScope.Squad):
-                    return "squad" + TeamId + " " + SquadId;
+                    return "team" + TeamId + "squad" + SquadId;
                 case (PlayerScope.Player):
                     return "player" + Player;
                 case (PlayerScope.All):

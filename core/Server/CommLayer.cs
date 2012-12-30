@@ -43,7 +43,7 @@ namespace core.Server
                         MessageTimeStamp = DateTime.Now,
                         Text = chat.Text,
                         Speaker = chat.SoldierName,
-                        MessageType = chat.TargetPlayers
+                        MessageType = chat.TargetPlayers.ToString()
                     };
 
                 var chatArgs = new ChatEventArgs(message);

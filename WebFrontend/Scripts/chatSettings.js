@@ -140,7 +140,13 @@ $('#historicalChatForm').submit(function (data) {
     };
     console.log(dateTime);
 
-    $.get('/api/values/getbyday', dateTime, function (data) {
-        parseJSON(data);
+    $.ajax({
+        type: 'GET',
+        url: '/api/values/getbyday/',
+        dataType: 'json',
+        data: dateTime,
+        success: function (data) {
+            parseJSON(data);
+        }
     });
 });
