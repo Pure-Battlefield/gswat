@@ -66,32 +66,61 @@ function parseJSON(data) {
         // The message body.
         var text = data[message].Text;
 
-        // Prepare the HTML statement to be written.
-        var stmt = '<p>[%ts] [%c] <strong>%s</strong>: %t</p>';
-
         // Rename channels to more verbose names.
-        switch (channel) {
-            case 'TEAM1':
-                channel = 'US';
-                break;
-            case 'TEAM2':
-                channel = 'RU';
-                break;
-            default:
-                channel = 'SQUAD';
+        channel = channel.replace('TEAM1', '<span style="color:#0000ff">US</span>');
+        channel = channel.replace('TEAM2', '<span style="color:#ce2323">RU</span>');
+        channel = channel.replace('SQUAD', ' <span style="color:#28ae00">SQUAD');
+        
+        // Prepare the HTML statement to be written.
+        var stmt = '<p>[%ts] <strong>[%c</span>] %s</strong>: %t</p>';
+        if (channel.indexOf('SQUAD') > -1) {
+            stmt = '<p>[%ts] <strong>[%c</span>] %s</strong>: %t</p>';
+        }
+        else if (channel.substring(0, 2) == 'US') {
+            stmt = '<p>[%ts] <strong>[%c</span>] %s</strong>: %t</p>';
+        }
+        else if (channel.substring(0, 2) == 'RU') {
+            stmt = '<p>[%ts] <strong>[%c</span>] %s</strong>: %t</p>';
         }
 
-        // Color codes for channels
-        var colorCodes = {
-            US: '0000ff',
-            RU: 'ce2323', // ec5800
-            SQUAD: '28ae00' // 00ff00
-        };
-
         stmt = stmt.replace('%ts', timestamp)
-            .replace('%c', '<span style="color:#' + colorCodes[channel] + '">' + channel + '</span>')
+            .replace('%c', channel)
             .replace('%s', speaker)
             .replace('%t', text);
+
+        var squads = [
+            ["SQUAD1", "ALPHA"],
+            ["SQUAD2", "BRAVO"],
+            ["SQUAD3", "CHARLIE"],
+            ["SQUAD4", "DELTA"],
+            ["SQUAD5", "ECHO"],
+            ["SQUAD6", "FOXTROT"],
+            ["SQUAD7", "GOLF"],
+            ["SQUAD8", "HOTEL"],
+            ["SQUAD9", "INDIA"],
+            ["SQUAD10", "JULIET"],
+            ["SQUAD11", "KILO"],
+            ["SQUAD12", "LIMA"],
+            ["SQUAD13", "MIKE"],
+            ["SQUAD14", "NOVEMBER"],
+            ["SQUAD15", "OSCAR"],
+            ["SQUAD16", "PAPA"],
+            ["SQUAD17", "QUEBEC"],
+            ["SQUAD18", "ROMEO"],
+            ["SQUAD19", "SIERRA"],
+            ["SQUAD20", "TANGO"],
+            ["SQUAD21", "UNIFORM"],
+            ["SQUAD22", "VICTOR"],
+            ["SQUAD23", "WHISKEY"],
+            ["SQUAD24", "XRAY"],
+            ["SQUAD25", "YANKEE"],
+            ["SQUAD26", "ZULU"]
+        ];
+        
+        // This isn't quite the prettiest solution, but it works
+        for (var i = 0; i < squads.length; i++) {
+            stmt = stmt.replace(squads[i][0], squads[i][1]);
+        }
 
         // Append the prepared statement to 'content', which is the chunk of HTML data of all the messages.
         content += stmt;
