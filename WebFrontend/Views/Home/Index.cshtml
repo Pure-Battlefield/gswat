@@ -21,11 +21,22 @@
                 <hr />
                 <div id="serverSettingsBox">
                     <form id="serverSettingsForm">
-                        <input type="text" name="ipInput" id="ipInput" value="IP" />
-                        <input type="text" name="portInput" id="portInput" value="Port" />
-                        <br />
-                        <input type="password" name="passwdInput" id="passwdInput" value="password" />
-                        <input type="submit" value="Connect to Server" id="serverSettingsSubmit" />
+                        <fieldset>
+                            <legend></legend>
+                            <label for="ip">IP: </label>
+                            <input type="text" name="ip" id="ip" />
+                                
+                            <label for="port">Port: </label>
+                            <input type="text" name="port" id="port" />
+
+                            <label for="passwd">Password: </label>
+                            <input type="password" name="passwd" id="passwd" />
+
+                            <label for="oldPasswd">Old password: </label>
+                            <input type="password" name="oldPasswd" id="oldPasswd" />
+
+                            <br /><input type="submit" value="Change server connection settings" name="serverSettingsForm" />
+                        </fieldset>
                     </form>
                 </div>
             </div>
@@ -36,18 +47,21 @@
         <h3 style="text-align:center">We're loading the chat, give us a sec..</h3>
     </section>
     <div id="buttons">
-        <form id="chat">
-            <label>Enter Chat Date:</label>
-            <input id="chatDate" type="text" size="25" />
-            <a href="javascript:NewCal('chatDate','ddmmyyyy')">
-                <img src="Images/cal.gif" width="16" height="16" border="0" alt="Pick a date" />
-            </a>
-            <br />
-            <input type="submit" value="Submit" />
+        <form id="historicalChatForm">
+            <fieldset>
+                <legend><!-- not needed --></legend>
+                <label>Enter Chat Date:</label>
+                <input type="text" name="chatDate" id="chatDate" />
+
+                <input type="submit" value="Load chat" />
+            </fieldset>
+            
+            <script type="text/javascript">
+                $('#chatDate').datepicker({
+                    dateFormat: 'dd/mm/yy'
+                });
+            </script>
         </form>
-        </div>
-            <div id="scroll">
-            Keep scrolling to load another 300 chat messages.
         </div>
     <!-- Start edits by Conner -->
     <div id="footerPopup" style="display:none"></div>

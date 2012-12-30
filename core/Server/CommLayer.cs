@@ -12,10 +12,6 @@ namespace core.Server
 
         public void Connect(string address, int port, string password)
         {
-            if (RconProtocol != null)
-            {
-                RconProtocol.Dispose();
-            }
             RconProtocol = new Protocol(address, port, password);
             RconProtocol.PacketEvent += RConnPacketHandler;
             RconProtocol.Connect();
@@ -27,9 +23,13 @@ namespace core.Server
             throw new NotImplementedException();
         }
 
-        public void Close()
+        public void Disconnect()
         {
-            throw new NotImplementedException();
+            if (RconProtocol != null)
+            {
+                RconProtocol.Disconnect();
+                RconProtocol.PacketEvent -= RConnPacketHandler;
+            }
         }
 
         private void RConnPacketHandler(Packet args)

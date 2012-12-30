@@ -4,28 +4,33 @@ namespace core.ServerInterface
 {
     public class CommHandler : ICommHandler
     {
-        // Implements ICommHandler
-        /// <summary>
-        ///     Constructs a CommHandler object with a predefined ICommLayer
-        /// </summary>
-        /// <param name="comm">ICommLayer to hook this CommHandler to</param>
-        public CommHandler(ICommLayer comm)
-        {
-            CommLayer = comm;
-            if (comm != null)
-            {
-                CommLayer.CommHandler += NotifyCore;
-            }
-        }
-
         public event ChatEventHandler CoreListener;
         public ICommLayer CommLayer { get; set; }
 
+        // Implements ICommHandler
         public void NotifyCore(object sender, ChatEventArgs e)
         {
             if (CoreListener != null)
             {
                 CoreListener(this, e);
+            }
+        }
+
+        // Implements ICommHandler
+        public void Connect(string address, int port, string password)
+        {
+            CommLayer = new CommLayer();
+            CommLayer.CommHandler += NotifyCore;
+            CommLayer.Connect(address, port, password);
+        }
+
+        // Implements ICommHandler
+        public void Disconnect()
+        {
+            if (CommLayer != null)
+            {
+                CommLayer.Disconnect();
+                CommLayer.CommHandler -= NotifyCore;
             }
         }
     }

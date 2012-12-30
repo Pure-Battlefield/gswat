@@ -6,7 +6,7 @@ using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
 {
-    public class Protocol : IDisposable
+    public class Protocol
     {
         public delegate void PacketEventHandler(Packet args);
 
@@ -29,6 +29,7 @@ namespace core.Server.RConn
 
         public event PacketEventHandler PacketEvent;
 
+        public Thread MessagePump;
 
         public void Connect()
         {
@@ -50,8 +51,8 @@ namespace core.Server.RConn
                     throw new Exception("Events not enabled.");
                 }
 
-                var messagePump = new Thread(ReceivePackets);
-                messagePump.Start();
+                MessagePump = new Thread(ReceivePackets);
+                MessagePump.Start();
             }
             catch (SocketException)
             {
@@ -131,10 +132,10 @@ namespace core.Server.RConn
             Sock.Send(packet.Emit());
         }
 
-        public void Dispose()
+        public void Disconnect()
         {
-            GC.SuppressFinalize(this);
             Sock.Close();
+            MessagePump.Abort();
         }
     }
 }

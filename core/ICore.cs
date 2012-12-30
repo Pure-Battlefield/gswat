@@ -48,5 +48,17 @@ namespace core
         /// <param name="date">DateTime object specifying day (all other properties such as Time are ignored)</param>
         /// <returns>List of messages on that day</returns>
         IEnumerable<ChatMessage> GetMessagesFromDate(DateTime date);
+
+        /// <summary>
+        ///     Connect to a new server (wipes current cached MessageQueue)
+        ///     Currently, this just replaces the CommLayer object with a new one
+        /// </summary>
+        /// <param name="address">Address of the server</param>
+        /// <param name="port">Port to connect to</param>
+        /// <param name="password">Password to use</param>
+        /// <param name="oldpass">Old password to verify with</param>
+        void Connect(string address, int port, string password, string oldPass);
+
+        void LoadExistingConnection();
     }
 }
