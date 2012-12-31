@@ -22,6 +22,7 @@ namespace core
         public CloudTable MessageTable { get; set; }
         public CloudTable CredTable { get; set; }
         public Queue<ChatMessage> MessageQueue { get; set; }
+        public Dictionary<string, DateTime> ServerMessages { get; set; } 
 
         /// <summary>
         ///     Constructs an instance of Core
@@ -33,6 +34,8 @@ namespace core
             CommHandler.CoreListener += MessageHandler;
 
             MessageQueue = new Queue<ChatMessage>();
+            ServerMessages = new Dictionary<string, DateTime>();
+
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
@@ -44,16 +47,51 @@ namespace core
         public void MessageHandler(object sender, ChatEventArgs e)
         {
             // Filter for server messages here - do not want the spam
-            if (e != null && e.ServerMessage.Speaker != "Server")
+            if (e != null)
             {
-                MessageQueue.Enqueue(e.ServerMessage);
-                if (MessageQueue.Count > 25)
+                if (e.ServerMessage.Speaker == "Server")
                 {
-                    MessageQueue.Dequeue();
+                    if (ServerMessages.ContainsKey(e.ServerMessage.Text))
+                    {
+                        DateTime lastShown = ServerMessages[e.ServerMessage.Text];
+                        DateTime now = DateTime.UtcNow;
+                        TimeSpan ts = now - lastShown;
+                        double diff = ts.TotalMinutes;
+                        if (diff > 10)
+                        {
+                            // Message needs to be displayed again
+                            EnqueueMessage(e.ServerMessage);
+
+                            // Timestamp in Dictionary also needs to be updated
+                            ServerMessages[e.ServerMessage.Text] = now;
+                        }
+                    }
+                    else
+                    {
+                        // Message needs to be displayed, as it has not been seen
+                        EnqueueMessage(e.ServerMessage);
+
+                        // Also need to add it to the Dictionary
+                        DateTime now = DateTime.UtcNow;
+                        ServerMessages.Add(e.ServerMessage.Text, now);
+                    }
                 }
-                TableOperation insertOp = TableOperation.Insert(e.ServerMessage);
-                MessageTable.Execute(insertOp);
+                else
+                {
+                    EnqueueMessage(e.ServerMessage);
+                }
             }
+        }
+
+        private void EnqueueMessage(ChatMessage msg)
+        {
+            MessageQueue.Enqueue(msg);
+            if (MessageQueue.Count > 25)
+            {
+                MessageQueue.Dequeue();
+            }
+            TableOperation insertOp = TableOperation.Insert(msg);
+            MessageTable.Execute(insertOp);
         }
 
         // Implements ICore
