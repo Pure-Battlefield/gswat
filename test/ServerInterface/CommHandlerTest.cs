@@ -15,7 +15,8 @@ namespace test.ServerInterface
         {
             // Create objects
             var mockCommLayer = new Mock<ICommLayer>();
-            var commHandler = new CommHandler(mockCommLayer.Object);
+            var commHandler = new CommHandler();
+            commHandler.CommLayer = mockCommLayer.Object;
 
             // Subscribe to CommHandler
             bool raised = false;
@@ -33,7 +34,7 @@ namespace test.ServerInterface
         public void CommHandlerTest_Constructor_NullParams()
         {
             // Create objects
-            var commHandler = new CommHandler(null);
+            var commHandler = new CommHandler();
 
             // Check for empty CommHandler reference in Core
             Assert.AreEqual(commHandler.CommLayer, null);
