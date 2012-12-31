@@ -44,7 +44,7 @@ namespace core
         public void MessageHandler(object sender, ChatEventArgs e)
         {
             // Filter for server messages here - do not want the spam
-            if (e != null && e.ServerMessage.Speaker != "Server")
+            if (e != null)
             {
                 MessageQueue.Enqueue(e.ServerMessage);
                 if (MessageQueue.Count > 25)
