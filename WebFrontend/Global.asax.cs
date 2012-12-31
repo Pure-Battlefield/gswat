@@ -22,10 +22,8 @@ namespace WebFrontend
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            GlobalStaticVars.StaticCommLayer = new CommLayer();
-            var commHandler = new CommHandler(GlobalStaticVars.StaticCommLayer);
-
-            GlobalStaticVars.StaticCore = new Core(commHandler);
+            GlobalStaticVars.StaticCore = new Core();
+            GlobalStaticVars.StaticCore.LoadExistingConnection();
         }
     }
 }

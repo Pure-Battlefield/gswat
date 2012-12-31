@@ -1,4 +1,6 @@
-﻿namespace core.Server.RConn.Commands
+﻿using System;
+
+namespace core.Server.RConn.Commands
 {
     /// <summary>
     ///     Request:  player.onChat [source soldier name: string] [text: string] [target players: player subset]
@@ -47,7 +49,7 @@
             }
         }
 
-        public string TargetPlayers
+        public PlayerSubset TargetPlayers
         {
             get
             {
@@ -55,15 +57,35 @@
 
                 if (Words.Count >= 4)
                 {
-                    result += new string(Words[3].Content);
+                    for(int i=3; i<Words.Count; i++)
+                    result += new string(Words[i].Content);
                 }
 
                 if (Words.Count >= 5)
                 {
-                    result += new string(Words[4].Content);
+                    for(int i=4; i<Words.Count; i++)
+                    result += new string(Words[i].Content);
                 }
 
-                return result;
+                PlayerSubset subset = new PlayerSubset();
+
+                if (result.Contains("team"))
+                {
+                    subset.Scope = PlayerScope.Team;
+                    subset.TeamId = Convert.ToInt32(result.Substring(result.Length - 1));
+                }
+                else if (result.Contains("squad"))
+                {
+                    subset.Scope = PlayerScope.Squad;
+                    subset.TeamId = Convert.ToInt32(result.Substring(result.Length - 2, 1));
+                    subset.SquadId = Convert.ToInt32(result.Substring(result.Length - 1));
+                }
+                else
+                {
+                    subset.Scope = PlayerScope.All;
+                }
+
+                return subset;
             }
         }
 

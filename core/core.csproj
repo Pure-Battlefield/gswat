@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="ServerInterface\CommHandler.cs" />
     <Compile Include="ServerInterface\ICommHandler.cs" />
+    <Compile Include="TableStore\ServerConfig.cs" />
     <Compile Include="Server\ICommLayer.cs" />
     <Compile Include="Server\IServerMock.cs" />
     <Compile Include="Server\CommLayerMock.cs" />

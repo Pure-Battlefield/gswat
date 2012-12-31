@@ -6,7 +6,7 @@ using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
 {
-    public class Protocol : IDisposable
+    public class Protocol
     {
         public delegate void PacketEventHandler(Packet args);
 
@@ -29,6 +29,7 @@ namespace core.Server.RConn
 
         public event PacketEventHandler PacketEvent;
 
+        public Thread MessagePump;
 
         public void Connect()
         {
@@ -50,8 +51,8 @@ namespace core.Server.RConn
                     throw new Exception("Events not enabled.");
                 }
 
-                var messagePump = new Thread(ReceivePackets);
-                messagePump.Start();
+                MessagePump = new Thread(ReceivePackets);
+                MessagePump.Start();
             }
             catch (SocketException)
             {
@@ -95,9 +96,22 @@ namespace core.Server.RConn
         private Packet ReceivePacket()
         {
             var buffer = new byte[Packet.MaxSize];
-            Sock.Receive(buffer, Packet.HeaderSize, SocketFlags.None);
+
+            int bytesReceived = 0;
+            while (bytesReceived < (int) Packet.HeaderSize)
+            {
+                bytesReceived += Sock.Receive(buffer, bytesReceived, Packet.HeaderSize - bytesReceived, SocketFlags.None);
+            }
+
             UInt32 size = buffer.BytesToUInt(4);
-            Sock.Receive(buffer, Packet.HeaderSize, (int) size - Packet.HeaderSize, SocketFlags.None);
+
+            while (bytesReceived < (int)size)
+            {
+                bytesReceived += Sock.Receive(buffer,
+                        bytesReceived,
+                        ((int)size) - bytesReceived,
+                        SocketFlags.None);
+            }
 
             return buffer.BytesToPacket();
         }
@@ -118,10 +132,13 @@ namespace core.Server.RConn
             Sock.Send(packet.Emit());
         }
 
-        public void Dispose()
+        public void Disconnect()
         {
-            GC.SuppressFinalize(this);
             Sock.Close();
+            if (MessagePump != null)
+            {
+                MessagePump.Abort();
+            }
         }
     }
 }
