@@ -15,7 +15,7 @@
       <Import moduleName="Diagnostics" />
     </Imports>
     <LocalResources>
-      <LocalStorage name="DiagnosticStore" sizeInMB="20000" cleanOnRoleRecycle="false" />
+      <LocalStorage name="DiagnosticStore" sizeInMB="2000" cleanOnRoleRecycle="true" />
     </LocalResources>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
