@@ -40,7 +40,7 @@ namespace core.Server
                 var chat = new OnChat(args);
                 var message = new ChatMessage
                     {
-                        MessageTimeStamp = DateTime.Now,
+                        MessageTimeStamp = DateTime.UtcNow,
                         Text = chat.Text,
                         Speaker = chat.SoldierName,
                         MessageType = chat.TargetPlayers.ToString()

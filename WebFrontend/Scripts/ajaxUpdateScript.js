@@ -54,7 +54,8 @@ function parseJSON(data) {
     var content = '';
     for (var message in data) { // Loop through each chat message in the data sent
         // The timestamp hooked to the current chat message.
-        var timestamp = moment(new Date(parseInt(data[message].MessageTimeStamp.replace('/Date(', ''))));
+        var now = new Date(parseInt(data[message].MessageTimeStamp.replace('/Date(', '')));
+        var timestamp = moment(new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
         timestamp = timestamp.format('MM/DD/YYYY HH:mm:ss');
 
         // The channel this user is in (ALL, SQUAD#, etc.)
