@@ -9,12 +9,14 @@ var chatRefreshRate = 1;
  * @param type      The type of message, this is expected to be exact.
  * @param data      (If applicable) a piece of data to go in the message.
  */
-function footerPopup(type, data) {
+function footerPopup(type, data, doFade) {
+    doFade = typeof a !== 'undefined' ? doFade : true; //Automatically fade out message after 3500 ms if not specified
     // List of valid 'types' of messages that can be printed.
     var validTypes = {
         chatRefreshRate: 'Chat will now be refreshed every %data% seconds.',
         chatRefreshForced: 'Chat messages refreshed.',
-        serverSettings: 'Connected to new server successfully at %data%.'
+        serverSettings: 'Connected to new server successfully at %data%.',
+        loadingLogData: 'Loading Chat Log Data.'
     };
 
     // Construct the message itself
@@ -30,7 +32,9 @@ function footerPopup(type, data) {
 
     // Show the pop-up.
     $('#footerPopup').text(message).fadeIn('slow', function () {
-        return $(this).delay(3500).fadeOut('slow')
+        if (doFade) {
+            return $(this).delay(3500).fadeOut('slow');
+        }
     });
 }
 
@@ -139,6 +143,7 @@ $('#historicalChatForm').submit(function (data) {
         Year: splitDate[2]
     };
     console.log(dateTime);
+    footerPopup('loadingLogData', null, false);
 
     $.ajax({
         type: 'GET',
@@ -147,6 +152,7 @@ $('#historicalChatForm').submit(function (data) {
         data: dateTime,
         success: function (data) {
             parseJSON(data);
+            $('#footerPopup').fadeOut('slow');
         }
     });
 });
