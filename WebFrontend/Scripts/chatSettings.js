@@ -10,7 +10,7 @@ var chatRefreshRate = 1;
  * @param data      (If applicable) a piece of data to go in the message.
  */
 function footerPopup(type, data, doFade) {
-    doFade = typeof a !== 'undefined' ? doFade : true; //Automatically fade out message after 3500 ms if not specified
+    doFade = typeof doFade !== "undefined" ? doFade : true; //Automatically fade out message after 3500 ms if not specified.
     // List of valid 'types' of messages that can be printed.
     var validTypes = {
         chatRefreshRate: 'Chat will now be refreshed every %data% seconds.',
