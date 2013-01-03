@@ -129,7 +129,11 @@ $('#forceRefreshBtn').click(function () {
 });
 
 
-$('#historicalChatForm').submit(function (data) {
+$('#historicalChatForm').submit(function () {
+    return false;
+});
+
+$('#loadByDay').click(function (event) {
     // Do NOT try to continuously load messages (these are historical chat messages!)
     loop = false;
 
@@ -138,8 +142,8 @@ $('#historicalChatForm').submit(function (data) {
     console.log(date);
     var splitDate = date.split("/");
     var dateTime = {
-        Day: splitDate[0],
-        Month: splitDate[1],
+        Day: splitDate[1],
+        Month: splitDate[0],
         Year: splitDate[2]
     };
     console.log(dateTime);
@@ -152,6 +156,34 @@ $('#historicalChatForm').submit(function (data) {
         data: dateTime,
         success: function (data) {
             parseJSON(data);
+            $('#footerPopup').fadeOut('slow');
+        }
+    });
+});
+
+$('#saveByDay').click(function (event) {
+    console.log("CLICKED");
+    event.preventDefault();
+    var date = $('#chatDate').val();
+    console.log(date);
+    var splitDate = date.split("/");
+    var dateTime = {
+        Day: splitDate[1],
+        Month: splitDate[0],
+        Year: splitDate[2]
+    };
+    console.log(dateTime);
+    footerPopup('loadingLogData', null, false);
+
+    $.ajax({
+        type: 'GET',
+        url: '/api/values/downloadbyday/',
+        dataType: 'text',
+        data: dateTime,
+        success: function (data) {
+            console.log(data);
+            newWin = window.open();
+            newWin.document.writeln(data);
             $('#footerPopup').fadeOut('slow');
         }
     });

@@ -35,7 +35,6 @@ namespace WebFrontend.Controllers
 
             foreach (var message in q)
             {
-
                 writer.Write(String.Format(messageFmt, message.MessageTimeStamp, message.MessageType, message.Speaker,
                                   message.Text) + "\n");
             }
