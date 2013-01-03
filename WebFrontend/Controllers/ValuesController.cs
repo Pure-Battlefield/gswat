@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using System.Diagnostics;
@@ -10,7 +14,6 @@ namespace WebFrontend.Controllers
 {
     public class ValuesController : ApiController
     {
-        // GET api/values
         [HttpGet]
         [ActionName("GetAllMessages")]
         public string GetAllMessages()
@@ -20,7 +23,32 @@ namespace WebFrontend.Controllers
             return json.Serialize(q);
         }
 
-        // GET api/values/5
+        [HttpGet]
+        [ActionName("DownloadByDay")]
+        public HttpResponseMessage DownloadByDay([FromUri] DateTimeInfo dateTime)
+        {
+            DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
+            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+            const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+
+            foreach (var message in q)
+            {
+
+                writer.Write(String.Format(messageFmt, message.MessageTimeStamp, message.MessageType, message.Speaker,
+                                  message.Text) + "\n");
+            }
+            writer.Flush();
+            stream.Position = 0;
+
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/octet-stream");
+
+            return result;
+        }
+
         [HttpGet]
         [ActionName("GetByDay")]
         public string GetByDay([FromUri]DateTimeInfo dateTime)
@@ -31,7 +59,6 @@ namespace WebFrontend.Controllers
                 return json.Serialize(q);
         }
 
-        // POST api/values
         [HttpPost]
         [ActionName("SetServerInfo")]
         public void SetServerInfo([FromBody]ConnectionInfo connection)
