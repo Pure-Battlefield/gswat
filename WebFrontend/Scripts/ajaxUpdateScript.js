@@ -11,12 +11,16 @@ var loop;
 // Scroll pane API reference
 var scrollPaneAPI;
 
+// First launch
+var first;
+
     function startup() {
-        loadMessageQueue();
+        first = true;
         var scrollPane = $('#chatContents').jScrollPane({
                 verticalDragMinHeight: 20
             });
         scrollPaneAPI = scrollPane.data('jsp');
+        loadMessageQueue();
     }
 
     /**
@@ -140,7 +144,14 @@ var scrollPaneAPI;
 
         // Clean out the chat div and add the new stuff.  This is significantly faster than it sounds it would be.
         //$('#chatContents').empty().append(content);
+        var scroll = true;
+        if (scrollPaneAPI.getPercentScrolledY() < 100) {
+            scroll = false;
+        }
         scrollPaneAPI.getContentPane().empty().append(content);
         scrollPaneAPI.reinitialise();
-        scrollPaneAPI.scrollToBottom();
+        if(scroll || first) {
+            scrollPaneAPI.scrollToBottom();
+            first = false;
+        }
     }
