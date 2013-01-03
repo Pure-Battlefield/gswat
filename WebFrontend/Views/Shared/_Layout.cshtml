@@ -12,8 +12,10 @@
 
     @Script("moment.min.js") <!-- this is for date formatting for chat messages -->
     @Script("ajaxUpdateScript.js")
+    @Script("jquery.mousewheel.js")
+    @Script("jquery.jscrollpane.min.js")
 </head>
-<body onload="loadMessageQueue()">
+<body onload="startup()">
     @RenderBody()
 
     @RenderSection("scripts", required: false)

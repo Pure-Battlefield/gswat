@@ -57,7 +57,7 @@ namespace core
                         DateTime now = DateTime.UtcNow;
                         TimeSpan ts = now - lastShown;
                         double diff = ts.TotalMinutes;
-                        if (diff > 10)
+                        if (diff > 30)
                         {
                             // Message needs to be displayed again
                             EnqueueMessage(e.ServerMessage);
@@ -85,13 +85,20 @@ namespace core
 
         private void EnqueueMessage(ChatMessage msg)
         {
-            MessageQueue.Enqueue(msg);
-            if (MessageQueue.Count > 25)
+            try
             {
-                MessageQueue.Dequeue();
+                TableOperation insertOp = TableOperation.Insert(msg);
+                MessageTable.Execute(insertOp);
+                MessageQueue.Enqueue(msg);
+                if (MessageQueue.Count > 100)
+                {
+                    MessageQueue.Dequeue();
+                }
             }
-            TableOperation insertOp = TableOperation.Insert(msg);
-            MessageTable.Execute(insertOp);
+            catch (Exception e)
+            {
+                
+            }
         }
 
         // Implements ICore
