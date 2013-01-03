@@ -175,16 +175,8 @@ $('#saveByDay').click(function (event) {
     console.log(dateTime);
     footerPopup('loadingLogData', null, false);
 
-    $.ajax({
-        type: 'GET',
-        url: '/api/values/downloadbyday/',
-        dataType: 'text',
-        data: dateTime,
-        success: function (data) {
-            console.log(data);
-            newWin = window.open();
-            newWin.document.writeln(data);
-            $('#footerPopup').fadeOut('slow');
-        }
-    });
+    var ifrm = document.getElementById('chatFrame');
+    ifrm.src = "/api/values/downloadbyday/?" + $.param(dateTime);
+
+    $('#footerPopup').fadeOut('slow');
 });

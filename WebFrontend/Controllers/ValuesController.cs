@@ -67,50 +67,66 @@ namespace WebFrontend.Controllers
         [ActionName("DownloadByDay")]
         public HttpResponseMessage DownloadByDay([FromUri] DateTimeInfo dateTime)
         {
-            DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
-            const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
-
-            foreach (var message in q)
+            try
             {
-                message.MessageType = message.MessageType.ToUpperInvariant();
-                foreach (var teamPair in Teams)
-                {
-                    message.MessageType = message.MessageType.Replace(teamPair.Key, teamPair.Value);
-                }
+                DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
+                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
+                MemoryStream stream = new MemoryStream();
+                StreamWriter writer = new StreamWriter(stream);
 
-                foreach (var squadPair in Squads)
+                foreach (var message in q)
                 {
-                    message.MessageType = message.MessageType.Replace(squadPair.Key, squadPair.Value);
-                }
+                    message.MessageType = message.MessageType.ToUpperInvariant();
+                    foreach (var teamPair in Teams)
+                    {
+                        message.MessageType = message.MessageType.Replace(teamPair.Key, teamPair.Value);
+                    }
 
-                writer.Write(String.Format(messageFmt, message.MessageTimeStamp, message.MessageType, message.Speaker,
-                                  message.Text) + "\n");
+                    foreach (var squadPair in Squads)
+                    {
+                        message.MessageType = message.MessageType.Replace(squadPair.Key, squadPair.Value);
+                    }
+
+                    writer.Write(String.Format(messageFmt, message.MessageTimeStamp, message.MessageType,
+                                               message.Speaker,
+                                               message.Text) + "\n");
+                }
+                writer.Flush();
+                stream.Position = 0;
+
+                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                result.Content = new StreamContent(stream);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+                var disposition = new ContentDispositionHeaderValue("attachment");
+                disposition.FileName = string.Format("{0}.txt", temp.ToString("yyyyMMdd"));
+
+                result.Content.Headers.ContentDisposition = disposition;
+
+                return result;
             }
-            writer.Flush();
-            stream.Position = 0;
-
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-            var disposition = new ContentDispositionHeaderValue("attachment");
-            disposition.FileName = string.Format("{0}.txt", temp.ToString("yyyyMMdd"));
-
-            result.Content.Headers.ContentDisposition = disposition;
-
-            return result;
+            catch (Exception e)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
+            }
         }
 
         [HttpGet]
         [ActionName("GetByDay")]
         public string GetByDay([FromUri]DateTimeInfo dateTime)
         {
+            try
+            {
                 DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
                 IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 JavaScriptSerializer json = new JavaScriptSerializer();
                 return json.Serialize(q);
+            }
+            catch (Exception e)
+            {
+                JavaScriptSerializer json = new JavaScriptSerializer();
+                return json.Serialize(new List<ChatMessage>());
+            }
         }
 
         [HttpPost]
