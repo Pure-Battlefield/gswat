@@ -53,12 +53,14 @@
                 <label>Enter Chat Date:</label>
                 <input type="text" name="chatDate" id="chatDate" />
 
-                <input type="submit" value="Load chat" />
+                <input type="submit" id="loadByDay" value="Load"/>
+                <input type="submit" id="saveByDay" value="Save"/>
+                <iframe id="chatFrame" style="display:none"></iframe>
             </fieldset>
             
             <script type="text/javascript">
                 $('#chatDate').datepicker({
-                    dateFormat: 'dd/mm/yy'
+                    dateFormat: 'mm/dd/yy'
                 });
             </script>
         </form>
