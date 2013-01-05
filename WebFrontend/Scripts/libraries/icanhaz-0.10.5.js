@@ -74,7 +74,7 @@ More info at: http://icanhazjs.com
             // Whitespace at beginning and end of all templates inside <script> tags will 
             // be trimmed. If you want whitespace around a partial, add it in the parent, 
             // not the partial. Or do it explicitly using <br/> or &nbsp;
-            grabTemplates: function () {
+            grabTemplates: function (callback) {
                 var i, l,
                     scripts = document.getElementsByTagName('script'),
                     script,

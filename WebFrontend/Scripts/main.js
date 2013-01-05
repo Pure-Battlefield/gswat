@@ -15,7 +15,7 @@ _.extend(window, {
     pGSWAT: null
 });
 
-(function(window, document, $, _, head, undefined) {
+(function(window, document, $, _, yepnope, undefined) {
     pGSWAT = function () {
         // Object Variables
         this.view_instances         = {};
@@ -70,14 +70,17 @@ _.extend(window, {
             return collection;
         },
 
-        load: function(files,callback){
-            var files_loaded = this.files_loaded;
-            var files_needed = _.difference(files,files_loaded);
-            this.files_loaded = files_loaded.concat(files_needed);
-
-            head.js(files_needed,function(){
-                return callback();
-            });
+        load: function (files, callback) {
+            $(this.main_ele).html(ich.tpl_loading());
+            var last = _.last(files);
+            yepnope([{
+                load: files,
+                callback: function (url) {
+                    if (url === last) {
+                        return callback();
+                    }
+                }
+            }]);
         },
 
         set_options: function(options){
@@ -103,4 +106,4 @@ _.extend(window, {
         model_definitions : {},
         collection_definitions : {}
     });
-}(window, document, jQuery, _, head));
+}(window, document, jQuery, _, yepnope));

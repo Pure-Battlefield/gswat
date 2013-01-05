@@ -1,6 +1,6 @@
 (function(window, $, _, ich) {
     _.extend(window.pGSWAT.prototype.view_definitions, {
-        home: Backbone.View.extend({
+        chat: Backbone.View.extend({
             events: {
                 //
             },
@@ -12,7 +12,7 @@
             },
 
             render: function () {
-                this.$el.html(ich.tpl_body());
+                this.$el.html(ich.tpl_chat());
             }
         })
     });

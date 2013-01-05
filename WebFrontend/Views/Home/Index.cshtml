@@ -6,9 +6,15 @@
                 <a href="#home"><span class="element brand">GSWAT <small>0.0.5</small></span></a>
                 <span class="divider"></span>
                 <ul class="menu">
-                    <li><a href="#settings"><i class="icon-cog"></i> Settings</a></li>
+                    <li><a href="#home"><i class="icon-home"></i> Home</a></li>
                     <li><a href="#chat"><i class="icon-comments-2"></i> Chat</a></li>
-                    <li><a href="#"><i class="icon-loop"></i> Refresh</a></li>
+                    <li><a href="#coming-soon"><i class="icon-earth"></i> Map Rotation</a></li>
+                    <li><a href="#coming-soon"><i class="icon-list"></i> Players</a></li>
+                    <li><a href="#settings"><i class="icon-cog"></i> Settings</a></li>
+                </ul>
+                <span class="divider"></span>
+                <ul class="menu">
+                    <li><a href="#coming-soon"><i class="icon-user-2"></i> Account</a></li>
                     <li><a href="https://github.com/Pure-Battlefield/gswat"><i class="icon-github-2"></i> GitHub</a></li>
                 </ul>
             </div>
@@ -27,11 +33,43 @@
     </div>
 </script>
 
+<script id="tpl_loading" type="text/html">
+    <div class="page text-center">
+        <img src="/Content/themes/base/images/preloader-w8-cycle-black.gif">
+        <p class="body-text">Loading...</p>
+    </div>
+</script>
+
+<script id="tpl_coming_soon" type="text/html">
+    <div class="page">
+        <div class="page-header">
+            <h1>Coming Soon!</h1>
+        </div>
+        <div class="page-region">
+            <div class="page-region-content">
+                <p class="body-text">This page hasn't been built yet, but don't worry, it's coming soon!</p>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script id="tpl_body" type="text/html">
     <div class="page">
-        <div id="chatContents" class="bg-color-blueLight">
-            <img src="/images/preloader-w8-cycle-black.gif">
+        <div class="page-header">
+            <h1>Welcome!</h1>
         </div>
+        <div class="page-region">
+            <div class="page-region-content">
+                <p class="body-text">This is the Pure Game Server Web Administration Tool, or GSWAT for short. It's purpose is to try and simplify the task of administering servers from any platform that has a modern browser. We hope you enjoy it!</p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="tpl_chat" type="text/html">
+    <div class="page">
+        <i class="icon-loop"></i> Refresh</a>
+        <div id="chatContents" class="bg-color-blueLight"></div>
         <div class="span4">
             <form id="historicalChatForm">
                 <fieldset>
@@ -55,46 +93,47 @@
     </div>
 </script>
 
-<script id="tpl_settings" type="text/html">
-    <div id="settingsBox">
-        <form id="chatSettings">
-            <fieldset>
-                <legend>Chat Settings</legend>
-                <label class="input-control switch">
-                    <input type="checkbox">
-                    <span class="helper">Auto-refresh</span>
-                </label>
-                <label class="input-control switch">
-                    <input type="checkbox">
-                    <span class="helper">Show Server MSGs</span>
-                </label>
-                <div class="input-control text">
-                    <input type="text" placeholder="Refresh Interval in Seconds"/>
-                    <button class="helper"></button>
-                </div>
-            </fieldset>
-        </form>
-        <form id="serverSettingsForm">
-            <fieldset>
-                <legend>Server Connection Settings</legend>
-                <div class="input-control text">
-                    <input type="text" placeholder="Server IP"/>
-                    <button class="helper"></button>
-                </div>
-                <div class="input-control text">
-                    <input type="text" placeholder="Server Port"/>
-                    <button class="helper"></button>
-                </div>
-                <div class="input-control text">
-                    <input type="text" placeholder="Server Password"/>
-                    <button class="helper"></button>
-                </div>
-                <div class="input-control text">
-                    <input type="text" placeholder="Old Server Password"/>
-                    <button class="helper"></button>
-                </div>
-                <input type="submit" value="Submit" />
-            </fieldset>
-        </form>
-    </div>
+<script id="tpl_chat_settings" type="text/html">
+    <form id="chatSettings">
+        <fieldset>
+            <legend>Chat Settings</legend>
+            <label class="input-control switch">
+                <input type="checkbox">
+                <span class="helper">Auto-refresh</span>
+            </label>
+            <label class="input-control switch">
+                <input type="checkbox">
+                <span class="helper">Show Server MSGs</span>
+            </label>
+            <div class="input-control text">
+                <input type="text" placeholder="Refresh Interval in Seconds"/>
+                <button class="helper"></button>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+<script id="tpl_server_settings" type="text/html">
+    <form id="serverSettingsForm">
+        <fieldset>
+            <legend>Server Connection Settings</legend>
+            <div class="input-control text">
+                <input type="text" placeholder="Server IP"/>
+                <button class="helper"></button>
+            </div>
+            <div class="input-control text">
+                <input type="text" placeholder="Server Port"/>
+                <button class="helper"></button>
+            </div>
+            <div class="input-control text">
+                <input type="text" placeholder="Server Password"/>
+                <button class="helper"></button>
+            </div>
+            <div class="input-control text">
+                <input type="text" placeholder="Old Server Password"/>
+                <button class="helper"></button>
+            </div>
+            <input type="submit" value="Submit" />
+        </fieldset>
+    </form>
 </script>

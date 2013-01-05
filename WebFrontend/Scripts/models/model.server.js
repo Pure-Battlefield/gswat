@@ -1,7 +1,6 @@
 (function(window, $, _) {
     var server_model = Backbone.Model.extend({
         defaults : {
-            password: '',
             ip: '',
             port: 0
         },

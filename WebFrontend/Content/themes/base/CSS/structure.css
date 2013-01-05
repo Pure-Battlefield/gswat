@@ -8,8 +8,14 @@
 #header li i,
 #header li a {
     font-size:16px;
+    line-height:15px;
 }
 
 /* Footer */
 #footer {
+}
+
+/* Content */
+#content {
+    min-height: 400px;
 }
