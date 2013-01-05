@@ -12,11 +12,11 @@ window.requestAnimFrame = (function() {
 }());
 
 _.extend(window, {
-    pGSWAT: null
+    GSWAT: null
 });
 
 (function(window, document, $, _, yepnope, undefined) {
-    pGSWAT = function () {
+    GSWAT = function () {
         // Object Variables
         this.view_instances         = {};
         this.model_instances        = {};
@@ -28,7 +28,7 @@ _.extend(window, {
         this.timers                 = {};
     };
 
-    pGSWAT.prototype = {
+    GSWAT.prototype = {
         get_model: function(model_name,data){
             var models = this.model_instances;
             var model = (models[model_name])? models[model_name] : this.create_model(model_name);
@@ -71,16 +71,25 @@ _.extend(window, {
         },
 
         load: function (files, callback) {
-            $(this.main_ele).html(ich.tpl_loading());
-            var last = _.last(files);
-            yepnope([{
-                load: files,
-                callback: function (url) {
-                    if (url === last) {
-                        return callback();
+            var loading = this.get_view('loading');
+            loading.render();
+
+            var files_loaded = this.files_loaded;
+            var files_needed = _.difference(files, files_loaded);
+            this.files_loaded = files_loaded.concat(files_needed);
+            if (files_needed.length) {
+                var last = _.last(files_needed);
+                yepnope([{
+                    load: files_needed,
+                    callback: function (url) {
+                        if (url === last) {
+                            return callback();
+                        }
                     }
-                }
-            }]);
+                }]);
+            } else {
+                return callback();
+            }
         },
 
         set_options: function(options){
@@ -101,7 +110,7 @@ _.extend(window, {
     };
 
     // Global objects for our views/models/collections/events
-    _.extend(pGSWAT.prototype, {
+    _.extend(GSWAT.prototype, {
         view_definitions : {},
         model_definitions : {},
         collection_definitions : {}

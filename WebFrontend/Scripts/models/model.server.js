@@ -10,5 +10,5 @@
         }
     });
 
-    _.extend(window.pGSWAT.prototype.model_definitions, { server_model: server_model });
+    _.extend(window.GSWAT.prototype.model_definitions, { server_model: server_model });
 }(window, jQuery, _));

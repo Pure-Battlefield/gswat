@@ -1,6 +1,6 @@
 $(function(window,$,_){
     _.extend(window, {
-        PBF: new pGSWAT()
+        PBF: new GSWAT()
     });
 
     PBF.init({

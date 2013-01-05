@@ -1,5 +1,5 @@
 (function(window, $){
-    window.pGSWAT.prototype.router = Backbone.Router.extend({
+    window.GSWAT.prototype.router = Backbone.Router.extend({
         initialize: function () {
             var header = PBF.get_view('header');
             var footer = PBF.get_view('footer');
@@ -13,6 +13,7 @@
             ];
             PBF.load(files, function () {
                 var home = PBF.get_view('home', 'server_model');
+                home.render();
             });
         },
 
@@ -24,6 +25,7 @@
             ];
             PBF.load(files, function () {
                 var chat = PBF.get_view('chat', 'chat_model');
+                chat.render();
             });
         },
 
@@ -36,15 +38,19 @@
             PBF.load(files, function () {
                 var chat_settings = PBF.get_view('chat_settings', 'chat_model');
                 var server_settings = PBF.get_view('server_settings', 'server_model');
+                chat_settings.render();
+                server_settings.render();
             });
         },
 
         render_loading: function(){
             var loading = PBF.get_view('loading');
+            loading.render();
         },
 
         render_coming_soon : function(){
             var coming_soon = PBF.get_view('coming_soon');
+            coming_soon.render();
         },
 
         routes: {

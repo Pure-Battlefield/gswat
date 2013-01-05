@@ -1,5 +1,5 @@
 (function(window, $, _, ich) {
-    _.extend(window.pGSWAT.prototype.view_definitions, {
+    _.extend(window.GSWAT.prototype.view_definitions, {
         home: Backbone.View.extend({
             events: {
                 //
@@ -8,7 +8,7 @@
             el: '#content',
 
             initialize: function () {
-                this.render();
+                //
             },
 
             render: function () {
