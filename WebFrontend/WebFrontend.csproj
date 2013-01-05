@@ -165,6 +165,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Scripts\libraries\mustache-0.7.2.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\jquery.jscrollpane.css" />
@@ -199,9 +200,9 @@
     <Content Include="Scripts\libraries\ajaxUpdateScript.js" />
     <Content Include="Scripts\libraries\backbone-0.9.9.min.js" />
     <Content Include="Scripts\chatSettings.js" />
+    <Content Include="Scripts\libraries\icanhaz-0.10.5.js" />
     <Content Include="Scripts\libraries\hammer-0.6.4.min.js" />
     <Content Include="Scripts\libraries\head-0.99.min.js" />
-    <Content Include="Scripts\libraries\icanhaz-0.10.min.js" />
     <Content Include="Scripts\init.js" />
     <Content Include="Scripts\libraries\lib.js" />
     <Content Include="Scripts\libraries\jquery-1.8.3.min.js" />
@@ -214,7 +215,6 @@
     <Content Include="Scripts\libraries\jquery.validate.min.js" />
     <Content Include="Scripts\libraries\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\libraries\keyboard.js" />
-    <Content Include="Scripts\libraries\lucid.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\models\model.server.js" />
     <Content Include="Scripts\libraries\modernizr-2.5.3.js" />

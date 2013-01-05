@@ -12,7 +12,23 @@
             },
 
             render: function(){
-                this.$el.html(ich.header());
+                this.$el.html(ich.tpl_header());
+            }
+        }),
+
+        main: Backbone.View.extend({
+            events: {
+                //
+            },
+
+            el: '#content',
+
+            initialize: function () {
+                this.render();
+            },
+
+            render: function () {
+                this.$el.html(ich.tpl_body());
             }
         }),
 
@@ -23,14 +39,12 @@
 
             el: '#footer',
 
-            id : 'footerWpr',
-
             initialize: function(){
                 this.render();
             },
 
             render: function(){
-                this.$el.html(ich.footer());
+                this.$el.html(ich.tpl_footer());
             }
         })
     });

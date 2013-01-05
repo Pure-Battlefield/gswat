@@ -1,44 +1,44 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/themes/base/jquery-ui-1.9.2.custom.min.css")
-    @Styles.Render("~/Content/themes/base/modern.css")
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>@ViewBag.Title</title>
+        @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/themes/base/jquery-ui-1.9.2.custom.min.css")
+        @Styles.Render("~/Content/themes/base/modern.css")
 
-    <!-- Libraries -->
-    @Scripts.Render("~/bundles/jquery")
-    @Script("libraries/jquery-ui-1.9.2.custom.min.js")
-    @Script("libraries/moment.min.js") <!-- this is for date formatting for chat messages -->
-    @Script("libraries/ajaxUpdateScript.js")
-    @Script("libraries/jquery.mousewheel.js")
-    @Script("libraries/jquery.jscrollpane.min.js")
-    @Script("libraries/head-0.99.min.js")
-    @Script("libraries/underscore-1.4.3.min.js")
-    @Script("libraries/backbone-0.9.9.js")
-    @Script("libraries/lucid.js")
+        <!-- Libraries -->
+        @Script("libraries/mustache-0.7.2.js")
+        @Script("libraries/jquery-1.8.3.min.js")
+        @Script("libraries/jquery-ui-1.9.2.custom.min.js")
+        @Script("libraries/moment.min.js") <!-- this is for date formatting for chat messages -->
+        @Script("libraries/ajaxUpdateScript.js")
+        @Script("libraries/jquery.mousewheel.js")
+        @Script("libraries/jquery.jscrollpane.min.js")
+        @Script("libraries/head-0.99.min.js")
+        @Script("libraries/underscore-1.4.3.min.js")
+        @Script("libraries/backbone-0.9.9.min.js")
+        @Script("libraries/icanhaz-0.10.5.js")
     
-    <!-- App -->
-    @Script("libraries/lib.js")
-    @Script("main.js")
-    @Script("router.js")
-    @Script("init.js")
+        <!-- App -->
+        @Script("libraries/lib.js")
+        @Script("main.js")
+        @Script("router.js")
+        @Script("init.js")
 
-    <!-- Templates -->
-    @RenderBody()
-</head>
-<body id="body" onload="startup()">
-    <header id="header"></header>
-    <section id="content"></section>
-    <footer id="footer"></footer>
+        <!-- ICanHaz Templates -->
+        @RenderBody()
+    </head>
+    <body id="body" onload="startup()">
+        <header id="header"></header>
+        <section id="content">
+        </section>
+        <footer id="footer"></footer>
 
-    @RenderSection("scripts", required: false)
-    @Script("chatSettings.js")
-</body>
+        @Script("chatSettings.js")
+    </body>
 </html>
-
 @helper Script(string scriptName) {
     <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
 }

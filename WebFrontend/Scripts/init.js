@@ -4,7 +4,7 @@ $(function(window,$,_){
     });
 
     PBF.init({
-        CDN : CDN,
+        CDN : '/',
         main_ele: '#content'
     });
 

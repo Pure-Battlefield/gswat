@@ -27,3 +27,6 @@ The intent of this tool is to make administering serversa breeze without ever le
 * Underscore
 * jQuery
 * LESS
+* ICanHaz (modified)
+* Mustache
+* Metro UI CSS
