@@ -39,6 +39,10 @@
             });
         },
 
+        render_loading: function(){
+            var loading = PBF.get_view('loading');
+        },
+
         render_coming_soon : function(){
             var coming_soon = PBF.get_view('coming_soon');
         },
@@ -46,7 +50,8 @@
         routes: {
             'home'       : 'render_home',
             'chat'          : 'render_chat',
-            'settings'      : 'render_settings',
+            'settings': 'render_settings',
+            'load': 'render_loading',
             'coming-soon'   : 'render_coming_soon'
         }
     });

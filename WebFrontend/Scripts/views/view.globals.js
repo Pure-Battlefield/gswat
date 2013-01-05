@@ -47,5 +47,21 @@
                 this.$el.html(ich.tpl_coming_soon());
             }
         }),
+
+        loading: Backbone.View.extend({
+            events: {
+                //
+            },
+
+            el: '#content',
+
+            initialize: function () {
+                this.render();
+            },
+
+            render: function () {
+                this.$el.html(ich.tpl_loading());
+            }
+        })
     });
 }(window, jQuery, _, ich));

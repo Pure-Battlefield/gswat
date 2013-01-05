@@ -1,13 +1,13 @@
 ﻿/* Global */
 .page {
-    width:940px;
+    max-width:940px;
     margin:0 auto;
 }
 
 /* Header */
 #header li i,
 #header li a {
-    font-size:16px;
+    font-size:12pt;
     line-height:15px;
 }
 
