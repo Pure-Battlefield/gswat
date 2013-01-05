@@ -6,17 +6,33 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/themes/base/jquery-ui-1.9.2.custom.min.css")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/modernizr")
-    @Script("jquery-ui-1.9.2.custom.min.js")
+    @Styles.Render("~/Content/themes/base/modern.css")
 
-    @Script("moment.min.js") <!-- this is for date formatting for chat messages -->
-    @Script("ajaxUpdateScript.js")
-    @Script("jquery.mousewheel.js")
-    @Script("jquery.jscrollpane.min.js")
-</head>
-<body onload="startup()">
+    <!-- Libraries -->
+    @Scripts.Render("~/bundles/jquery")
+    @Script("libraries/jquery-ui-1.9.2.custom.min.js")
+    @Script("libraries/moment.min.js") <!-- this is for date formatting for chat messages -->
+    @Script("libraries/ajaxUpdateScript.js")
+    @Script("libraries/jquery.mousewheel.js")
+    @Script("libraries/jquery.jscrollpane.min.js")
+    @Script("libraries/head-0.99.min.js")
+    @Script("libraries/underscore-1.4.3.min.js")
+    @Script("libraries/backbone-0.9.9.js")
+    @Script("libraries/lucid.js")
+    
+    <!-- App -->
+    @Script("libraries/lib.js")
+    @Script("main.js")
+    @Script("router.js")
+    @Script("init.js")
+
+    <!-- Templates -->
     @RenderBody()
+</head>
+<body id="body" onload="startup()">
+    <header id="header"></header>
+    <section id="content"></section>
+    <footer id="footer"></footer>
 
     @RenderSection("scripts", required: false)
     @Script("chatSettings.js")
