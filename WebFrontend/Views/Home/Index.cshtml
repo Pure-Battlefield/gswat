@@ -1,70 +1,100 @@
 ﻿<script id="tpl_header" type="text/html">
-    <div class="content-wrapper">
-        <div class="float-left">
-            <p class="site-title"><a href="~/">GSWAT Test Page</a></p>
-        </div>
-    </div>
-    <div class="content-wrapper">
-        <hgroup class="title">
-            <h1>Server Chat</h1>
-        </hgroup>
-        <img src="/Images/settingsBtn.png" alt="Settings" title="Settings" id="settingsBtn" />
-        <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
-        <div id="settingsBox">
-            <input type="text" id="refreshRateInput" value="1" />
-            <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit" />
-            <hr />
-            <div id="serverSettingsBox">
-                <form id="serverSettingsForm">
-                    <fieldset>
-                        <legend></legend>
-                        <label for="ip">IP: </label>
-                        <input type="text" name="ip" id="ip" />
-                                
-                        <label for="port">Port: </label>
-                        <input type="text" name="port" id="port" />
-
-                        <label for="passwd">Password: </label>
-                        <input type="password" name="passwd" id="passwd" />
-
-                        <label for="oldPasswd">Old password: </label>
-                        <input type="password" name="oldPasswd" id="oldPasswd" />
-
-                        <br /><input type="submit" value="Change server connection settings" name="serverSettingsForm" />
-                    </fieldset>
-                </form>
+    <div class="page">
+        <div class="nav-bar">
+            <div class="nav-bar-inner padding10 bg-color-darken">
+                <span class="pull-menu"></span>
+                <a href="#home"><span class="element brand">GSWAT <small>0.0.5</small></span></a>
+                <span class="divider"></span>
+                <ul class="menu">
+                    <li><a href="#settings"><i class="icon-cog"></i> Settings</a></li>
+                    <li><a href="#chat"><i class="icon-comments-2"></i> Chat</a></li>
+                    <li><a href="#"><i class="icon-loop"></i> Refresh</a></li>
+                    <li><a href="https://github.com/Pure-Battlefield/gswat"><i class="icon-github-2"></i> GitHub</a></li>
+                </ul>
             </div>
         </div>
     </div>
 </script>
 
-<script id="tpl_body" type="text/html">
-    <div class="content-wrapper main-content clear-fix" id="chatContents" style="overflow: auto; height: 30em; max-width: 1040px">
-        <h3 style="text-align:center">We're loading the chat, give us a sec..</h3>
+<script id="tpl_footer" type="text/html">
+    <div class="page">
+        <div class="nav-bar">
+            <div class="nav-bar-inner padding10 bg-color-blueDark">
+                <span class="element">&copy;2012 PureBattlefield</span>
+            </div>
+        </div>
+        <div id="footerPopup" style="display:none"></div>
     </div>
-    <div id="buttons">
-        <form id="historicalChatForm">
-            <fieldset>
-                <label>Enter Chat Date:</label>
-                <input type="text" name="chatDate" id="chatDate" />
-
-                <input type="submit" id="loadByDay" value="Load"/>
-                <input type="submit" id="saveByDay" value="Save"/>
-                <iframe id="chatFrame" style="display:none"></iframe>
-            </fieldset>
-            
-            <script type="text/javascript">
-                $('#chatDate').datepicker({
-                    dateFormat: 'mm/dd/yy'
-                });
-            </script>
-        </form>
-    </div>
-    
 </script>
 
-<script id="tpl_footer" type="text/html">
-    <div><h6>Footer</h6>
-        <div id="footerPopup" style="display:none"></div>
+<script id="tpl_body" type="text/html">
+    <div class="page">
+        <div id="chatContents" class="bg-color-blueLight">
+            <img src="/images/preloader-w8-cycle-black.gif">
+        </div>
+        <div class="span4">
+            <form id="historicalChatForm">
+                <fieldset>
+                    <legend>Load up past history</legend>
+                    <div class="input-control text span3">
+                        <input type="text" name="chatDate" id="chatDate" placeholder="Enter Date" />
+                        <button class="helper"></button>
+                    </div>
+                    <input type="submit" id="loadByDay" value="Load"/>
+                    <input type="button" id="saveByDay" value="Save"/>
+                    <iframe id="chatFrame" style="display:none"></iframe>
+                </fieldset>
+            
+                <script type="text/javascript">
+                    $('#chatDate').datepicker({
+                        dateFormat: 'mm/dd/yy'
+                    });
+                </script>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script id="tpl_settings" type="text/html">
+    <div id="settingsBox">
+        <form id="chatSettings">
+            <fieldset>
+                <legend>Chat Settings</legend>
+                <label class="input-control switch">
+                    <input type="checkbox">
+                    <span class="helper">Auto-refresh</span>
+                </label>
+                <label class="input-control switch">
+                    <input type="checkbox">
+                    <span class="helper">Show Server MSGs</span>
+                </label>
+                <div class="input-control text">
+                    <input type="text" placeholder="Refresh Interval in Seconds"/>
+                    <button class="helper"></button>
+                </div>
+            </fieldset>
+        </form>
+        <form id="serverSettingsForm">
+            <fieldset>
+                <legend>Server Connection Settings</legend>
+                <div class="input-control text">
+                    <input type="text" placeholder="Server IP"/>
+                    <button class="helper"></button>
+                </div>
+                <div class="input-control text">
+                    <input type="text" placeholder="Server Port"/>
+                    <button class="helper"></button>
+                </div>
+                <div class="input-control text">
+                    <input type="text" placeholder="Server Password"/>
+                    <button class="helper"></button>
+                </div>
+                <div class="input-control text">
+                    <input type="text" placeholder="Old Server Password"/>
+                    <button class="helper"></button>
+                </div>
+                <input type="submit" value="Submit" />
+            </fieldset>
+        </form>
     </div>
 </script>

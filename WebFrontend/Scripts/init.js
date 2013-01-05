@@ -5,7 +5,8 @@ $(function(window,$,_){
 
     PBF.init({
         CDN : '/',
-        main_ele: '#content'
+        main_ele: '#content',
+        default_route: 'home'
     });
 
     console.log('Views',PBF.view_definitions);

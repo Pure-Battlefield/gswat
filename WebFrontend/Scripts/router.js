@@ -15,7 +15,7 @@
         },
 
         routes: {
-            'main' : 'render_main'
+            'home' : 'render_main'
         }
     });
 }(window,jQuery));

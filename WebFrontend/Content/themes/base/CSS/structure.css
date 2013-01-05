@@ -1,0 +1,15 @@
+﻿/* Global */
+.page {
+    width:940px;
+    margin:0 auto;
+}
+
+/* Header */
+#header li i,
+#header li a {
+    font-size:16px;
+}
+
+/* Footer */
+#footer {
+}

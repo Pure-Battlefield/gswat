@@ -165,6 +165,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Content\themes\base\CSS\structure.css" />
+    <Content Include="Content\themes\base\fonts\iconFont.svg" />
+    <Content Include="Content\themes\base\fonts\license.txt" />
+    <Content Include="Content\themes\base\images\preloader-w8-cycle-black.gif" />
+    <Content Include="Content\themes\base\images\preloader-w8-cycle-white.gif" />
+    <Content Include="Content\themes\base\images\preloader-w8-line-black.gif" />
+    <Content Include="Content\themes\base\images\preloader-w8-line-white.gif" />
     <Content Include="Scripts\libraries\mustache-0.7.2.js" />
   </ItemGroup>
   <ItemGroup>
@@ -185,8 +192,8 @@
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui-1.9.2.custom.min.css" />
-    <Content Include="Content\themes\base\modern-responsive.css" />
-    <Content Include="Content\themes\base\modern.css" />
+    <Content Include="Content\themes\base\CSS\modern-responsive.css" />
+    <Content Include="Content\themes\base\CSS\modern.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\chatRefreshBtn.png" />
@@ -211,6 +218,9 @@
     <Content Include="Scripts\libraries\jquery.jscrollpane.min.js" />
     <Content Include="Scripts\libraries\jquery.mousewheel.js" />
     <Content Include="Scripts\libraries\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Content\themes\base\fonts\iconFont.eot" />
+    <Content Include="Content\themes\base\fonts\iconFont.ttf" />
+    <Content Include="Content\themes\base\fonts\iconFont.woff" />
     <None Include="Scripts\libraries\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\libraries\jquery.validate.min.js" />
     <Content Include="Scripts\libraries\jquery.validate.unobtrusive.min.js" />
