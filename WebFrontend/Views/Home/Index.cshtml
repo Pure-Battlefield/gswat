@@ -1,55 +1,50 @@
-﻿<header>
+﻿<script id="tpl_header" type="text/html">
     <div class="content-wrapper">
         <div class="float-left">
-            <p class="site-title">
-                <a href="~/">GSWAT Test Page</a></p>
+            <p class="site-title"><a href="~/">GSWAT Test Page</a></p>
         </div>
     </div>
-</header>
-<div id="body">
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>Server Chat</h1>
-            </hgroup>
-            <!-- Start edits by Conner -->
-            <img src="/Images/settingsBtn.png" alt="Settings" title="Settings" id="settingsBtn" />
-            <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
-            <div id="settingsBox">
-                <input type="text" id="refreshRateInput" value="1" />
-                <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit" />
-                <hr />
-                <div id="serverSettingsBox">
-                    <form id="serverSettingsForm">
-                        <fieldset>
-                            <legend></legend>
-                            <label for="ip">IP: </label>
-                            <input type="text" name="ip" id="ip" />
+    <div class="content-wrapper">
+        <hgroup class="title">
+            <h1>Server Chat</h1>
+        </hgroup>
+        <img src="/Images/settingsBtn.png" alt="Settings" title="Settings" id="settingsBtn" />
+        <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
+        <div id="settingsBox">
+            <input type="text" id="refreshRateInput" value="1" />
+            <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit" />
+            <hr />
+            <div id="serverSettingsBox">
+                <form id="serverSettingsForm">
+                    <fieldset>
+                        <legend></legend>
+                        <label for="ip">IP: </label>
+                        <input type="text" name="ip" id="ip" />
                                 
-                            <label for="port">Port: </label>
-                            <input type="text" name="port" id="port" />
+                        <label for="port">Port: </label>
+                        <input type="text" name="port" id="port" />
 
-                            <label for="passwd">Password: </label>
-                            <input type="password" name="passwd" id="passwd" />
+                        <label for="passwd">Password: </label>
+                        <input type="password" name="passwd" id="passwd" />
 
-                            <label for="oldPasswd">Old password: </label>
-                            <input type="password" name="oldPasswd" id="oldPasswd" />
+                        <label for="oldPasswd">Old password: </label>
+                        <input type="password" name="oldPasswd" id="oldPasswd" />
 
-                            <br /><input type="submit" value="Change server connection settings" name="serverSettingsForm" />
-                        </fieldset>
-                    </form>
-                </div>
+                        <br /><input type="submit" value="Change server connection settings" name="serverSettingsForm" />
+                    </fieldset>
+                </form>
             </div>
-            <!-- End edits by Conner -->
         </div>
-    </section>
+    </div>
+</script>
+
+<script id="tpl_body" type="text/html">
     <div class="content-wrapper main-content clear-fix" id="chatContents" style="overflow: auto; height: 30em; max-width: 1040px">
         <h3 style="text-align:center">We're loading the chat, give us a sec..</h3>
     </div>
     <div id="buttons">
         <form id="historicalChatForm">
             <fieldset>
-                <legend><!-- not needed --></legend>
                 <label>Enter Chat Date:</label>
                 <input type="text" name="chatDate" id="chatDate" />
 
@@ -64,8 +59,12 @@
                 });
             </script>
         </form>
-        </div>
-    <!-- Start edits by Conner -->
-    <div id="footerPopup" style="display:none"></div>
-    <!-- End edits by Conner -->
-</div>
+    </div>
+    
+</script>
+
+<script id="tpl_footer" type="text/html">
+    <div><h6>Footer</h6>
+        <div id="footerPopup" style="display:none"></div>
+    </div>
+</script>

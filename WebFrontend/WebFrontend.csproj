@@ -165,9 +165,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Scripts\libraries\mustache-0.7.2.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\jquery.jscrollpane.css" />
+    <Content Include="Content\themes\base\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\themes\base\images\glyphicons-halflings.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -182,6 +185,8 @@
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui-1.9.2.custom.min.css" />
+    <Content Include="Content\themes\base\modern-responsive.css" />
+    <Content Include="Content\themes\base\modern.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\chatRefreshBtn.png" />
@@ -192,25 +197,44 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\ajaxUpdateScript.js" />
+    <Content Include="Scripts\libraries\ajaxUpdateScript.js" />
+    <Content Include="Scripts\libraries\backbone-0.9.9.min.js" />
     <Content Include="Scripts\chatSettings.js" />
-    <Content Include="Scripts\jquery-1.8.3.js" />
-    <Content Include="Scripts\jquery-1.8.3.min.js" />
-    <Content Include="Scripts\jquery-ui-1.9.2.custom.js" />
-    <Content Include="Scripts\jquery-ui-1.9.2.custom.min.js" />
-    <Content Include="Scripts\jquery.jscrollpane.min.js" />
-    <Content Include="Scripts\jquery.mousewheel.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\knockout-2.1.0.debug.js" />
-    <Content Include="Scripts\knockout-2.1.0.js" />
-    <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\libraries\icanhaz-0.10.5.js" />
+    <Content Include="Scripts\libraries\hammer-0.6.4.min.js" />
+    <Content Include="Scripts\libraries\head-0.99.min.js" />
+    <Content Include="Scripts\init.js" />
+    <Content Include="Scripts\libraries\lib.js" />
+    <Content Include="Scripts\libraries\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery-plugins\jquery.hammer.js" />
+    <Content Include="Scripts\libraries\jquery-ui-1.9.2.custom.min.js" />
+    <Content Include="Scripts\libraries\jquery.jscrollpane.min.js" />
+    <Content Include="Scripts\libraries\jquery.mousewheel.js" />
+    <Content Include="Scripts\libraries\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\libraries\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\libraries\jquery.validate.min.js" />
+    <Content Include="Scripts\libraries\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\libraries\keyboard.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\models\model.server.js" />
+    <Content Include="Scripts\libraries\modernizr-2.5.3.js" />
+    <Content Include="Scripts\modern\accordion.js" />
+    <Content Include="Scripts\modern\buttonset.js" />
+    <Content Include="Scripts\modern\carousel.js" />
+    <Content Include="Scripts\modern\dropdown.js" />
+    <Content Include="Scripts\modern\input-control.js" />
+    <Content Include="Scripts\modern\pagecontrol.js" />
+    <Content Include="Scripts\modern\rating.js" />
+    <Content Include="Scripts\modern\slider.js" />
+    <Content Include="Scripts\modern\tile-drag.js" />
+    <Content Include="Scripts\modern\tile-slider.js" />
+    <Content Include="Scripts\libraries\moment.min.js" />
+    <Content Include="Scripts\libraries\mousetrap-1.2.2.min.js" />
+    <Content Include="Scripts\libraries\preloadjs-0.2.0.min.js" />
+    <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
+    <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
+    <Content Include="Scripts\router.js" />
+    <Content Include="Scripts\views\view.home.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
