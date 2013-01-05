@@ -93,6 +93,17 @@
     </div>
 </script>
 
+<script id="tpl_chat_messages" type="text/html">
+    {{#.}}
+        <p>
+            <span class="timestamp">{{MessageTimeStamp}}</span>
+            <span class="team team-{{MessageType}}">{{MessageType}}</span>
+            <span class="player-name">{{Speaker}}</span>
+            <span class="message">{{Text}}</span>
+        </p>
+    {{/.}}
+</script>
+
 <script id="tpl_chat_settings" type="text/html">
     <form id="chatSettings">
         <fieldset>
