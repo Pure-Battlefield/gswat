@@ -20,7 +20,7 @@ The intent of this tool is to make administering serversa breeze without ever le
 * Windows Azure
  
 #####Backend Code
-*C# .NET4.5 MVC3 on the backend
+* C# .NET4.5 MVC3 on the backend
 
 #####Frontend Code
 * Backbone
@@ -30,3 +30,4 @@ The intent of this tool is to make administering serversa breeze without ever le
 * ICanHaz (modified)
 * Mustache
 * Metro UI CSS
+* YepNope
