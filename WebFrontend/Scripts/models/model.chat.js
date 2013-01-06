@@ -13,7 +13,9 @@
             'squads': [["SQUAD1", "ALPHA"],["SQUAD2", "BRAVO"],["SQUAD3", "CHARLIE"],["SQUAD4", "DELTA"],["SQUAD5", "ECHO"],["SQUAD6", "FOXTROT"],["SQUAD7", "GOLF"],["SQUAD8", "HOTEL"],["SQUAD9", "INDIA"],["SQUAD10", "JULIET"],["SQUAD11", "KILO"],["SQUAD12", "LIMA"],["SQUAD13", "MIKE"],["SQUAD14", "NOVEMBER"],["SQUAD15", "OSCAR"],["SQUAD16", "PAPA"],["SQUAD17", "QUEBEC"],["SQUAD18", "ROMEO"],["SQUAD19", "SIERRA"],["SQUAD20", "TANGO"],["SQUAD21", "UNIFORM"],["SQUAD22", "VICTOR"],["SQUAD23", "WHISKEY"],["SQUAD24", "XRAY"],["SQUAD25", "YANKEE"],["SQUAD26", "ZULU"]]
         },
 
-        url: this.get('url'),
+        url: function(){
+            return this.get('url');
+        },
 
         initialize: function () {
             this.set_interval();

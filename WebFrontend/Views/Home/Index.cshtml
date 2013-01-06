@@ -68,8 +68,15 @@
 
 <script id="tpl_chat" type="text/html">
     <div class="page">
-        <i class="icon-loop"></i> Refresh</a>
-        <div id="chatContents" class="bg-color-blueLight"></div>
+        <div class="page-header">
+            <h1>Server Chat</h1>
+            <i class="icon-loop"></i> Refresh</a>
+        </div>
+        <div class="page-region">
+            <div class="page-region-content">
+                <div id="chatContents" class="bg-color-blueLight"></div>
+            </div>
+        </div>
         <div class="span4">
             <form id="historicalChatForm">
                 <fieldset>
@@ -104,10 +111,25 @@
     {{/.}}
 </script>
 
+<script id="tpl_settings" type="text/html">
+    <div class="page padding10">
+        <div class="page-header">
+            <h1>Settings</h1>
+        </div>
+        <div class="page-region">
+            <div class="page-region-content">
+                <div id="chat-settings"></div>
+                <div id="server-settings"></div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script id="tpl_chat_settings" type="text/html">
-    <form id="chatSettings">
+    <h2>Chat</h2>
+    <form id="chat-settings-form">
         <fieldset>
-            <legend>Chat Settings</legend>
+            <legend>Chat Display Settings</legend>
             <label class="input-control switch">
                 <input type="checkbox">
                 <span class="helper">Auto-refresh</span>
@@ -120,14 +142,16 @@
                 <input type="text" placeholder="Refresh Interval in Seconds"/>
                 <button class="helper"></button>
             </div>
+            <input type="submit" value="Submit" />
         </fieldset>
     </form>
 </script>
 
 <script id="tpl_server_settings" type="text/html">
-    <form id="serverSettingsForm">
+    <h2>Server</h2>
+    <form id="server-settings-form">
         <fieldset>
-            <legend>Server Connection Settings</legend>
+            <legend>Connection Settings</legend>
             <div class="input-control text">
                 <input type="text" placeholder="Server IP"/>
                 <button class="helper"></button>

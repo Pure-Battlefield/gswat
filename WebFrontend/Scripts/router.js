@@ -36,10 +36,8 @@
                 PBF.CDN + 'Scripts/views/view.settings.js'
             ];
             PBF.load(files, function () {
-                var chat_settings = PBF.get_view('chat_settings', 'chat_model');
-                var server_settings = PBF.get_view('server_settings', 'server_model');
-                chat_settings.render();
-                server_settings.render();
+                var settings = PBF.get_view('settings');
+                settings.render();
             });
         },
 
