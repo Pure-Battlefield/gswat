@@ -3,13 +3,14 @@
         defaults : {
             'auto_refresh': true,
             'url': '/api/values/getallmessages',
-            'interval': 1000,
+            'interval': 1,
             'fetch_interval': {},
             'show_server_msgs': false,
             'team_1_msgs': [],
             'team_2_msgs': [],
             'server_msgs': [],
             'server_set': false,
+            //TO-DO: Fetch squad definitions from server
             'squads': [["SQUAD1", "ALPHA"],["SQUAD2", "BRAVO"],["SQUAD3", "CHARLIE"],["SQUAD4", "DELTA"],["SQUAD5", "ECHO"],["SQUAD6", "FOXTROT"],["SQUAD7", "GOLF"],["SQUAD8", "HOTEL"],["SQUAD9", "INDIA"],["SQUAD10", "JULIET"],["SQUAD11", "KILO"],["SQUAD12", "LIMA"],["SQUAD13", "MIKE"],["SQUAD14", "NOVEMBER"],["SQUAD15", "OSCAR"],["SQUAD16", "PAPA"],["SQUAD17", "QUEBEC"],["SQUAD18", "ROMEO"],["SQUAD19", "SIERRA"],["SQUAD20", "TANGO"],["SQUAD21", "UNIFORM"],["SQUAD22", "VICTOR"],["SQUAD23", "WHISKEY"],["SQUAD24", "XRAY"],["SQUAD25", "YANKEE"],["SQUAD26", "ZULU"]]
         },
 
@@ -21,20 +22,18 @@
             this.set_interval();
         },
 
+        update_settings: function (settings) {
+
+        },
+
         set_interval: function (interval) {
             this.clear_interval();
             if(this.get('server_set')){
-                interval = interval || this.get('interval');
-                /*var fetch_interval = _.bind(function () {
-                    window.setInterval(function () {
-                        model.fetch();
-                    }, interval)
-                }, this);
-                this.set({ 'fetch_interval': fetch_interval });*/
-
-
                 var _update = _.bind(function () {
-                    this._intervalFetch = window.setTimeout(_update, interval || 1000);
+                    if (this.get('server_set') && this.get('auto_refresh')) {
+                        interval = this.get('interval') * 1000;
+                        this._intervalFetch = window.setTimeout(_update, interval);
+                    }
                 }, this);
 
                 _update();

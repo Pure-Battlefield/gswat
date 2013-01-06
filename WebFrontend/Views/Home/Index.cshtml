@@ -130,17 +130,20 @@
     <form id="chat-settings-form">
         <fieldset>
             <legend>Chat Display Settings</legend>
-            <label class="input-control switch">
-                <input type="checkbox">
+            <label id="chat-auto-refresh-field" class="input-control switch">
+                <input data-field="auto_refresh" type="checkbox" {{#auto_refresh}}checked{{/auto_refresh}}>
                 <span class="helper">Auto-refresh</span>
             </label>
-            <label class="input-control switch">
-                <input type="checkbox">
+            <label id="chat-servers-msgs-field" class="input-control switch">
+                <input data-field="show_server_msgs" type="checkbox" {{#show_server_msgs}}checked{{/show_server_msgs}}>
                 <span class="helper">Show Server MSGs</span>
             </label>
-            <div class="input-control text">
-                <input type="text" placeholder="Refresh Interval in Seconds"/>
-                <button class="helper"></button>
+            <div>
+                <label>Refresh Interval in Seconds</label>
+                <div id="chat-interval-field" class="input-control text">
+                    <input data-field="interval" type="text" value="{{interval}}"/>
+                    <button class="helper"></button>
+                </div>
             </div>
             <input type="submit" value="Submit" />
         </fieldset>
@@ -152,20 +155,24 @@
     <form id="server-settings-form">
         <fieldset>
             <legend>Connection Settings</legend>
+            <label>Server IP</label>
             <div class="input-control text">
-                <input type="text" placeholder="Server IP"/>
+                <input name="server-ip" data-field="server_ip" type="text" value="{{server_ip}}"/>
                 <button class="helper"></button>
             </div>
+            <label>Server Port</label>
             <div class="input-control text">
-                <input type="text" placeholder="Server Port"/>
+                <input name="server-port" data-field="server_port" type="text" value="{{server_port}}"/>
                 <button class="helper"></button>
             </div>
+            <label>Server Password</label>
             <div class="input-control text">
-                <input type="text" placeholder="Server Password"/>
+                <input name="server-password" data-field="server_password" type="text" value="{{server_password}}"/>
                 <button class="helper"></button>
             </div>
+            <label>Old Server Password</label>
             <div class="input-control text">
-                <input type="text" placeholder="Old Server Password"/>
+                <input name="server-old-password" data-field="server_old_password" type="text" value="{{server_old_password}}"/>
                 <button class="helper"></button>
             </div>
             <input type="submit" value="Submit" />

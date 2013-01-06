@@ -52,10 +52,10 @@
         },
 
         routes: {
-            'home'       : 'render_home',
+            'home'          : 'render_home',
             'chat'          : 'render_chat',
-            'settings': 'render_settings',
-            'load': 'render_loading',
+            'settings'      : 'render_settings',
+            'loading'       : 'render_loading',
             'coming-soon'   : 'render_coming_soon'
         }
     });

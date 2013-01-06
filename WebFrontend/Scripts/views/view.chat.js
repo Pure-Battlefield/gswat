@@ -11,6 +11,10 @@
                 //
             },
 
+            render_messages: function(){
+                //
+            },
+
             render: function () {
                 this.$el.html(ich.tpl_chat());
             }
