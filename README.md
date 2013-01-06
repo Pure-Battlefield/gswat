@@ -1,6 +1,6 @@
 #The Pure Game Server Web Administration Tool
 ***
-The intent of this tool is to make administering serversa breeze without ever leaving the comfort of your favorite browser, no matter what kind of device you're using. Enjoy!
+The intent of this tool is to make administering servers a breeze without ever leaving the comfort of your favorite browser, no matter what kind of device you're using. Enjoy!
 
 ## Setup
 
