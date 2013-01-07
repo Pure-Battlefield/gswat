@@ -21,6 +21,13 @@
 }
 
 /* Chat Colors */
+#chatContents {
+    max-height:400px;
+    overflow:scroll;
+    overflow-x:visible;
+    overflow-y:scroll;
+}
+
 #chatContents p {
     margin: 0 0 2px;
 }

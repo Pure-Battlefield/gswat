@@ -6,12 +6,8 @@
             'interval': 1,
             'fetch_interval': {},
             'show_server_msgs': false,
-            'team_1_msgs': [],
-            'team_2_msgs': [],
-            'server_msgs': [],
-            'public_msgs': [],
             'all_msgs': [],
-            'server_set': true,
+            'server_set': false,
             'update_msgs':false,
             //TODO: Fetch squad definitions from server
             'squads': [["SQUAD1", "ALPHA"],["SQUAD2", "BRAVO"],["SQUAD3", "CHARLIE"],["SQUAD4", "DELTA"],["SQUAD5", "ECHO"],["SQUAD6", "FOXTROT"],["SQUAD7", "GOLF"],["SQUAD8", "HOTEL"],["SQUAD9", "INDIA"],["SQUAD10", "JULIET"],["SQUAD11", "KILO"],["SQUAD12", "LIMA"],["SQUAD13", "MIKE"],["SQUAD14", "NOVEMBER"],["SQUAD15", "OSCAR"],["SQUAD16", "PAPA"],["SQUAD17", "QUEBEC"],["SQUAD18", "ROMEO"],["SQUAD19", "SIERRA"],["SQUAD20", "TANGO"],["SQUAD21", "UNIFORM"],["SQUAD22", "VICTOR"],["SQUAD23", "WHISKEY"],["SQUAD24", "XRAY"],["SQUAD25", "YANKEE"],["SQUAD26", "ZULU"]]
@@ -61,24 +57,12 @@
             //this.clear_interval();
             if (data.length > 0) {
                 var squads = this.get('squads');
-                var all = this.get('public_msgs');
-                var team_1 = this.get('team_1_msgs');
-                var team_2 = this.get('team_2_msgs');
-                var server = this.get('server_msgs');
-                var archive = this.get('all_msgs');
-                //console.log(data);
+                var all = this.get('all_msgs');
 
                 _.each(data, function (message) {
                     var now = new Date(parseInt(message.MessageTimeStamp.replace('/Date(', '')));
                     var timestamp = moment(new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
                     message.MessageTimeStamp = timestamp.format('MM/DD/YYYY HH:mm:ss');
-
-                    // Rename channels to more verbose names.
-                    var team = '';
-                    team = message.team_slug = message.MessageType.replace('TEAM1', 'US');
-                    team = message.team_slug = message.MessageType.replace('TEAM2', 'RU');
-                    //console.log('messagetype', message.MessageType);
-                    console.log(message.MessageType);
 
                     // Match on Squad
                     var re1 = '.*?';	// Non-greedy match on filler
@@ -103,10 +87,10 @@
                     if (m != null) {
                         if (m[2] == "1") {
                             message.MessageType = 'US';
-                            team_1.push(message);
+                            //team_1.push(message);
                         } else {
                             message.MessageType = 'RU';
-                            team_2.push(message);
+                            //team_2.push(message);
                         }
                         return;
                     }
@@ -117,7 +101,7 @@
                     var p = new RegExp(re1, ["i"]);
                     var m = p.exec(message.MessageType);
                     if (m != null) {
-                        server.push(message);
+                        //server.push(message);
                         return;
                     }
 
@@ -127,16 +111,14 @@
                     var p = new RegExp(re1, ["i"]);
                     var m = p.exec(message.MessageType);
                     if (m != null) {
-                        all.push(message);
+                        //all.push(message);
                         return;
                     }
                 });
                 var msgs = {};
-                msgs.all_msgs = _.union(archive, data);
+                msgs.all_msgs = _.union(all, data);
                 msgs.update_msgs = true;
                 this.set(msgs);
-                //console.log(this.attributes);
-                //return msgs;
             }
         }
     });
