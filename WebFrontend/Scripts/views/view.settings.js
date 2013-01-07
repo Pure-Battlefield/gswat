@@ -76,13 +76,23 @@
             id: 'server-settings',
 
             initialize: function () {
-                //
+                this.model.bind('change:settings_success', this.update_confirm());
             },
 
             submit: function (event) {
                 event.preventDefault();
-                var values = this.$el.find('form').serializeArray();
-                this.model.set(values);
+                var form = this.$el.find('form').serializeArray();
+                var values = {}
+                _.each(form, function (input) {
+                    values[input.name] = input.value;
+                });
+                this.model.update_settings(values);
+                values.settings_success = 3;
+                this.model.set(values, { silent: true });
+            },
+
+            update_confirm: function () {
+                console.log('success',this.model.get('settings_success'));
             },
 
             clear_field: function (event) {

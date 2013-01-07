@@ -1,14 +1,34 @@
 (function(window, $, _) {
     var server_model = Backbone.Model.extend({
         defaults : {
-            server_ip: '',
-            server_password: '',
-            server_port: 0,
-            server_old_password: ''
+            ServerIP: '',
+            Password: '',
+            ServerPort: '',
+            OldPassword: '',
+            server_settings_url: '/api/values/setserverinfo',
+            settings_success: 3
         },
 
-        initialize : function () {
+        initialize: function () {
             //
+        },
+
+        update_settings: function (data) {
+            var model = this;
+            console.log(data);
+            $.ajax({
+                type: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Content-type', 'application/json')
+                },
+                contentType: 'application/json; charset=utf-8',
+                url: model.get('server_settings_url'),
+                data: data,
+                dataType: 'json',
+                success: function () {
+                    model.set({'settings_success':1});
+                }
+            });
         }
     });
 

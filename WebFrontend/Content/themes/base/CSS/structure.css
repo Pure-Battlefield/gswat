@@ -4,10 +4,6 @@
     margin:0 auto;
 }
 
-label + input + button.help {
-    top:23px;
-}
-
 /* Header */
 #header li i,
 #header li a {
