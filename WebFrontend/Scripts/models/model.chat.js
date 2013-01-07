@@ -26,11 +26,12 @@
 
         },
 
-        set_interval: function (interval) {
+        set_interval: function () {
             this.clear_interval();
             if(this.get('server_set')){
                 var _update = _.bind(function () {
                     if (this.get('server_set') && this.get('auto_refresh')) {
+                        this.fetch();
                         interval = this.get('interval') * 1000;
                         this._intervalFetch = window.setTimeout(_update, interval);
                     }
@@ -48,61 +49,63 @@
         },
 
         parse: function (data) {
-            var squads = this.get('squad');
-            var team_1 = this.get('team_1_msgs');
-            var team_2 = this.get('team_2_msgs');
-            var server = this.get('server_msgs');
-
             data = $.parseJSON(data);
-            console.log(data);
+            if (data.length > 0) {
+                console.log('test', data);
+                var squads = this.get('squad');
+                var team_1 = this.get('team_1_msgs');
+                var team_2 = this.get('team_2_msgs');
+                var server = this.get('server_msgs');
+                console.log(data);
 
-            _.each(data, function (message) {
-                var now = new Date(parseInt(message.MessageTimeStamp.replace('/Date(', '')));
-                var timestamp = moment(new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
-                message.MessageTimeStamp = timestamp.format('MM/DD/YYYY HH:mm:ss');
+                _.each(data, function (message) {
+                    var now = new Date(parseInt(message.MessageTimeStamp.replace('/Date(', '')));
+                    var timestamp = moment(new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
+                    message.MessageTimeStamp = timestamp.format('MM/DD/YYYY HH:mm:ss');
 
-                // Rename channels to more verbose names.
-                var team = '';
-                team = message.team_slug = MessageType.replace('TEAM1', 'US');
-                team = message.team_slug = MessageType.replace('TEAM2', 'RU');
-                var squad_name = MessageType.replace('SQUAD', ' SQUAD');
+                    // Rename channels to more verbose names.
+                    var team = '';
+                    team = message.team_slug = MessageType.replace('TEAM1', 'US');
+                    team = message.team_slug = MessageType.replace('TEAM2', 'RU');
+                    var squad_name = MessageType.replace('SQUAD', ' SQUAD');
 
-                // Match on Team
-                var re1 = '(team)';	// Word 1
-                var re2 = '(\\d+)';	// Integer Number 1
+                    // Match on Team
+                    var re1 = '(team)';	// Word 1
+                    var re2 = '(\\d+)';	// Integer Number 1
 
-                var p = new RegExp(re1 + re2, ["i"]);
-                var m = p.exec(txt);
-                if (m != null) {
-                    console.log(m[1], m[2]);
-                }
-
-                // Match on Squad
-                var re1 = '.*?';	// Non-greedy match on filler
-                var re2 = '(squad)';	// Word 1
-                var re3 = '(\\d+)';	// Integer Number 1
-
-                var p = new RegExp(re1 + re2 + re3, ["i"]);
-                var m = p.exec(txt);
-                if (m != null) {
-                    console.log(m[1], m[2]);
-                    for (var i = 0; i < squads.length; i++) {
-                        squad = _.find(squad, function(squad){
-                            return squad[0] == squad_name;
-                        });
-                            //.replace(squads[i][0], squads[i][1]);
+                    var p = new RegExp(re1 + re2, ["i"]);
+                    var m = p.exec(txt);
+                    if (m != null) {
+                        console.log(m[1], m[2]);
                     }
-                }
+
+                    // Match on Squad
+                    var re1 = '.*?';	// Non-greedy match on filler
+                    var re2 = '(squad)';	// Word 1
+                    var re3 = '(\\d+)';	// Integer Number 1
+
+                    var p = new RegExp(re1 + re2 + re3, ["i"]);
+                    var m = p.exec(txt);
+                    if (m != null) {
+                        console.log(m[1], m[2]);
+                        for (var i = 0; i < squads.length; i++) {
+                            squad = _.find(squad, function (squad) {
+                                return squad[0] == squad_name;
+                            });
+                            //.replace(squads[i][0], squads[i][1]);
+                        }
+                    }
 
 
-                // Match on Server
-                var p = new RegExp(re1, ["i"]);
-                var m = p.exec(txt);
-                if (m != null) {
-                    console.log(m[1]);
-                }
-            });
-            return data;
+                    // Match on Server
+                    var p = new RegExp(re1, ["i"]);
+                    var m = p.exec(txt);
+                    if (m != null) {
+                        console.log(m[1]);
+                    }
+                });
+                return data;
+            }
         }
     });
 

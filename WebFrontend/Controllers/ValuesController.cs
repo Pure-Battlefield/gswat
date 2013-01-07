@@ -131,15 +131,16 @@ namespace WebFrontend.Controllers
 
         [HttpPost]
         [ActionName("SetServerInfo")]
-        public void SetServerInfo([FromBody]ConnectionInfo connection)
+        public HttpResponseMessage SetServerInfo([FromBody]ConnectionInfo connection)
         {
             try
             {
                 GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
             catch (ArgumentException)
             {
-                
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
     }

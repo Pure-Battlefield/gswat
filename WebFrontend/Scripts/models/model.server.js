@@ -15,7 +15,6 @@
 
         update_settings: function (data) {
             var model = this;
-            console.log(data);
             $.ajax({
                 type: 'POST',
                 beforeSend: function (xhr) {
@@ -23,10 +22,18 @@
                 },
                 contentType: 'application/json; charset=utf-8',
                 url: model.get('server_settings_url'),
-                data: data,
+                data: JSON.stringify(data), //TODO: No likey JSON string, this should be a standard POST..
                 dataType: 'json',
-                success: function () {
-                    model.set({'settings_success':1});
+                success: function (success) {
+                    console.log(model);
+                    model.set({ 'settings_success': 1 });
+                    var chat_settings = PBF.get_model('chat_model');
+                    console.log(chat_settings);
+                    chat_settings.set({ 'server_set': true });
+                    chat_settings.set_interval();
+                },
+                error: function (error) {
+                    model.set({'settings_success': 0});
                 }
             });
         }
