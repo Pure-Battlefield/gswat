@@ -19,3 +19,25 @@
 #content {
     min-height: 400px;
 }
+
+/* Chat Colors */
+#chatContents p {
+    margin: 0 0 2px;
+}
+
+.team {
+    font-weight: bold;
+    text-transform:uppercase;
+}
+
+.team.team-team1 {
+    color: #0000ff;
+}
+
+.team.team-team2 {
+    color: #CE2323;
+}
+
+.player-name {
+    font-weight: bold;
+}

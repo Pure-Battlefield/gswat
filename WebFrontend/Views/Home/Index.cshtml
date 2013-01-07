@@ -70,11 +70,11 @@
     <div class="page">
         <div class="page-header">
             <h1>Server Chat</h1>
-            <i class="icon-loop"></i> Refresh</a>
+            <span id="chat-force-refresh"><i class="icon-loop"></i> Refresh</span>
         </div>
         <div class="page-region">
             <div class="page-region-content">
-                <div id="chatContents" class="bg-color-blueLight"></div>
+                <div id="chatContents" class="bg-color-blueLight row padding10">{{>tpl_chat_messages}}</div>
             </div>
         </div>
         <div class="span4">
@@ -101,14 +101,14 @@
 </script>
 
 <script id="tpl_chat_messages" type="text/html">
-    {{#.}}
+    {{#messages}}
         <p>
-            <span class="timestamp">{{MessageTimeStamp}}</span>
-            <span class="team team-{{MessageType}}">{{MessageType}}</span>
-            <span class="player-name">{{Speaker}}</span>
+            [<span class="timestamp">{{MessageTimeStamp}}</span>]
+            [<span class="team team-{{MessageType}}">{{MessageType}}</span>]
+            <span class="player-name">{{Speaker}}</span>:
             <span class="message">{{Text}}</span>
         </p>
-    {{/.}}
+    {{/messages}}
 </script>
 
 <script id="tpl_settings" type="text/html">
