@@ -30,12 +30,16 @@
     text-transform:uppercase;
 }
 
-.team.team-team1 {
+.team.team-US {
     color: #0000ff;
 }
 
-.team.team-team2 {
+.team.team-RU {
     color: #CE2323;
+}
+
+.team.squad {
+    color: #28AE00;
 }
 
 .player-name {

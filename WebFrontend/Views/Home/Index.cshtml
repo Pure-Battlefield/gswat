@@ -104,7 +104,7 @@
     {{#messages}}
         <p>
             [<span class="timestamp">{{MessageTimeStamp}}</span>]
-            [<span class="team team-{{MessageType}}">{{MessageType}}</span>]
+            [<span class="team team-{{MessageType}}">{{MessageType}}</span>{{#SquadName}} <span class="team squad">{{SquadName}}</span>{{/SquadName}}]
             <span class="player-name">{{Speaker}}</span>:
             <span class="message">{{Text}}</span>
         </p>
