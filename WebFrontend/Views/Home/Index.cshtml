@@ -67,38 +67,36 @@
 </script>
 
 <script id="tpl_chat" type="text/html">
-    <div class="page">
-        <div class="page-header">
-            <h1>Server Chat</h1>
-            <span id="chat-force-refresh"><i class="icon-loop"></i> Refresh</span>
-        </div>
-        <div class="page-region">
-            <div class="page-region-content">
-                <div id="chatContents" class="bg-color-blueLight row padding10">
-                    {{>tpl_chat_messages}}
-                </div>
+    <div class="page-header">
+        <h1>Server Chat</h1>
+        <span id="chat-force-refresh"><i class="icon-loop"></i> Refresh</span>
+    </div>
+    <div class="page-region">
+        <div class="page-region-content">
+            <div id="chatContents" class="bg-color-blueLight row padding10">
+                {{>tpl_chat_messages}}
             </div>
         </div>
-        <div class="span4">
-            <form id="historicalChatForm">
-                <fieldset>
-                    <legend>Load up past history</legend>
-                    <div class="input-control text span3">
-                        <input type="text" name="chatDate" id="chatDate" placeholder="Enter Date" />
-                        <button class="helper"></button>
-                    </div>
-                    <input type="submit" id="loadByDay" value="Load"/>
-                    <input type="button" id="saveByDay" value="Save"/>
-                    <iframe id="chatFrame" style="display:none"></iframe>
-                </fieldset>
+    </div>
+    <div class="span4">
+        <form id="historical-chat-form">
+            <fieldset>
+                <legend>Load past history</legend>
+                <div class="input-control text span3">
+                    <input type="text" id="chat-date-input" name="chat-date" placeholder="Enter Date" />
+                    <button class="helper"></button>
+                </div>
+                <input type="submit" id="load-archive" class="archive-btn" value="Load"/>
+                <input type="button" id="save-archive" class="archive-btn" value="Save"/>
+                <iframe id="download-chat-iframe" src="{{iframe_url}}" style="display:none"></iframe>
+            </fieldset>
             
-                <script type="text/javascript">
-                    $('#chatDate').datepicker({
-                        dateFormat: 'mm/dd/yy'
-                    });
-                </script>
-            </form>
-        </div>
+            <script type="text/javascript">
+                $('#chatDate').datepicker({
+                    dateFormat: 'mm/dd/yy'
+                });
+            </script>
+        </form>
     </div>
 </script>
 

@@ -26,7 +26,8 @@
             PBF.load(files, function () {
                 var server = PBF.get_model('server_model');
                 var chat = PBF.get_view('chat', 'chat_model');
-                chat.render();
+                chat.render()
+                $(PBF.main_ele).html(chat.$el);
             });
         },
 

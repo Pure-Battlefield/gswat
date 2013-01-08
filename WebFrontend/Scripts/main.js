@@ -21,7 +21,7 @@ _.extend(window, {
         this.view_instances         = {};
         this.model_instances        = {};
         this.collection_instances   = {};
-        this.main_ele               = 'body';
+        this.main_ele               = '#content';
         this.default_route          = 'main';
         this.CDN                    = '';
         this.files_loaded           = [];
@@ -108,6 +108,9 @@ _.extend(window, {
             this.set_options(options);
             if (window.location.hash == undefined || window.location.hash == ''){
                 window.location.hash = this.default_route;
+            }
+            if (window.lib) {
+                this.lib = new window.lib();
             }
             this.active_router = new this.router();
             Backbone.history.start();
