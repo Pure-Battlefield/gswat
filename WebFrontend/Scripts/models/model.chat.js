@@ -87,11 +87,10 @@
                     if (m != null) {
                         if (m[2] == "1") {
                             message.MessageType = 'US';
-                            //team_1.push(message);
                         } else {
                             message.MessageType = 'RU';
-                            //team_2.push(message);
                         }
+                        all.push(message);
                         return;
                     }
 
@@ -101,7 +100,7 @@
                     var p = new RegExp(re1, ["i"]);
                     var m = p.exec(message.MessageType);
                     if (m != null) {
-                        //server.push(message);
+                        all.push(message);
                         return;
                     }
 
@@ -111,12 +110,12 @@
                     var p = new RegExp(re1, ["i"]);
                     var m = p.exec(message.MessageType);
                     if (m != null) {
-                        //all.push(message);
+                        all.push(message);
                         return;
                     }
                 });
                 var msgs = {};
-                msgs.all_msgs = _.union(all, data);
+                msgs.all_msgs = all //_.union(all, data);
                 msgs.update_msgs = true;
                 this.set(msgs);
             }

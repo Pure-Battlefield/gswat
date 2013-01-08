@@ -38,7 +38,6 @@
             ];
             PBF.load(files, function () {
                 var settings = PBF.get_view('settings');
-                settings.delegateEvents();
                 settings.render();
             });
         },

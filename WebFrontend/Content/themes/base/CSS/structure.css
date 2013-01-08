@@ -22,7 +22,6 @@
 
 /* Chat Colors */
 #chatContents {
-    max-height:400px;
     overflow:scroll;
     overflow-x:visible;
     overflow-y:scroll;

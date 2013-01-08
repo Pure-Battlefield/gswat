@@ -38,9 +38,14 @@ _.extend(window, {
             return model;
         },
 
-        get_view: function(view_name,model_name){
-            var views = this.view_instances;
-            var view = (views[view_name])? views[view_name] : this.create_view(view_name,model_name);
+        get_view: function (view_name, model_name, reset) {
+            var view = {};
+            if (model_name === true || reset === true) {
+                view = this.create_view(view_name, model_name);
+            } else {
+                var views = this.view_instances;
+                view = (views[view_name]) ? views[view_name] : this.create_view(view_name, model_name);
+            }
             return view;
         },
 
