@@ -130,16 +130,11 @@ namespace core
         }
 
         // Implements ICore
-        public void Connect(string address, int port, string password, string oldPass)
+        public String Connect(string address, int port, string password, string oldPass)
         {
             // Check for a last-saved connection - if present, oldPass must match
-            CloudStorageAccount storageAccount =
-                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CredTable = tableClient.GetTableReference("serverSettings");
-            CredTable.CreateIfNotExists();
-            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>("Last", "Server");
-            TableResult result = CredTable.Execute(retrieveOp);
+            TableResult result = LoadServerSettings("Last", "Server");
+
             if (result.Result != null)
             {
                 var settings = (ServerConfig)result.Result;
@@ -160,8 +155,12 @@ namespace core
                     try
                     {
                         CommHandler.Connect(address, port, password);
+                        return "Connected to " + address;
                     }
-                    catch (Exception e) {}
+                    catch (Exception e) {
+
+                        return e.Message;
+                    }
                 }
             }
             else
@@ -180,20 +179,20 @@ namespace core
                 {
                     CommHandler.Connect(address, port, password);
                 }
-                catch (Exception e) {}
+                catch (Exception e) {
+
+                    return e.Message;
+                }
             }
+
+            return null;
         }
 
         public void LoadExistingConnection()
         {
             // Check for a last-saved connection
-            CloudStorageAccount storageAccount =
-                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CredTable = tableClient.GetTableReference("serverSettings");
-            CredTable.CreateIfNotExists();
-            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>("Last", "Server");
-            TableResult result = CredTable.Execute(retrieveOp);
+            TableResult result = LoadServerSettings("Last", "Server");
+
             if (result.Result != null)
             {
                 var settings = (ServerConfig)result.Result;
@@ -201,8 +200,24 @@ namespace core
                 {
                     CommHandler.Connect(settings.Address, settings.Port, settings.Password);
                 }
-                catch (Exception e) {}
+                catch (Exception e) {
+
+                    Console.Write(e.Message);                
+                }
             }
+        }
+
+        public TableResult LoadServerSettings(String partitionKey, String rowKey)
+        {
+            CloudStorageAccount storageAccount =
+                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CredTable = tableClient.GetTableReference("serverSettings");
+            CredTable.CreateIfNotExists();
+            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>(partitionKey, rowKey);
+            TableResult result = CredTable.Execute(retrieveOp);
+
+            return result;
         }
     }
 }

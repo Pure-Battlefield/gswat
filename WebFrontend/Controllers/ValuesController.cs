@@ -131,16 +131,35 @@ namespace WebFrontend.Controllers
 
         [HttpPost]
         [ActionName("SetServerInfo")]
-        public void SetServerInfo([FromBody]ConnectionInfo connection)
+        public String SetServerInfo([FromBody]ConnectionInfo connection)
         {
+            JavaScriptSerializer json = new JavaScriptSerializer();
             try
             {
-                GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
+               return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword));
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
-                
+               return json.Serialize(e.Message);
             }
+        }
+
+        /** Queries the Azure storage for the setting saved for the given Server
+         *  using the Core.LoadServerSettings() method. <Auth> */
+
+       [HttpGet]
+       [ActionName("GetServerSettings")]
+        public String GetServerSettings()
+        {
+           // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
+            Microsoft.WindowsAzure.Storage.Table.TableResult result = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+
+            var settings = (core.TableStore.ServerConfig)result.Result;
+
+            JavaScriptSerializer json = new JavaScriptSerializer();
+           
+            return json.Serialize(new string[]{settings.Address,settings.Port.ToString()});
+
         }
     }
 }
