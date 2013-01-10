@@ -7,6 +7,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using core.ChatMessageUtilities;
 using core.Server;
 using core.ServerInterface;
+using core.TableStore;
 
 namespace core
 {
@@ -66,6 +67,6 @@ namespace core
         /// </summary>
         /// <param name="partitionKey">The primary IP of the server</param>
         /// <param name="rowKey">The unique port of the server</param>
-        TableResult LoadServerSettings(string partitionKey, string rowKey);
+        ServerConfig LoadServerSettings(string partitionKey, string rowKey);
     }
 }
