@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using System.Diagnostics;
 using WebFrontend.Models;
 using core.ChatMessageUtilities;
+using core.TableStore;
 
 namespace WebFrontend.Controllers
 {
@@ -131,16 +132,34 @@ namespace WebFrontend.Controllers
 
         [HttpPost]
         [ActionName("SetServerInfo")]
-        public void SetServerInfo([FromBody]ConnectionInfo connection)
+        public String SetServerInfo([FromBody]ConnectionInfo connection)
         {
+            JavaScriptSerializer json = new JavaScriptSerializer();
             try
             {
-                GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
+               GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
+               return null;
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
-                
+               return json.Serialize(e.Message);
             }
+        }
+
+        /** Queries the Azure storage for the setting saved for the given Server
+         *  using the Core.LoadServerSettings() method. <Auth> */
+
+       [HttpGet]
+       [ActionName("GetServerSettings")]
+        public String GetServerSettings()
+        {
+           // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
+            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+
+            JavaScriptSerializer json = new JavaScriptSerializer();
+           
+            return json.Serialize(new string[]{settings.Address,settings.Port.ToString()});
+
         }
     }
 }
