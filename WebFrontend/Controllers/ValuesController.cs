@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using System.Diagnostics;
 using WebFrontend.Models;
 using core.ChatMessageUtilities;
+using core.TableStore;
 
 namespace WebFrontend.Controllers
 {
@@ -152,9 +153,7 @@ namespace WebFrontend.Controllers
         public String GetServerSettings()
         {
            // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
-            Microsoft.WindowsAzure.Storage.Table.TableResult result = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
-
-            var settings = (core.TableStore.ServerConfig)result.Result;
+            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
 
             JavaScriptSerializer json = new JavaScriptSerializer();
            

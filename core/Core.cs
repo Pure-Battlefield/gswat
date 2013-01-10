@@ -133,24 +133,23 @@ namespace core
         public String Connect(string address, int port, string password, string oldPass)
         {
             // Check for a last-saved connection - if present, oldPass must match
-            TableResult result = LoadServerSettings("Last", "Server");
+            ServerConfig Oldsettings = LoadServerSettings("Last", "Server");
 
-            if (result.Result != null)
+            if (Oldsettings != null)
             {
-                var settings = (ServerConfig)result.Result;
                 // Only overwrite the last-saved connection if the passwords match
-                if (settings.Password == oldPass)
+                if (Oldsettings.Password == oldPass)
                 {
                     // Disconnect from current server
                     MessageQueue.Clear();
                     CommHandler.Disconnect();
 
-                    settings.Address = address;
-                    settings.Port = port;
-                    settings.Password = password;
-                    settings.PartitionKey = "Last";
-                    settings.RowKey = "Server";
-                    TableOperation updateOp = TableOperation.Replace(settings);
+                    Oldsettings.Address = address;
+                    Oldsettings.Port = port;
+                    Oldsettings.Password = password;
+                    Oldsettings.PartitionKey = "Last";
+                    Oldsettings.RowKey = "Server";
+                    TableOperation updateOp = TableOperation.Replace(Oldsettings);
                     CredTable.Execute(updateOp);
                     try
                     {
@@ -191,11 +190,10 @@ namespace core
         public void LoadExistingConnection()
         {
             // Check for a last-saved connection
-            TableResult result = LoadServerSettings("Last", "Server");
+            ServerConfig settings = LoadServerSettings("Last", "Server");
 
-            if (result.Result != null)
+            if (settings != null)
             {
-                var settings = (ServerConfig)result.Result;
                 try
                 {
                     CommHandler.Connect(settings.Address, settings.Port, settings.Password);
@@ -207,7 +205,10 @@ namespace core
             }
         }
 
-        public TableResult LoadServerSettings(String partitionKey, String rowKey)
+        /* Queries the Azure Storage for the ServerConfig object relative to the 
+         * given partition and rowKey (IP, Port). Returns null if there is no result. */
+
+        public ServerConfig LoadServerSettings(String partitionKey, String rowKey)
         {
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
@@ -217,7 +218,15 @@ namespace core
             TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>(partitionKey, rowKey);
             TableResult result = CredTable.Execute(retrieveOp);
 
-            return result;
+            if (result != null)
+            {
+                return (ServerConfig)result.Result;
+            }
+
+            else
+            {
+                return null;
+            }
         }
     }
 }
