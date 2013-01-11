@@ -145,7 +145,7 @@ var first;
         // Clean out the chat div and add the new stuff.  This is significantly faster than it sounds it would be.
         //$('#chatContents').empty().append(content);
         var scroll = true;
-        if (scrollPaneAPI.getPercentScrolledY() < 100) {
+        if (scrollPaneAPI.getPercentScrolledY() < 1) {
             scroll = false;
         }
         scrollPaneAPI.getContentPane().empty().append(content);
