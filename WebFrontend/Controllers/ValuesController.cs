@@ -137,7 +137,8 @@ namespace WebFrontend.Controllers
             JavaScriptSerializer json = new JavaScriptSerializer();
             try
             {
-               return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword));
+               GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
+               return null;
             }
             catch (ArgumentException e)
             {
