@@ -755,6 +755,11 @@ tr.pager td {
         }
 }
 
+#chatContents 
+{
+    z-index: 1;
+}
+
 #chatContents p
 {
     margin: 0;
@@ -791,20 +796,29 @@ tr.pager td {
     padding-top: 16px;
 }
 
-#settingsBox
+#settingsBoxWrapper 
 {
-    float: right;
-    background-color: #7AC0DA;
-    padding: 10px;
-    margin: 3% 16px;
-    display: none;
+    position: relative;
+    max-width: 960px;
 }
 
-    #settingsBox hr
+    #settingsBox
     {
-        width: 70%;
-        float: left;
+        float: right;
+        background-color: #7AC0DA;
+        padding: 10px;
+        margin: 30px 16px;
+        display: none;
+        z-index: 1000;
+        position: absolute;
+        right: 0;
     }
+
+        #settingsBox hr
+        {
+            width: 70%;
+            float: left;
+        }
 
 #refreshRateInput
 {

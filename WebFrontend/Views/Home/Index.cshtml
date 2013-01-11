@@ -15,31 +15,34 @@
             <!-- Start edits by Conner -->
             <img src="/Images/settingsBtn.png" alt="Settings" title="Settings" id="settingsBtn" />
             <img src="/Images/chatRefreshBtn.png" alt="Force refresh chat" title="Force refresh chat" id="forceRefreshBtn" />
-            <div id="settingsBox">
-                <input type="text" id="refreshRateInput" value="1" />
-                <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit" />
-                <hr />
-                <div id="serverSettingsBox">
-                    <form id="serverSettingsForm">
-                        <fieldset>
-                            <legend></legend>
-                            <label for="ip">IP: </label>
-                            <input type="text" name="ip" id="ip" />
+            <div id="settingsBoxWrapper">
+                <div id="settingsBox">
+                    <input type="text" id="refreshRateInput" value="1" />
+                    <input type="submit" value="Adjust auto-refresh rate (secs)" id="refreshRateSubmit" />
+                    <hr />
+                    <div id="serverSettingsBox">
+                        <form id="serverSettingsForm">
+                            <fieldset>
+                                <legend></legend>
+                                <label for="ip">IP: </label>
+                                <input type="text" name="ip" id="ip" />
                                 
-                            <label for="port">Port: </label>
-                            <input type="text" name="port" id="port" />
+                                <label for="port">Port: </label>
+                                <input type="text" name="port" id="port" />
 
-                            <label for="passwd">Password: </label>
-                            <input type="password" name="passwd" id="passwd" />
+                                <label for="passwd">Password: </label>
+                                <input type="password" name="passwd" id="passwd" />
 
-                            <label for="oldPasswd">Old password: </label>
-                            <input type="password" name="oldPasswd" id="oldPasswd" />
+                                <label for="oldPasswd">Old password: </label>
+                                <input type="password" name="oldPasswd" id="oldPasswd" />
 
-                            <br /><input type="submit" value="Change server connection settings" name="serverSettingsForm" />
-                        </fieldset>
-                    </form>
+                                <br /><input type="submit" value="Change server connection settings" name="serverSettingsForm" />
+                             </fieldset>
+                         </form>
+                    </div>
                 </div>
             </div>
+            
             <!-- End edits by Conner -->
         </div>
     </section>
