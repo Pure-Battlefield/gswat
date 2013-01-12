@@ -1,0 +1,81 @@
+﻿/* Global */
+.page {
+    max-width:940px;
+    margin:0 auto;
+}
+
+html {
+    background:#CCC;
+}
+
+/* Header */
+#header li i,
+#header li a {
+    font-size:12pt;
+    line-height:15px;
+}
+
+.nav-bar .nav-bar-inner a:hover .element,
+.nav-bar .nav-bar-inner > ul.menu > li a:hover {
+    color:rgba(45, 173, 237, 0.8);
+}
+
+/* Footer */
+#footer {
+}
+
+/* Content */
+#content .page {
+    background:#FFF;
+    min-height:400px;
+}
+
+/* Chat Page */
+#server-chat-page #chat-settings h2 {
+    display:none;
+}
+
+#chat-quick-settings {
+    position:absolute;
+    z-index:5;
+    display:none;
+}
+
+#server-chat-page .hide-server-msgs .server-message {
+    display: none;
+}
+
+#server-chat-page .grid.page-region {
+    margin: 0;
+}
+
+#chatContents {
+    overflow:scroll;
+    overflow-x:visible;
+    overflow-y:scroll;
+}
+
+#chatContents p {
+    margin: 0 0 2px;
+}
+
+.team {
+    font-weight: bold;
+    text-transform:uppercase;
+}
+
+.team.team-US {
+    color: #0000ff;
+}
+
+.team.team-RU {
+    color: #CE2323;
+}
+
+.team.squad {
+    color: #28AE00;
+}
+
+.player-name {
+    font-weight: bold;
+}
