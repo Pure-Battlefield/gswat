@@ -161,3 +161,6 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+/WebFrontend.Azure/ServiceConfiguration.Cloud.cscfg
+/WebFrontend.Azure/WebFrontend.Azure.ccproj
+/WebFrontend.Azure/Profiles/dev-gswat-enzoStaging.azurePubxml

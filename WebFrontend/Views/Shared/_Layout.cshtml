@@ -1,28 +1,82 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/themes/base/jquery-ui-1.9.2.custom.min.css")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/modernizr")
-    @Script("jquery-ui-1.9.2.custom.min.js")
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>@ViewBag.Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        @Styles.Render("~/Content/themes/base/jquery-ui-1.9.2.custom.min.css")
+        @Styles.Render("~/Content/themes/base/CSS/modern.css")
+        @Styles.Render("~/Content/themes/base/CSS/modern-responsive.css")
+        @Styles.Render("~/Content/themes/base/CSS/structure.css")
 
-    @Script("moment.min.js") <!-- this is for date formatting for chat messages -->
-    @Script("ajaxUpdateScript.js")
-    @Script("jquery.mousewheel.js")
-    @Script("jquery.jscrollpane.min.js")
-</head>
-<body onload="startup()">
-    @RenderBody()
-
-    @RenderSection("scripts", required: false)
-    @Script("chatSettings.js")
-</body>
+        <!-- Libraries -->
+        @Script("libraries/yepnope-1.5.4.min.js")
+        <script type="text/javascript">
+            yepnope([
+                {
+                    load: '/Scripts/libraries/jquery-1.8.3.min.js'
+                },
+                {
+                    load: '/Scripts/libraries/mustache-0.7.2.js'
+                },
+                {
+                    load: '/Scripts/libraries/icanhaz-0.10.5.js',
+                    complete: function(){ ich.grabTemplates(); }
+                },
+                {
+                    load: '/Scripts/libraries/jquery-ui-1.9.2.custom.min.js'
+                },
+                {
+                    load: '/Scripts/libraries/moment.min.js'
+                },
+                {
+                    load: '/Scripts/libraries/jquery.mousewheel.js'
+                },
+                {
+                    load: '/Scripts/libraries/jquery.jscrollpane.min.js'
+                },
+                {
+                    load: '/Scripts/libraries/head-0.99.min.js'
+                },
+                {
+                    load: '/Scripts/libraries/underscore-1.4.3.min.js'
+                },
+                {
+                    load: '/Scripts/libraries/backbone-0.9.9.min.js'
+                },
+                {
+                    load: '/Scripts/main.js'
+                },
+                {
+                    load: '/Scripts/libraries/lib.js'
+                },
+                {
+                    load: '/Scripts/router.js'
+                },
+                {
+                    load: '/Scripts/views/view.globals.js'
+                },
+                {
+                    load: '/Scripts/init.js'
+                }
+            ]);
+        </script>
+        
+        <!-- ICanHaz Templates -->
+        @RenderBody()
+    </head>
+    <body id="body">
+        <header id="header"></header>
+        <section id="content">
+            <div class="page text-center">
+                <img src="/Content/themes/base/images/preloader-w8-cycle-black.gif">
+                <p class="body-text">Loading...</p>
+            </div>
+        </section>
+        <footer id="footer"></footer>
+    </body>
 </html>
-
 @helper Script(string scriptName) {
     <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
 }
