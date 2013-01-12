@@ -2,13 +2,19 @@
     _.extend(window.GSWAT.prototype.view_definitions, {
         header: Backbone.View.extend({
             events: {
-                //
+                'click .pull-menu'  : 'toggle_menu'
             },
 
             el: '#header',
 
             initialize: function(){
                 this.render();
+            },
+
+            toggle_menu: function() {
+                var menu = this.$el.find('ul.menu');
+                menu.css( { 'overflow': 'hidden' } );
+                menu.toggle(200);
             },
 
             render: function () {

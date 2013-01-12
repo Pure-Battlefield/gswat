@@ -5,7 +5,7 @@ _.extend(window,{
 
 (function (window, document, $, _, yepnope, undefined) {
     lib = function () {
-        this.squads = [["SQUAD1", "ALPHA"], ["SQUAD2", "BRAVO"], ["SQUAD3", "CHARLIE"], ["SQUAD4", "DELTA"], ["SQUAD5", "ECHO"], ["SQUAD6", "FOXTROT"], ["SQUAD7", "GOLF"], ["SQUAD8", "HOTEL"], ["SQUAD9", "INDIA"], ["SQUAD10", "JULIET"], ["SQUAD11", "KILO"], ["SQUAD12", "LIMA"], ["SQUAD13", "MIKE"], ["SQUAD14", "NOVEMBER"], ["SQUAD15", "OSCAR"], ["SQUAD16", "PAPA"], ["SQUAD17", "QUEBEC"], ["SQUAD18", "ROMEO"], ["SQUAD19", "SIERRA"], ["SQUAD20", "TANGO"], ["SQUAD21", "UNIFORM"], ["SQUAD22", "VICTOR"], ["SQUAD23", "WHISKEY"], ["SQUAD24", "XRAY"], ["SQUAD25", "YANKEE"], ["SQUAD26", "ZULU"]];
+        this.squads=[["SQUAD0","LONE WOLF"],["SQUAD1","ALPHA"],["SQUAD2","BRAVO"],["SQUAD3","CHARLIE"],["SQUAD4","DELTA"],["SQUAD5","ECHO"],["SQUAD6","FOXTROT"],["SQUAD7","GOLF"],["SQUAD8","HOTEL"],["SQUAD9","INDIA"],["SQUAD10","JULIET"],["SQUAD11","KILO"],["SQUAD12","LIMA"],["SQUAD13","MIKE"],["SQUAD14","NOVEMBER"],["SQUAD15","OSCAR"],["SQUAD16","PAPA"],["SQUAD17","QUEBEC"],["SQUAD18","ROMEO"],["SQUAD19","SIERRA"],["SQUAD20","TANGO"],["SQUAD21","UNIFORM"],["SQUAD22","VICTOR"],["SQUAD23","WHISKEY"],["SQUAD24","XRAY"],["SQUAD25","YANKEE"],["SQUAD26","ZULU"]];
     };
 
     lib.prototype = {
@@ -29,7 +29,7 @@ _.extend(window,{
                         var p = new RegExp(re1 + re2 + re3, ["i"]);
                         var m = p.exec(message.MessageType);
                         if (m != null) {
-                            squad_name = m[1].toUpperCase() + m[2];
+                            squad_name=m[1].toUpperCase()+m[2];
                             message.SquadName = _.find(squads, function (squad) {
                                 return squad[0] == squad_name;
                             })[1];
