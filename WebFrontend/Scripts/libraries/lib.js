@@ -19,6 +19,7 @@ _.extend(window,{
                         var now = new Date(parseInt(message.MessageTimeStamp.replace('/Date(', '')));
                         var timestamp = moment(new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
                         message.MessageTimeStamp = timestamp.format('MM/DD/YYYY HH:mm:ss');
+                        message.Server = false;
 
                         // Match on Squad
                         var re1 = '.*?';	// Non-greedy match on filler
@@ -50,12 +51,13 @@ _.extend(window,{
                             return;
                         }
 
-
                         // Match on Server
                         var re1 = '(server)';	// Word 1
                         var p = new RegExp(re1, ["i"]);
-                        var m = p.exec(message.MessageType);
+                        var m = p.exec(message.Speaker);
                         if (m != null) {
+                            message.MessageType = 'server';
+                            message.Server = true;
                             parsed_messages.push(message);
                             return;
                         }

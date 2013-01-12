@@ -1,28 +1,31 @@
 (function(window, $, _, moment) {
     var chat_model = Backbone.Model.extend({
         defaults : {
-            'auto_refresh': true,
-            'url': '/api/values/getallmessages',
-            'interval': 1,
-            'fetch_interval': {},
-            'show_server_msgs': false,
-            'all_msgs': [],
-            'server_set': true,
-            'update_msgs': false,
-            'archive_date': '',
-            'save_archive': false,
-            'iframe_url':''
+            'auto_refresh'      : true,
+            'url'               : '/api/values/getallmessages',
+            'interval'          : 1,
+            'fetch_interval'    : {},
+            'show_server_msgs'  : true,
+            'all_msgs'          : [],
+            'server_set'        : true,
+            'update_msgs'       : false,
+            'archive_date'      : '',
+            'save_archive'      : false,
+            'iframe_url'        : ''
         },
 
         initialize: function () {
             this.set_interval();
-            this.on('change:archive_date',this.get_old_msgs);
+            this.on('change:archive_date', this.get_old_msgs, this);
+            this.on('change:auto_refresh', this.set_interval, this);
+            this.on('change:interval', this.set_interval, this);
+            this.on('change:server_set', this.set_interval, this);
         },
 
         get_msgs: function () {
-            this.set({ 'update_msgs': false }, { silent: true });
             var model = this;
-            var url = this.get('url');
+            model.set({ 'update_msgs': false }, { silent: true });
+            var url = model.get('url');
             $.get(url, function (data) {
                 model.parse_msgs($.parseJSON(data));
             });
@@ -38,10 +41,7 @@
                         this._intervalFetch = window.setTimeout(_update, interval);
                     }
                 }, this);
-
                 _update();
-            } else {
-                //console.log('No server set yet');
             }
         },
 
@@ -51,12 +51,9 @@
         },
 
         parse_msgs: function (data) {
-            console.log(data.length);
             if (data.length > 0) {
-                var msgs = {};
                 data = PBF.lib.parse_chat_messages(data);
-                msgs.all_msgs = data.content;
-                msgs.update_msgs = true;
+                var msgs = { all_msgs: data.content, update_msgs: true };
                 this.set(msgs);
             }
         },
@@ -65,7 +62,6 @@
             var model = this;
             var date = model.get('archive_date').split('/');
             if (date.length === 3) {
-                var msgs = {};
                 date = {
                     Day: date[1],
                     Month: date[0],
@@ -82,6 +78,7 @@
                         data: date,
                         success: function (data) {
                             model.set({ 'update_msgs': false }, { silent: true });
+                            model.set({'auto_refresh':false});
                             model.parse_msgs($.parseJSON(data));
                         }
                     });
@@ -90,6 +87,7 @@
         }
     });
 
+    // TODO: Save archives to a collection
     var chat_date_model = Backbone.Model.extend({
         defaults: {},
 

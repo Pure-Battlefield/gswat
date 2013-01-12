@@ -21,6 +21,7 @@
             var files = [
                 PBF.CDN + 'Scripts/models/model.server.js',
                 PBF.CDN + 'Scripts/models/model.chat.js',
+                PBF.CDN + 'Scripts/views/view.settings.js',
                 PBF.CDN + 'Scripts/views/view.chat.js'
             ];
             PBF.load(files, function () {

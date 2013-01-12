@@ -34,14 +34,14 @@
 </script>
 
 <script id="tpl_loading" type="text/html">
-    <div class="page text-center vertical-align">
+    <div class="page text-center vertical-align padding10">
         <img src="/Content/themes/base/images/preloader-w8-cycle-black.gif">
         <p class="body-text">Loading...</p>
     </div>
 </script>
 
 <script id="tpl_coming_soon" type="text/html">
-    <div class="page">
+    <div class="page padding10">
         <div class="page-header">
             <h1>Coming Soon!</h1>
         </div>
@@ -54,7 +54,7 @@
 </script>
 
 <script id="tpl_body" type="text/html">
-    <div class="page">
+    <div class="page padding10">
         <div class="page-header">
             <h1>Welcome!</h1>
         </div>
@@ -67,48 +67,54 @@
 </script>
 
 <script id="tpl_chat" type="text/html">
-    <div class="page-header">
-        <h1>Server Chat</h1>
-        <span id="chat-force-refresh"><i class="icon-loop"></i> Refresh</span>
-    </div>
-    <div class="page-region">
-        <div class="page-region-content">
-            <div id="chatContents" class="bg-color-blueLight row padding10">
+    <div class="grid page-region">
+        <div class="row bg-color-lighten padding5">
+            <a id="chat-force-refresh" href="#"><span><i class="icon-loop"></i> Refresh</span></a>
+            <a id="chat-toggle-options" href="#" class="place-right"><span><i class="icon-wrench"></i> Options & Archives</span></a>
+        </div>
+        <div id="chat-quick-settings" class="row bg-color-white padding10">
+            <h2>Quick Settings</h2>
+            <div class="span4">
+                <form id="historical-chat-form">
+                    <fieldset>
+                        <legend>Load past history</legend>
+                        <label>This will disable chat auto-refresh</label>
+                        <div class="input-control text">
+                            <input type="text" id="chat-date-input" name="chat-date" placeholder="Enter Date (DD/MM/YYYY)" />
+                            <button class="helper"></button>
+                        </div>
+                        <input type="submit" id="load-archive" class="archive-btn" value="Load"/>
+                        <input type="button" id="save-archive" class="archive-btn" value="Save"/>
+                        <iframe id="download-chat-iframe" src="{{iframe_url}}" style="display:none"></iframe>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="span6">
+                <div id="chat-settings"></div>
+            </div>
+        </div>
+        <div class="row padding10">
+            <div class="page-header">
+                <h1>Server Chat</h1>
+            </div>
+        </div>
+        <div class="row padding10">
+            <div id="chat-contents" class="bg-color-blueLight row padding10 {{^show_server_msgs}}hide-server-msgs{{/show_server_msgs}}">
                 {{>tpl_chat_messages}}
             </div>
         </div>
     </div>
-    <div class="span4">
-        <form id="historical-chat-form">
-            <fieldset>
-                <legend>Load past history</legend>
-                <div class="input-control text span3">
-                    <input type="text" id="chat-date-input" name="chat-date" placeholder="Enter Date" />
-                    <button class="helper"></button>
-                </div>
-                <input type="submit" id="load-archive" class="archive-btn" value="Load"/>
-                <input type="button" id="save-archive" class="archive-btn" value="Save"/>
-                <iframe id="download-chat-iframe" src="{{iframe_url}}" style="display:none"></iframe>
-            </fieldset>
-            
-            <script type="text/javascript">
-                $('#chatDate').datepicker({
-                    dateFormat: 'mm/dd/yy'
-                });
-            </script>
-        </form>
-    </div>
 </script>
 
 <script id="tpl_chat_messages" type="text/html">
-    {{#messages}}
-        <p>
+    {{#all_msgs}}
+        <p {{#Server}}class="server-message"{{/Server}}>
             [<span class="timestamp">{{MessageTimeStamp}}</span>]
             [<span class="team team-{{MessageType}}">{{MessageType}}</span>{{#SquadName}} <span class="team squad">{{SquadName}}</span>{{/SquadName}}]
             <span class="player-name">{{Speaker}}</span>:
             <span class="message">{{Text}}</span>
         </p>
-    {{/messages}}
+    {{/all_msgs}}
 </script>
 
 <script id="tpl_settings" type="text/html">

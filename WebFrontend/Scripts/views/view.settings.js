@@ -16,13 +16,15 @@
             render: function () {
                 this.$el.html(ich.tpl_settings());
                 this.render_sub_views();
+                this.delegateEvents(); // TODO: Properly fix this event issue
             },
 
             render_sub_views: function () {
-                var scope = this;
-                _.each(scope.subviews, function (view) {
-                    view.render()
-                    scope.$el.find('#' + view.id).replaceWith(view.el);
+                var view = this;
+                _.each(view.subviews, function (sub_view) {
+                    sub_view.render();
+                    view.$el.find('#' + sub_view.id).replaceWith(sub_view.el);
+                    sub_view.delegateEvents(); // TODO: Properly fix this event issue
                 });
             }
         }),
@@ -30,8 +32,8 @@
         chat_settings: Backbone.View.extend({
             events: {
                 'click input:submit'    : 'submit',
-                'click button.helper': 'clear_field',
-                'change .input-control.switch input': 'change_switch'
+                'click button.helper'   : 'clear_field',
+                'change .switch input'  : 'change_switch'
             },
 
             id: 'chat-settings',
@@ -69,8 +71,8 @@
 
         server_settings: Backbone.View.extend({
             events: {
-                'click input:submit': 'submit',
-                'click button.helper': 'clear_field'
+                'click input:submit'    : 'submit',
+                'click button.helper'   : 'clear_field'
             },
 
             id: 'server-settings',

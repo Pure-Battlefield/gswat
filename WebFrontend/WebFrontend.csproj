@@ -175,7 +175,6 @@
     <Content Include="Scripts\libraries\mustache-0.7.2.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\jquery.jscrollpane.css" />
     <Content Include="Content\themes\base\images\glyphicons-halflings-white.png" />
     <Content Include="Content\themes\base\images\glyphicons-halflings.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -204,9 +203,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\libraries\ajaxUpdateScript.js" />
     <Content Include="Scripts\libraries\backbone-0.9.9.min.js" />
-    <Content Include="Scripts\chatSettings.js" />
     <Content Include="Scripts\libraries\icanhaz-0.10.5.js" />
     <Content Include="Scripts\libraries\hammer-0.6.4.min.js" />
     <Content Include="Scripts\libraries\head-0.99.min.js" />
@@ -250,7 +247,6 @@
     <Content Include="Scripts\views\view.chat.js" />
     <Content Include="Scripts\views\view.globals.js" />
     <Content Include="Scripts\views\view.home.js" />
-    <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -258,7 +254,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\heroAccent.png" />

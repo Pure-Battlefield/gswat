@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width" />
         <title>@ViewBag.Title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        @*@Styles.Render("~/Content/css")*@
         @Styles.Render("~/Content/themes/base/jquery-ui-1.9.2.custom.min.css")
         @Styles.Render("~/Content/themes/base/CSS/modern.css")
         @Styles.Render("~/Content/themes/base/CSS/modern-responsive.css")
@@ -30,9 +29,6 @@
                 },
                 {
                     load: '/Scripts/libraries/moment.min.js'
-                },
-                {
-                    load: '/Scripts/libraries/ajaxUpdateScript.js'
                 },
                 {
                     load: '/Scripts/libraries/jquery.mousewheel.js'
@@ -79,8 +75,6 @@
             </div>
         </section>
         <footer id="footer"></footer>
-
-        @*@Script("chatSettings.js")*@
     </body>
 </html>
 @helper Script(string scriptName) {
