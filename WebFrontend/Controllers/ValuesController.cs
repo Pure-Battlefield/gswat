@@ -132,17 +132,17 @@ namespace WebFrontend.Controllers
 
         [HttpPost]
         [ActionName("SetServerInfo")]
-        public String SetServerInfo([FromBody]ConnectionInfo connection)
+        public HttpResponseMessage SetServerInfo([FromBody]ConnectionInfo connection)
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
             try
             {
-               GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
-               return null;
+                GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
             catch (ArgumentException e)
             {
-               return json.Serialize(e.Message);
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
 
