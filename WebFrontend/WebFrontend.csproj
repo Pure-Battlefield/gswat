@@ -168,6 +168,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Scripts\libraries\toe.min.js" />
     <Content Include="Content\themes\base\CSS\structure.css" />
     <Content Include="Content\themes\base\fonts\iconFont.svg" />
     <Content Include="Content\themes\base\fonts\license.txt" />
@@ -221,6 +222,7 @@
     <Content Include="Content\themes\base\fonts\iconFont.eot" />
     <Content Include="Content\themes\base\fonts\iconFont.ttf" />
     <Content Include="Content\themes\base\fonts\iconFont.woff" />
+    <Content Include="Content\themes\base\LESS\structure.less" />
     <None Include="Scripts\libraries\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\libraries\jquery.validate.min.js" />
     <Content Include="Scripts\libraries\jquery.validate.unobtrusive.min.js" />
