@@ -30,16 +30,13 @@ If you have a [Windows Azure](windowsazure.com) account, you can use it to put a
 
 Once the process completes, you can check your [Windows Azure Dashboard](https://manage.windowsazure.com/#Workspace/All/dashboard) for the view link, you'll need to configure the `Storage` first though
 
-####Configure Sotrage
+####Configure Storage
 Once you've got it published, go to your [Windows Azure Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage), and follow these steps:
 * Select the storage instance and click on `Manage Keys` at the bottom of the window
 * Copy the first two fields into the following string: DefaultEndpointsProtocol=https;AccountName=`STORAGE ACCOUNT NAME`;AccountKey=`PRIMARY ACCESS KEY`
-* Under `WebFrontend.Azure`, open the `Roles` folder, and open the `WebFrontend` file
-* Click `Settings`
-* Select the `Cloud` configuration option
-* Paste the string from earlier into the `Value` column of the `StorageConnectionString` and `Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString` and then re-publish
-
-You can also update these settings directly in your `Windows Azure Cloud Instance` by selecting the instance, going to `Configure`, and pasting the string into the `webfrontend` `settings` field and hitting `Save`
+* Go to `Windows Azure Cloud` and select your app instance
+* Go to the `Configure` tab
+* Paste the string into the `webfrontend` `settings` field and hit `Save`
 
 ## Technologies
 
