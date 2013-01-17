@@ -7,6 +7,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using core.ChatMessageUtilities;
 using core.Server;
 using core.ServerInterface;
+using core.TableStore;
 
 namespace core
 {
@@ -57,8 +58,15 @@ namespace core
         /// <param name="port">Port to connect to</param>
         /// <param name="password">Password to use</param>
         /// <param name="oldpass">Old password to verify with</param>
-        void Connect(string address, int port, string password, string oldPass);
+        String Connect(string address, int port, string password, string oldPass);
 
         void LoadExistingConnection();
+
+        /// <summary>
+        ///     Query Azure Storage for settings related to the passed input.
+        /// </summary>
+        /// <param name="partitionKey">The primary IP of the server</param>
+        /// <param name="rowKey">The unique port of the server</param>
+        ServerConfig LoadServerSettings(string partitionKey, string rowKey);
     }
 }

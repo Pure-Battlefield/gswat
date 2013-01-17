@@ -130,38 +130,36 @@ namespace core
         }
 
         // Implements ICore
-        public void Connect(string address, int port, string password, string oldPass)
+        public String Connect(string address, int port, string password, string oldPass)
         {
             // Check for a last-saved connection - if present, oldPass must match
-            CloudStorageAccount storageAccount =
-                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CredTable = tableClient.GetTableReference("serverSettings");
-            CredTable.CreateIfNotExists();
-            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>("Last", "Server");
-            TableResult result = CredTable.Execute(retrieveOp);
-            if (result.Result != null)
+            ServerConfig Oldsettings = LoadServerSettings("Last", "Server");
+
+            if (Oldsettings != null)
             {
-                var settings = (ServerConfig)result.Result;
                 // Only overwrite the last-saved connection if the passwords match
-                if (settings.Password == oldPass)
+                if (Oldsettings.Password == oldPass)
                 {
                     // Disconnect from current server
                     MessageQueue.Clear();
                     CommHandler.Disconnect();
 
-                    settings.Address = address;
-                    settings.Port = port;
-                    settings.Password = password;
-                    settings.PartitionKey = "Last";
-                    settings.RowKey = "Server";
-                    TableOperation updateOp = TableOperation.Replace(settings);
+                    Oldsettings.Address = address;
+                    Oldsettings.Port = port;
+                    Oldsettings.Password = password;
+                    Oldsettings.PartitionKey = "Last";
+                    Oldsettings.RowKey = "Server";
+                    TableOperation updateOp = TableOperation.Replace(Oldsettings);
                     CredTable.Execute(updateOp);
                     try
                     {
                         CommHandler.Connect(address, port, password);
+                        return "Connected to " + address;
                     }
-                    catch (Exception e) {}
+                    catch (Exception e) {
+
+                        return e.Message;
+                    }
                 }
             }
             else
@@ -180,28 +178,54 @@ namespace core
                 {
                     CommHandler.Connect(address, port, password);
                 }
-                catch (Exception e) {}
+                catch (Exception e) {
+
+                    return e.Message;
+                }
             }
+
+            return null;
         }
 
         public void LoadExistingConnection()
         {
             // Check for a last-saved connection
+            ServerConfig settings = LoadServerSettings("Last", "Server");
+
+            if (settings != null)
+            {
+                try
+                {
+                    CommHandler.Connect(settings.Address, settings.Port, settings.Password);
+                }
+                catch (Exception e) {
+
+                    Console.Write(e.Message);                
+                }
+            }
+        }
+
+        /* Queries the Azure Storage for the ServerConfig object relative to the 
+         * given partition and rowKey (IP, Port). Returns null if there is no result. */
+
+        public ServerConfig LoadServerSettings(String partitionKey, String rowKey)
+        {
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CredTable = tableClient.GetTableReference("serverSettings");
             CredTable.CreateIfNotExists();
-            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>("Last", "Server");
+            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>(partitionKey, rowKey);
             TableResult result = CredTable.Execute(retrieveOp);
-            if (result.Result != null)
+
+            if (result != null)
             {
-                var settings = (ServerConfig)result.Result;
-                try
-                {
-                    CommHandler.Connect(settings.Address, settings.Port, settings.Password);
-                }
-                catch (Exception e) {}
+                return (ServerConfig)result.Result;
+            }
+
+            else
+            {
+                return null;
             }
         }
     }
