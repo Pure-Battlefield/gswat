@@ -12,11 +12,11 @@
             className: 'page',
 
             initialize: function () {
-                this.model.on("change:update_msgs", this.render, this);
-                this.model.on("change:iframe_url", this.render, this);
+                this.model.on("change:iframe_url", this.render_iframe, this);
                 this.model.on("change:show_server_msgs", this.toggle_server_msgs, this);
                 this.view = {};
                 this.subviews = {};
+                this.subviews.chat_messages = PBF.get_view('chat_messages', this.model);
                 this.subviews.chat_settings = PBF.get_view('chat_settings', this.model);
             },
 
@@ -30,13 +30,9 @@
                 this.model.get_msgs();
             },
 
-            render_messages: function(){
-                this.view.messages = this.model.get('all_msgs');
-            },
-
             render_iframe: function () {
-                this.view.iframe_url = this.model.get('iframe_url');
-                this.render(view);
+                this.render();
+                this.model.set({ iframe_url: '' },{silent:true});
             },
 
             toggle_server_msgs: function () {
@@ -65,6 +61,20 @@
                     view.$el.find('#' + sub_view.id).replaceWith(sub_view.el);
                     sub_view.delegateEvents(); // TODO: Properly fix this event issue
                 });
+            }
+        }),
+
+        chat_messages: Backbone.View.extend({
+            id: 'chat-contents-ul',
+
+            tagName: 'ul',
+
+            initialize: function () {
+                this.model.on("change:update_msgs", this.render, this);
+            },
+
+            render: function () {
+                this.$el.html(ich.tpl_chat_messages(this.model.toJSON()));
             }
         })
     });
