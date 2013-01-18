@@ -20,6 +20,11 @@ html {
     color:rgba(45, 173, 237, 0.8);
 }
 
+.nav-bar .nav-bar-inner > ul.menu > li {
+    display:inline-block;
+    float:none;
+}
+
 /* Footer */
 #footer {
 }
@@ -55,7 +60,12 @@ html {
     overflow-y:scroll;
 }
 
-#chatContents p {
+#chat-contents-ul {
+    margin: 0;
+    list-style:none;
+}
+
+#chatContents li {
     margin: 0 0 2px;
 }
 

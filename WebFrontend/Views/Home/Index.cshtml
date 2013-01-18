@@ -100,7 +100,7 @@
         </div>
         <div class="row padding10">
             <div id="chat-contents" class="bg-color-blueLight row padding10 {{^show_server_msgs}}hide-server-msgs{{/show_server_msgs}}">
-                {{>tpl_chat_messages}}
+                <ul id="chat-contents-ul"></ul>
             </div>
         </div>
     </div>
@@ -108,12 +108,12 @@
 
 <script id="tpl_chat_messages" type="text/html">
     {{#all_msgs}}
-        <p {{#Server}}class="server-message"{{/Server}}>
+        <li {{#Server}}class="server-message"{{/Server}}>
             [<span class="timestamp">{{MessageTimeStamp}}</span>]
             [<span class="team team-{{MessageType}}">{{MessageType}}</span>{{#SquadName}} <span class="team squad">{{SquadName}}</span>{{/SquadName}}]
             <span class="player-name">{{Speaker}}</span>:
             <span class="message">{{Text}}</span>
-        </p>
+        </li>
     {{/all_msgs}}
 </script>
 
