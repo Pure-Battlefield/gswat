@@ -168,6 +168,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Scripts\libraries\toe.min.js" />
     <Content Include="Content\themes\base\CSS\structure.css" />
     <Content Include="Content\themes\base\fonts\iconFont.svg" />
     <Content Include="Content\themes\base\fonts\license.txt" />
@@ -208,12 +209,10 @@
     </Content>
     <Content Include="Scripts\libraries\backbone-0.9.9.min.js" />
     <Content Include="Scripts\libraries\icanhaz-0.10.5.js" />
-    <Content Include="Scripts\libraries\hammer-0.6.4.min.js" />
     <Content Include="Scripts\libraries\head-0.99.min.js" />
     <Content Include="Scripts\init.js" />
     <Content Include="Scripts\libraries\lib.js" />
     <Content Include="Scripts\libraries\jquery-1.8.3.min.js" />
-    <Content Include="Scripts\jquery-plugins\jquery.hammer.js" />
     <Content Include="Scripts\libraries\jquery-ui-1.9.2.custom.min.js" />
     <Content Include="Scripts\libraries\jquery.jscrollpane.min.js" />
     <Content Include="Scripts\libraries\jquery.mousewheel.js" />
@@ -221,6 +220,7 @@
     <Content Include="Content\themes\base\fonts\iconFont.eot" />
     <Content Include="Content\themes\base\fonts\iconFont.ttf" />
     <Content Include="Content\themes\base\fonts\iconFont.woff" />
+    <Content Include="Content\themes\base\LESS\structure.less" />
     <None Include="Scripts\libraries\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\libraries\jquery.validate.min.js" />
     <Content Include="Scripts\libraries\jquery.validate.unobtrusive.min.js" />
@@ -280,6 +280,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\jquery-plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
