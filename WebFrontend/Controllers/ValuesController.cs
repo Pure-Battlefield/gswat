@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -62,6 +64,17 @@ namespace WebFrontend.Controllers
             IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             JavaScriptSerializer json = new JavaScriptSerializer();
             return json.Serialize(q);
+        }
+
+        [HttpGet]
+        [ActionName("GetAllMessagesFromTime")]
+        public string GetAllMessagesFromTime([FromUri] DateTimeInfo dateTime)
+        {
+            var q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            var output = (from chatMessage in q let constructedDateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second) 
+                          where chatMessage.MessageTimeStamp > constructedDateTime select chatMessage).ToList();
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            return json.Serialize(output);
         }
 
         [HttpGet]
