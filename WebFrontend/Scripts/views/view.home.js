@@ -5,7 +5,7 @@
                 //
             },
 
-            el: '#content',
+            id: 'home',
 
             initialize: function () {
                 //
