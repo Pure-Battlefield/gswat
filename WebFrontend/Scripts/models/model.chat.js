@@ -26,10 +26,7 @@
 
         get_msgs: function () {
             var model = this;
-			var data = this.get('last_fetch').utc().valueOf();
-			data = {
-				timestamp: data
-			};
+			var data = {timestamp: this.get('last_fetch').utc().valueOf()};
 			var url = this.get('url');
 			this.set({'new_msgs':''}, { silent: true });
             $.ajax({

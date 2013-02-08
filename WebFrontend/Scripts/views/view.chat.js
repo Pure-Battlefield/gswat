@@ -64,35 +64,30 @@
         }),
 
         chat_messages: Backbone.View.extend({
-			events: {
-				'scroll #chat-contents'	: 'scroll'
-			},
-
             id: 'chat-contents-ul',
 
             tagName: 'ul',
 
             initialize: function () {
-				this.do_scroll = true;
                 this.model.on("change:new_msgs", this.render, this);
             },
 
-			//TODO: Fix the scrolling
-			scroll: function(){
-				var ele = document.getElementById('chat-contents');
-				if(ele.scrollTop != ele.scrollHeight){
-					this.do_scroll = false;
-				}
-			},
-
             render: function () {
-                this.$el.append(ich.tpl_chat_messages({all_msgs:this.model.get('new_msgs')}));
-				if(this.do_scroll){
-					var ele = $("chat-contents");
-					ele.prop('scrollTop',ele.prop('scrollHeight'));
-				}
+				var ele = $("#chat-contents");
+				//console.log(ele.prop('scrollTop'),ele.prop('scrollHeight'));
+				//if(ele.prop('scrollTop') == ele.prop('scrollHeight')){
+					this.append_message();
+					ele.scrollTop(ele.prop('scrollHeight'));
+				//} else {
+					//this.append_message();
+				//}
 				return this;
-            }
+            },
+
+			append_message: function(message){
+				message = message || this.model.get('new_msgs');
+				this.$el.append(ich.tpl_chat_messages({all_msgs:message}));
+			}
         })
     });
 }(window, jQuery, _, ich));

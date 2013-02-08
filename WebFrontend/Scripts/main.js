@@ -26,7 +26,7 @@ _.extend(window, {
         this.CDN                    = '';
         this.files_loaded           = [];
         this.timers                 = {};
-		this.lib					= lib || undefined;
+		this.Lib					= Lib || undefined;
     };
 
 	/**
@@ -178,8 +178,8 @@ _.extend(window, {
         },
 
         init: function (options) {
-            if (!_.isUndefined(this.lib)) {
-                _.extend(this, new this.lib());
+            if (!_.isUndefined(this.Lib)) {
+                _.extend(this, new this.Lib());
             }
             var _super = Backbone.View.prototype.remove;
             Backbone.View.prototype.remove = function () {
