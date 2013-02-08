@@ -68,12 +68,19 @@ namespace WebFrontend.Controllers
 
         [HttpGet]
         [ActionName("GetAllMessagesFromTime")]
-        public string GetAllMessagesFromTime([FromUri] DateTimeInfo dateTime)
+        public string GetAllMessagesFromTime([FromUri] double timestamp)
         {
+            /*timestamp is a unix timestamp of milliseconds since the epoch.*/
+            /*TODO: Note that this is still unsafe; while it is *highly unlikely* that two messages could be received in under a ms,
+             * there still exists a race condition here, and a message may not be sent.  This should be fixed with sessions.  
+            */
             var q = GlobalStaticVars.StaticCore.GetMessageQueue();
-            var output = (from chatMessage in q let constructedDateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second) 
-                          where chatMessage.MessageTimeStamp > constructedDateTime select chatMessage).ToList();
-            JavaScriptSerializer json = new JavaScriptSerializer();
+            var constructedDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            constructedDateTime = constructedDateTime.AddMilliseconds(timestamp);
+
+            var output = q.Where(chatMessage => (chatMessage.MessageTimeStamp - constructedDateTime).TotalMilliseconds >= 1).ToList();
+
+            var json = new JavaScriptSerializer();
             return json.Serialize(output);
         }
 

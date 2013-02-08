@@ -26,17 +26,12 @@
 
         get_msgs: function () {
             var model = this;
-			var data = this.get('last_fetch').utc().format('YYYY/MM/DD/HH/mm/ss').split('/');
+			var data = this.get('last_fetch').utc().valueOf();
 			data = {
-				Year: data[0],
-				Month: data[1],
-				Day: data[2],
-				Hour: data[3],
-				Minute: data[4],
-				Second: data[5]
+				timestamp: data
 			};
 			var url = this.get('url');
-			this.set({'new_msgs':'','last_fetch': moment()}, { silent: true });
+			this.set({'new_msgs':''}, { silent: true });
             $.ajax({
                 url:url,
 				data: data,
@@ -68,6 +63,8 @@
 
         parse_msgs: function (data) {
             if (data.length > 0) {
+                var lastrcvd = moment(data[data.length - 1].MessageTimeStamp);
+                this.set({ 'last_fetch': lastrcvd }, { silent: true });
                 data = PBF.parse_chat_messages(data);
                 this.get('all_msgs').push(data.content);
                 this.set({new_msgs:data.content});
