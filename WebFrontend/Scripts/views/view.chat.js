@@ -74,13 +74,12 @@
 
             render: function () {
 				var ele = $("#chat-contents");
-				//console.log(ele.prop('scrollTop'),ele.prop('scrollHeight'));
-				//if(ele.prop('scrollTop') == ele.prop('scrollHeight')){
+				if(ele.prop('offsetHeight') + ele.prop('scrollTop') == ele.prop('scrollHeight')){
 					this.append_message();
 					ele.scrollTop(ele.prop('scrollHeight'));
-				//} else {
-					//this.append_message();
-				//}
+				} else {
+					this.append_message();
+				}
 				return this;
             },
 

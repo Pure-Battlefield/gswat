@@ -1,10 +1,6 @@
 (function(window, $, _, ich) {
     _.extend(window.GSWAT.prototype.view_definitions, {
         settings: Backbone.View.extend({
-            events: {
-                //
-            },
-
             id: 'settings',
 
             initialize: function () {
@@ -36,10 +32,6 @@
             },
 
             id: 'chat-settings',
-
-            initialize: function () {
-                //
-            },
 
             submit: function (event) {
                 event.preventDefault();

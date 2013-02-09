@@ -60,8 +60,7 @@
 
         parse_msgs: function (data) {
             if (data.length > 0) {
-                var lastrcvd = moment(data[data.length - 1].MessageTimeStamp);
-                this.set({ 'last_fetch': lastrcvd }, { silent: true });
+                this.set({ 'last_fetch': moment(data[data.length - 1].MessageTimeStamp) }, { silent: true });
                 data = PBF.parse_chat_messages(data);
                 this.get('all_msgs').push(data.content);
                 this.set({new_msgs:data.content});
@@ -95,30 +94,6 @@
                 }
             }
         }
-    });
-
-    // TODO: Save archives to a collection
-    var chat_date_model = Backbone.Model.extend({
-        defaults: {},
-
-        initialize: function () {
-            //
-        }
-    });
-
-    $.extend(window.GSWAT.prototype.collection_definitions, {
-        chat_date_collection: Backbone.Collection.extend({
-            model: chat_date_model,
-
-            url: function (day) {
-                //return url;
-            },
-
-            parse: function (data) {
-                console.log(data);
-                return data;
-            }
-        })
     });
 
     _.extend(window.GSWAT.prototype.model_definitions, { chat_model: chat_model });
