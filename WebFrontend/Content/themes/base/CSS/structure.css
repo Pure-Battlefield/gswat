@@ -54,10 +54,11 @@ html {
     margin: 0;
 }
 
-#chatContents {
+#chat-contents {
     overflow:scroll;
     overflow-x:visible;
     overflow-y:scroll;
+	max-height:600px;
 }
 
 #chat-contents-ul {
@@ -65,7 +66,7 @@ html {
     list-style:none;
 }
 
-#chatContents li {
+#chat-contents li {
     margin: 0 0 2px;
 }
 

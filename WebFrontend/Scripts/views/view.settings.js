@@ -1,16 +1,12 @@
 (function(window, $, _, ich) {
     _.extend(window.GSWAT.prototype.view_definitions, {
         settings: Backbone.View.extend({
-            events: {
-                //
-            },
-
-            el: '#content',
+            id: 'settings',
 
             initialize: function () {
                 this.subviews = {};
-                this.subviews.server_settings_view = PBF.get_view('server_settings', 'server_model');
-                this.subviews.chat_settings = PBF.get_view('chat_settings', 'chat_model');
+                this.subviews.server_settings_view = PBF.get({view:{name:'server_settings'},model:{name:'server_model'}});
+                this.subviews.chat_settings = PBF.get({view:{name:'chat_settings'},model:{name:'chat_model'}});
             },
 
             render: function () {
@@ -22,8 +18,7 @@
             render_sub_views: function () {
                 var view = this;
                 _.each(view.subviews, function (sub_view) {
-                    sub_view.render();
-                    view.$el.find('#' + sub_view.id).replaceWith(sub_view.el);
+                    view.$el.find('#' + sub_view.id).replaceWith(sub_view.render().el);
                     sub_view.delegateEvents(); // TODO: Properly fix this event issue
                 });
             }
@@ -37,10 +32,6 @@
             },
 
             id: 'chat-settings',
-
-            initialize: function () {
-                //
-            },
 
             submit: function (event) {
                 event.preventDefault();
@@ -66,6 +57,7 @@
 
             render: function () {
                 this.$el.html(ich.tpl_chat_settings(this.model.toJSON()));
+				return this;
             }
         }),
 
@@ -84,7 +76,7 @@
             submit: function (event) {
                 event.preventDefault();
                 var form = this.$el.find('form').serializeArray();
-                var values = {}
+                var values = {};
                 _.each(form, function (input) {
                     values[input.name] = input.value;
                 });
@@ -104,6 +96,7 @@
 
             render: function () {
                 this.$el.html(ich.tpl_server_settings(this.model.toJSON()));
+				return this;
             }
         })
     });

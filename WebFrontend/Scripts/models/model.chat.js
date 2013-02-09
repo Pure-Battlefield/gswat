@@ -2,20 +2,22 @@
     var chat_model = Backbone.Model.extend({
         defaults : {
             'auto_refresh'      : true,
-            'url'               : '/api/values/getallmessages',
+            'url'               : '/api/values/GetAllMessagesFromTime',
             'interval'          : 1,
             'fetch_interval'    : {},
             'show_server_msgs'  : true,
             'all_msgs'          : [],
             'server_set'        : true,
-            'update_msgs'       : false,
+            'new_msgs'       	: {},
             'archive_date'      : '',
             'save_archive'      : false,
-            'iframe_url'        : ''
+            'iframe_url'        : '',
+            'last_fetch'        : 0
         },
 
         initialize: function () {
-            this.set_interval();
+			this.set({'last_fetch':moment().subtract('minutes', 10)});
+			this.set_interval();
             this.on('change:archive_date', this.get_old_msgs, this);
             this.on('change:auto_refresh', this.set_interval, this);
             this.on('change:interval', this.set_interval, this);
@@ -24,10 +26,16 @@
 
         get_msgs: function () {
             var model = this;
-            model.set({ 'update_msgs': false }, { silent: true });
-            var url = model.get('url');
-            $.get(url, function (data) {
-                model.parse_msgs($.parseJSON(data));
+			var data = {timestamp: this.get('last_fetch').utc().valueOf()};
+			var url = this.get('url');
+			this.set({'new_msgs':''}, { silent: true });
+            $.ajax({
+                url:url,
+				data: data,
+				dataType: 'json',
+                success: function(data){
+                    model.parse_msgs($.parseJSON(data));
+                }
             });
         },
 
@@ -52,9 +60,10 @@
 
         parse_msgs: function (data) {
             if (data.length > 0) {
-                data = PBF.lib.parse_chat_messages(data);
-                this.set({ all_msgs: data.content });
-                this.set({update_msgs:true});
+                this.set({ 'last_fetch': moment(data[data.length - 1].MessageTimeStamp) }, { silent: true });
+                data = PBF.parse_chat_messages(data);
+                this.get('all_msgs').push(data.content);
+                this.set({new_msgs:data.content});
             }
         },
 
@@ -85,30 +94,6 @@
                 }
             }
         }
-    });
-
-    // TODO: Save archives to a collection
-    var chat_date_model = Backbone.Model.extend({
-        defaults: {},
-
-        initialize: function () {
-            //
-        }
-    });
-
-    $.extend(window.GSWAT.prototype.collection_definitions, {
-        chat_date_collection: Backbone.Collection.extend({
-            model: chat_date_model,
-
-            url: function (day) {
-                //return url;
-            },
-
-            parse: function (data) {
-                console.log(data);
-                return data;
-            }
-        })
     });
 
     _.extend(window.GSWAT.prototype.model_definitions, { chat_model: chat_model });
