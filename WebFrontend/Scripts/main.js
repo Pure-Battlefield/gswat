@@ -22,7 +22,7 @@ _.extend(window, {
         this.model_instances        = {};
         this.collection_instances   = {};
         this.main_ele               = '#content';
-        this.default_route          = 'main';
+        this.default_route          = 'home';
         this.CDN                    = '';
         this.files_loaded           = [];
         this.timers                 = {};
