@@ -15,7 +15,7 @@
 
         update_settings: function (data) {
             var model = this;
-            var chat_settings = PBF.get_model('chat_model');
+            var chat_settings = PBF.get({model:{name:'chat_model'}});
             $.ajax({
                 type: 'POST',
                 beforeSend: function (xhr) {
