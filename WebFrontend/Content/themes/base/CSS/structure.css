@@ -35,6 +35,11 @@ html {
     min-height:400px;
 }
 
+#content #first-loading {
+	min-height:0;
+	margin-top:10px;
+}
+
 /* Chat Page */
 #server-chat-page #chat-settings h2 {
     display:none;

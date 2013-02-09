@@ -87,17 +87,18 @@ _.extend(window,{
             var files_needed = _.difference(files, files_loaded);
             this.files_loaded = files_loaded.concat(files_needed);
             if (files_needed.length) {
-                var last = _.last(files_needed);
-                yepnope([
-					{
-					    load: files_needed,
-					    callback: function (url) {
-					        if (url === last) {
-					            return callback();
-					        }
-					    }
+				var increment = 100 / files_needed.length;
+				yepnope({
+					load: files_needed,
+					callback: function(url,r,i){
+						$('#progress-bar-inner').stop().animate({width: ((increment * (parseInt(i) + 1)) + '%')});
+					},
+					complete: function(){
+						window.setTimeout(function(){
+							return callback();
+						},250);
 					}
-                ]);
+				});
             } else {
                 return callback();
             }
