@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using core.ChatMessageUtilities;
 using core.Server;
+using core.Server.RConn;
 using test.Properties;
 
 namespace test.Server
@@ -42,6 +43,12 @@ namespace test.Server
 
             // Check for empty CommHandler reference in Core
             Assert.AreEqual(commLayer.Server, null);
+        }
+
+        [TestMethod]
+        public void CommLayerTest_RecognizedPacket()
+        {
+            RecognizedPacket.LoadScrapedData();
         }
     }
 }

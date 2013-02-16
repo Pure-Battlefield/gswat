@@ -53,8 +53,8 @@
         parse_msgs: function (data) {
             if (data.length > 0) {
                 data = PBF.lib.parse_chat_messages(data);
-                var msgs = { all_msgs: data.content, update_msgs: true };
-                this.set(msgs);
+                this.set({ all_msgs: data.content });
+                this.set({update_msgs:true});
             }
         },
 
