@@ -1,0 +1,20 @@
+﻿/* Global */
+.page {
+    max-width:940px;
+    margin:0 auto;
+}
+
+html {
+    background:#CCC;
+}
+
+/* Content */
+#content .page {
+    background:#FFF;
+    min-height:400px;
+}
+
+#content #first-loading {
+	min-height:0;
+	margin-top:10px;
+}

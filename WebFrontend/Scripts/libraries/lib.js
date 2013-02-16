@@ -1,14 +1,14 @@
 /* Library of small useful global functions */
 _.extend(window,{
-    lib: {}
+	Lib: {}
 });
 
 (function (window, document, $, _, yepnope, undefined) {
-    lib = function () {
+	Lib = function () {
         this.squads=[["SQUAD0","LONE WOLF"],["SQUAD1","ALPHA"],["SQUAD2","BRAVO"],["SQUAD3","CHARLIE"],["SQUAD4","DELTA"],["SQUAD5","ECHO"],["SQUAD6","FOXTROT"],["SQUAD7","GOLF"],["SQUAD8","HOTEL"],["SQUAD9","INDIA"],["SQUAD10","JULIET"],["SQUAD11","KILO"],["SQUAD12","LIMA"],["SQUAD13","MIKE"],["SQUAD14","NOVEMBER"],["SQUAD15","OSCAR"],["SQUAD16","PAPA"],["SQUAD17","QUEBEC"],["SQUAD18","ROMEO"],["SQUAD19","SIERRA"],["SQUAD20","TANGO"],["SQUAD21","UNIFORM"],["SQUAD22","VICTOR"],["SQUAD23","WHISKEY"],["SQUAD24","XRAY"],["SQUAD25","YANKEE"],["SQUAD26","ZULU"]];
     };
 
-    lib.prototype = {
+    Lib.prototype = {
         parse_chat_messages: function (msgs,squads) {
             var result = '';
             if (typeof msgs == 'object') {
@@ -16,9 +16,7 @@ _.extend(window,{
                     squads = squads || this.squads;
                     var parsed_messages = [];
                     _.each(msgs, function (message) {
-                        var now = new Date(parseInt(message.MessageTimeStamp.replace('/Date(', '')));
-                        var timestamp = moment(new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
-                        message.MessageTimeStamp = timestamp.format('MM/DD/YYYY HH:mm:ss');
+                        message.MessageTimeStamp = moment(message.MessageTimeStamp).format('MM/DD/YYYY HH:mm:ss');
                         message.Server = false;
 
                         // Match on Squad
@@ -36,11 +34,11 @@ _.extend(window,{
                         }
 
                         // Match on Team
-                        var re1 = '(team)';	// Word 1
-                        var re2 = '(\\d+)';	// Integer Number 1
+                        re1 = '(team)';	// Word 1
+                        re2 = '(\\d+)';	// Integer Number 1
 
-                        var p = new RegExp(re1 + re2, ["i"]);
-                        var m = p.exec(message.MessageType);
+                        p = new RegExp(re1 + re2, ["i"]);
+                        m = p.exec(message.MessageType);
                         if (m != null) {
                             if (m[2] == "1") {
                                 message.MessageType = 'US';
@@ -52,9 +50,9 @@ _.extend(window,{
                         }
 
                         // Match on Server
-                        var re1 = '(server)';	// Word 1
-                        var p = new RegExp(re1, ["i"]);
-                        var m = p.exec(message.Speaker);
+                        re1 = '(server)';	// Word 1
+                        p = new RegExp(re1, ["i"]);
+                        m = p.exec(message.Speaker);
                         if (m != null) {
                             message.MessageType = 'server';
                             message.Server = true;
@@ -63,13 +61,12 @@ _.extend(window,{
                         }
 
                         // Match on All
-                        var re1 = '(all)';	// Word 1
+                        re1 = '(all)';	// Word 1
 
-                        var p = new RegExp(re1, ["i"]);
-                        var m = p.exec(message.MessageType);
+                        p = new RegExp(re1, ["i"]);
+                        m = p.exec(message.MessageType);
                         if (m != null) {
                             parsed_messages.push(message);
-                            return;
                         }
                     });
                     result = { 'status': 'success', 'content': parsed_messages };
@@ -80,6 +77,71 @@ _.extend(window,{
                 result = {'status':'error','content':'Needs to be an object'};
             }
             return result;
+        },
+
+        load: function (files, callback) {
+            var loading = this.get({view:{name:'loading'}});
+            loading.render();
+
+            var files_loaded = this.files_loaded;
+            var files_needed = _.difference(files, files_loaded);
+            this.files_loaded = files_loaded.concat(files_needed);
+            if (files_needed.length) {
+				var increment = 100 / files_needed.length;
+				yepnope({
+					load: files_needed,
+					callback: function(url,r,i){
+						$('#progress-bar-inner').stop().animate({width: ((increment * (parseInt(i) + 1)) + '%')});
+					},
+					complete: function(){
+						window.setTimeout(function(){
+							return callback();
+						},250);
+					}
+				});
+            } else {
+                return callback();
+            }
+        },
+
+        alert: function (alert_data) {
+            var header = this.get({ view: { name: 'header' } });
+            var type;
+            var title;
+            var message;
+            var alert_type = (typeof alert_data === 'string') ? alert_data : alert_data.type;
+            switch (alert_type) {
+                case 'success':
+                    type = 'success';
+                    title = 'Success!';
+                    message = 'Action completed successfully!';
+                    break;
+                case 'warning':
+                    type = 'block';
+                    title = 'Warning!';
+                    message = 'Issue detected!';
+                    break;
+                case 'error':
+                    type = 'error';
+                    title = 'Error!';
+                    message = 'An error occurred!';
+                    break;
+                case 'info':
+                    type = 'info';
+                    title = 'Info:';
+                    message = 'This is an informational message';
+                    break;
+            }
+
+            alert_data.type = alert_data.type || type;
+            alert_data.title = alert_data.title || title;
+            alert_data.message = alert_data.message || message;
+            header.trigger('alert', alert_data);
+        },
+
+        modal: function (data, callback) {
+            var modal = this.get({ view: { name: 'modal' }, model: { name: 'modal', data: data, options: { callback: callback } } });
+            modal.show_modal();
         }
     };
 }(window, document, jQuery, _, yepnope));

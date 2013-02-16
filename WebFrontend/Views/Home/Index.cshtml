@@ -22,7 +22,7 @@
     <div class="page">
         <div class="nav-bar">
             <div class="nav-bar-inner padding10 bg-color-blueDark">
-                <span class="element">&copy;2012 PureBattlefield</span>
+                <span class="element">&copy;2013 PureBattlefield</span>
                 <span class="divider"></span>
                 <ul class="menu">
                     <li><a href="https://github.com/Pure-Battlefield/gswat"><i class="icon-github-2"></i> GitHub</a></li>
@@ -34,9 +34,13 @@
 </script>
 
 <script id="tpl_loading" type="text/html">
-    <div class="page text-center vertical-align padding10">
-        <img src="/Content/themes/base/images/preloader-w8-cycle-black.gif">
-        <p class="body-text">Loading...</p>
+    <div id="loading" class="page padding10">
+        <div class="row">
+			<h2>Loading <small>- Please Wait</small></h2>
+			<div class="progress-bar">
+				<div id="progress-bar-inner" class="bar bg-color-blue"></div>
+			</div>
+		</div>
     </div>
 </script>
 
@@ -100,21 +104,21 @@
         </div>
         <div class="row padding10">
             <div id="chat-contents" class="bg-color-blueLight row padding10 {{^show_server_msgs}}hide-server-msgs{{/show_server_msgs}}">
-                {{>tpl_chat_messages}}
+                <ul id="chat-contents-ul"></ul>
             </div>
         </div>
     </div>
 </script>
 
 <script id="tpl_chat_messages" type="text/html">
-    {{#all_msgs}}
-        <p {{#Server}}class="server-message"{{/Server}}>
+    {{#.}}
+        <li {{#Server}}class="server-message"{{/Server}}>
             [<span class="timestamp">{{MessageTimeStamp}}</span>]
             [<span class="team team-{{MessageType}}">{{MessageType}}</span>{{#SquadName}} <span class="team squad">{{SquadName}}</span>{{/SquadName}}]
             <span class="player-name">{{Speaker}}</span>:
             <span class="message">{{Text}}</span>
-        </p>
-    {{/all_msgs}}
+        </li>
+    {{/.}}
 </script>
 
 <script id="tpl_settings" type="text/html">
