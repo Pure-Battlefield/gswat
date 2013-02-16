@@ -1,5 +1,5 @@
 ﻿using System;
-using core.ChatMessageUtilities;
+using core.TableStoreEntities;
 
 namespace core.Server
 {

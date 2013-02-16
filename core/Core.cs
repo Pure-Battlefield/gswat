@@ -4,10 +4,9 @@ using System.Linq;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using core.ChatMessageUtilities;
 using core.Server;
 using core.ServerInterface;
-using core.TableStore;
+using core.TableStoreEntities;
 
 namespace core
 {
@@ -20,6 +19,7 @@ namespace core
         // Implements ICore
         public ICommHandler CommHandler { get; set; }
         public CloudTable MessageTable { get; set; }
+        public CloudTable LogTable { get; set; }
         public CloudTable CredTable { get; set; }
         public Queue<ChatMessage> MessageQueue { get; set; }
         public Dictionary<string, DateTime> ServerMessages { get; set; } 
@@ -36,11 +36,20 @@ namespace core
             MessageQueue = new Queue<ChatMessage>();
             ServerMessages = new Dictionary<string, DateTime>();
 
-            CloudStorageAccount storageAccount =
+            // Create chatMessage table if it does not exist
+            var storageAccount =
                 CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            var tableClient = storageAccount.CreateCloudTableClient();
             MessageTable = tableClient.GetTableReference("chatMessages");
             MessageTable.CreateIfNotExists();
+
+            // Create log table if it does not exist
+            LogTable = tableClient.GetTableReference("serverLogs");
+            LogTable.CreateIfNotExists();
+
+            // Create cred table if it does not exist
+            CredTable = tableClient.GetTableReference("serverSettings");
+            CredTable.CreateIfNotExists();
         }
 
         // Implements ICore
@@ -53,9 +62,9 @@ namespace core
                 {
                     if (ServerMessages.ContainsKey(e.ServerMessage.Text))
                     {
-                        DateTime lastShown = ServerMessages[e.ServerMessage.Text];
-                        DateTime now = DateTime.UtcNow;
-                        TimeSpan ts = now - lastShown;
+                        var lastShown = ServerMessages[e.ServerMessage.Text];
+                        var now = DateTime.UtcNow;
+                        var ts = now - lastShown;
                         double diff = ts.TotalMinutes;
                         if (diff > 30)
                         {
@@ -72,7 +81,7 @@ namespace core
                         EnqueueMessage(e.ServerMessage);
 
                         // Also need to add it to the Dictionary
-                        DateTime now = DateTime.UtcNow;
+                        var now = DateTime.UtcNow;
                         ServerMessages.Add(e.ServerMessage.Text, now);
                     }
                 }
@@ -83,11 +92,15 @@ namespace core
             }
         }
 
+        /// <summary>
+        /// Enqueues a message into both Table Store and the current cached queue
+        /// </summary>
+        /// <param name="msg"></param>
         private void EnqueueMessage(ChatMessage msg)
         {
             try
             {
-                TableOperation insertOp = TableOperation.Insert(msg);
+                var insertOp = TableOperation.Insert(msg);
                 MessageTable.Execute(insertOp);
                 MessageQueue.Enqueue(msg);
                 if (MessageQueue.Count > 100)
@@ -97,7 +110,7 @@ namespace core
             }
             catch (Exception e)
             {
-                
+                Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
             }
         }
 
@@ -133,7 +146,7 @@ namespace core
         public String Connect(string address, int port, string password, string oldPass)
         {
             // Check for a last-saved connection - if present, oldPass must match
-            ServerConfig Oldsettings = LoadServerSettings("Last", "Server");
+            var Oldsettings = LoadServerSettings("Last", "Server");
 
             if (Oldsettings != null)
             {
@@ -155,13 +168,15 @@ namespace core
                         Oldsettings.Password = password;
                         Oldsettings.PartitionKey = "Last";
                         Oldsettings.RowKey = "Server";
-                        TableOperation updateOp = TableOperation.Replace(Oldsettings);
+                        var updateOp = TableOperation.Replace(Oldsettings);
                         CredTable.Execute(updateOp);
 
                         return "Connected to " + address;
                     }
                     catch (Exception e)
                     {
+                        Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
+
                         // Oops, the Connect failed - reconnect to our last known server
                         LoadExistingConnection();
                         throw new ArgumentException(e.Message);
@@ -188,13 +203,15 @@ namespace core
                     var settings = new ServerConfig(address, port, password);
                     settings.PartitionKey = "Last";
                     settings.RowKey = "Server";
-                    TableOperation insertOp = TableOperation.Insert(settings);
+                    var insertOp = TableOperation.Insert(settings);
                     CredTable.Execute(insertOp);
 
                     return "Connected to " + address;
                 }
                 catch (Exception e)
                 {
+                    Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
+
                     // Oops, the Connect failed - reconnect to our last known server
                     LoadExistingConnection();
                     throw new ArgumentException(e.Message);
@@ -214,32 +231,45 @@ namespace core
                     CommHandler.Connect(settings.Address, settings.Port, settings.Password);
                 }
                 catch (Exception e) {
-                    Console.Write(e.Message);                
+                    Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
                 }
             }
         }
 
-        /* Queries the Azure Storage for the ServerConfig object relative to the 
-         * given partition and rowKey (IP, Port). Returns null if there is no result. */
-
+        /// <summary>
+        /// Queries TableStore for server settings
+        /// </summary>
+        /// <param name="partitionKey">Partition key to query for</param>
+        /// <param name="rowKey">Row key to query for</param>
+        /// <returns>ServerConfig object containing server settings (or null if none was found)</returns>
         public ServerConfig LoadServerSettings(String partitionKey, String rowKey)
         {
-            CloudStorageAccount storageAccount =
-                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CredTable = tableClient.GetTableReference("serverSettings");
-            CredTable.CreateIfNotExists();
-            TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>(partitionKey, rowKey);
-            TableResult result = CredTable.Execute(retrieveOp);
+            var retrieveOp = TableOperation.Retrieve<ServerConfig>(partitionKey, rowKey);
+            var result = CredTable.Execute(retrieveOp);
 
             if (result.Result != null)
             {
                 return (ServerConfig)result.Result;
             }
+            return null;
+        }
 
-            else
+        /// <summary>
+        /// Log 
+        /// </summary>
+        /// <param name="funcName">Current function on the stack</param>
+        /// <param name="message">Message to log</param>
+        public void Log(String funcName, String message)
+        {
+            try
             {
-                return null;
+                var msg = new LogMessage(DateTime.UtcNow, funcName, message);
+                var insertOp = TableOperation.Insert(msg);
+                LogTable.Execute(insertOp);
+            }
+            catch (Exception e)
+            {
+                // If we somehow reach this point, we have failed as software developers
             }
         }
     }
