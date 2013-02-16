@@ -83,9 +83,11 @@
 				return this;
             },
 
-			append_message: function(message){
-				message = message || this.model.get('new_msgs');
-				this.$el.append(ich.tpl_chat_messages({all_msgs:message}));
+			append_message: function(messages){
+				messages = messages || this.model.get('new_msgs');
+				if(messages.length > 0 && _.isArray(messages)){
+					this.$el.append(ich.tpl_chat_messages(messages));
+				}
 			}
         })
     });

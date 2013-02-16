@@ -49,7 +49,7 @@ More info at: http://icanhazjs.com
                     ich.templates[name] = templateString;
                     ich[name] = function (data, raw) {
                         data = data || {};
-                        var result = Mustache.to_html(ich.templates[name], data, ich.templates);
+                        var result = Mustache.to_html(ich.templates[name], data, ich.templates).replace(/^\s+|\s+$/g, "");
                         return (ich.$ && !raw) ? ich.$(result) : result;
                     };
                 }
