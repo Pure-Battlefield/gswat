@@ -54,12 +54,18 @@
 			PBF.render(coming_soon);
 		},
 
+		render_map_rotation: function(){
+			var map_rotation = PBG.get({view:{name:'map_rotation'}});
+			PBF.render(map_rotation);
+		},
+
 		routes: {
 			'home'			: 'render_home',
 			'chat'			: 'render_chat',
 			'settings'		: 'render_settings',
 			'loading'		: 'render_loading',
-			'coming-soon'	: 'render_coming_soon'
+			'coming-soon'	: 'render_coming_soon',
+			'map-rotation'	: 'render_map_rotation'
 		}
 	});
 }(window,jQuery));
