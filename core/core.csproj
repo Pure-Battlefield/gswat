@@ -62,16 +62,25 @@
   <ItemGroup>
     <Compile Include="AuthHandler\AuthHandler.cs" />
     <Compile Include="AuthHandler\IAuthHandler.cs" />
-    <Compile Include="ChatMessageUtilities\ChatMessage.cs" />
+    <Compile Include="TableStoreEntities\ChatMessage.cs" />
     <Compile Include="ICore.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ServerInterface\CommHandler.cs" />
     <Compile Include="ServerInterface\ICommHandler.cs" />
-    <Compile Include="TableStore\ServerConfig.cs" />
+    <Compile Include="Server\RConn\PacketFormat.cs" />
+    <Compile Include="Server\RConn\Parameter.cs" />
+    <Compile Include="Server\RConn\RecognizedPacket.cs" />
+    <Compile Include="TableStoreEntities\LogMessage.cs" />
+    <Compile Include="TableStoreEntities\ServerConfig.cs" />
     <Compile Include="Server\ICommLayer.cs" />
     <Compile Include="Server\IServerMock.cs" />
     <Compile Include="Server\CommLayerMock.cs" />
@@ -103,7 +112,18 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Server\RConn\BF3_formatted_scrape.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ChatMessageUtilities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

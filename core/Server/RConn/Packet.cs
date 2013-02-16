@@ -126,7 +126,7 @@ namespace core.Server.RConn
         /// <summary>
         ///     Set of RConnWords that make up the packet.
         /// </summary>
-        public List<Word> Words { get; protected set; }
+        public List<Word> Words { get; set; }
 
         /// <summary>
         ///     Maximum size of any given packet.

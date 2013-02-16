@@ -22,6 +22,7 @@
 
             quick_settings: function (event) {
                 event.preventDefault();
+				$(event.currentTarget).parent('li').toggleClass('active');
                 this.$el.find('#chat-quick-settings').toggle();
             },
 

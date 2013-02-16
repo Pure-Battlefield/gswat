@@ -1,8 +1,10 @@
 (function(window,$){
 	window.GSWAT.prototype.router = Backbone.Router.extend({
 		initialize: function(){
-			var header = PBF.get({view:{name:'header'}});
-			var footer = PBF.get({view:{name:'footer'}});
+			var header = PBF.get({view:{name:'header'},model:{name:'header'}});
+			var footer = PBF.get({view:{name:'footer'},model:{name:'footer'}});
+
+			header.set_active(Backbone.History.prototype.getHash(window));
 		},
 
 		render_home: function(){
@@ -28,7 +30,6 @@
 				var server = PBF.get({model:{name:'server_model'}});
 				var chat = PBF.get({view:{name:'chat'},model:{name:'chat_model'}});
 				PBF.render(chat);
-				//$(PBF.main_ele).html(chat.$el);
 			});
 		},
 
