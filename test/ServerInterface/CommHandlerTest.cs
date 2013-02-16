@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using core.ChatMessageUtilities;
 using core.Server;
 using core.ServerInterface;
+using core.TableStoreEntities;
 
 namespace test.ServerInterface
 {
