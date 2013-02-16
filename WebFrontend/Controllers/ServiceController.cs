@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,19 +7,36 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Script.Serialization;
-using System.Diagnostics;
+using ServiceStack.ServiceInterface;
 using WebFrontend.Models;
 using core.ChatMessageUtilities;
-using core.TableStore;
 
 namespace WebFrontend.Controllers
 {
-    public class ValuesController : ApiController
+    public class ServerInfoService : Service
+    {
+        public object Post(ConnectionInfo connection)
+        {
+            var json = new JavaScriptSerializer();
+
+            try
+            {
+                return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password,
+                                                    connection.OldPassword));
+            }
+            catch (ArgumentException e)
+            {
+                return json.Serialize(e.Message);
+            }
+        }
+    }
+
+    public class MessagesService : Service
     {
         private static readonly Dictionary<string, string> Squads;
         private static readonly Dictionary<string, string> Teams; 
 
-        static ValuesController()
+        static MessagesService()
         {
             Squads = new Dictionary<string, string>();
             Teams = new Dictionary<string, string>();
@@ -55,20 +71,27 @@ namespace WebFrontend.Controllers
             Squads.Add("SQUAD24", " XRAY");
             Squads.Add("SQUAD25", " YANKEE");
             Squads.Add("SQUAD26", " ZULU");
-        }
 
-        [HttpGet]
-        [ActionName("GetAllMessages")]
-        public string GetAllMessages()
+        }
+        public object Post(DateTimeInfo timestamp)
         {
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
-            JavaScriptSerializer json = new JavaScriptSerializer();
-            return json.Serialize(q);
+            switch (timestamp.Action)
+            {
+                case ("GetFromTime"):
+                    return GetAllMessagesFromTime(timestamp);
+                    break;
+                case ("Download"):
+                    return DownloadByDay(timestamp);
+                    break;
+                case ("GetByDay"):
+                    return GetByDay(timestamp);
+            }
+
+            return null;
         }
 
-        [HttpGet]
-        [ActionName("GetAllMessagesFromTime")]
-        public string GetAllMessagesFromTime([FromUri] DateTimeInfo timestamp)
+        # region MessageFunctions
+        public string GetAllMessagesFromTime(DateTimeInfo timestamp)
         {
             /*timestamp is a unix timestamp of milliseconds since the epoch.*/
             /*TODO: Note that this is still unsafe; while it is *highly unlikely* that two messages could be received in under a ms,
@@ -84,9 +107,7 @@ namespace WebFrontend.Controllers
             return json.Serialize(output);
         }
 
-        [HttpGet]
-        [ActionName("DownloadByDay")]
-        public HttpResponseMessage DownloadByDay([FromUri] DateTimeInfo dateTime)
+        public HttpResponseMessage DownloadByDay(DateTimeInfo dateTime)
         {
             try
             {
@@ -132,9 +153,7 @@ namespace WebFrontend.Controllers
             }
         }
 
-        [HttpGet]
-        [ActionName("GetByDay")]
-        public string GetByDay([FromUri]DateTimeInfo dateTime)
+        public string GetByDay(DateTimeInfo dateTime)
         {
             try
             {
@@ -150,36 +169,6 @@ namespace WebFrontend.Controllers
             }
         }
 
-        [HttpPost]
-        [ActionName("SetServerInfo")]
-        public HttpResponseMessage SetServerInfo([FromBody]ConnectionInfo connection)
-        {
-            JavaScriptSerializer json = new JavaScriptSerializer();
-            try
-            {
-                GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            }
-            catch (ArgumentException e)
-            {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-        }
-
-        /** Queries the Azure storage for the setting saved for the given Server
-         *  using the Core.LoadServerSettings() method. <Auth> */
-
-       [HttpGet]
-       [ActionName("GetServerSettings")]
-        public String GetServerSettings()
-        {
-           // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
-            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
-
-            JavaScriptSerializer json = new JavaScriptSerializer();
-           
-            return json.Serialize(new string[]{settings.Address,settings.Port.ToString()});
-
-        }
+        #endregion
     }
 }

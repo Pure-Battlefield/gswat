@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ServiceStack.ServiceHost;
 
 namespace WebFrontend.Models
 {
+    [Route("/serverInfo/","POST")]
     public class ConnectionInfo
     {
         public string ServerIP { get; set; }
