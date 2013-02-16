@@ -168,6 +168,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Content\themes\base\jquery-ui-1.10.0.custom.min.css" />
+    <Content Include="Scripts\libraries\backbone-0.9.10.min.js" />
+    <Content Include="Scripts\libraries\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\libraries\jquery-ui-1.10.0.custom.min.js" />
+    <Content Include="Scripts\libraries\keyboard-0.4.1.min.js" />
+    <Content Include="Scripts\libraries\moment-2.0.0.min.js" />
+    <Content Include="Scripts\libraries\mustache-0.7.3.js" />
+    <Content Include="Scripts\libraries\toe-1.2.min.js" />
     <Content Include="Content\themes\base\CSS\structure.css" />
     <Content Include="Content\themes\base\fonts\iconFont.svg" />
     <Content Include="Content\themes\base\fonts\license.txt" />
@@ -175,7 +183,6 @@
     <Content Include="Content\themes\base\images\preloader-w8-cycle-white.gif" />
     <Content Include="Content\themes\base\images\preloader-w8-line-black.gif" />
     <Content Include="Content\themes\base\images\preloader-w8-line-white.gif" />
-    <Content Include="Scripts\libraries\mustache-0.7.2.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\glyphicons-halflings-white.png" />
@@ -193,7 +200,6 @@
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery-ui-1.9.2.custom.min.css" />
     <Content Include="Content\themes\base\CSS\modern-responsive.css" />
     <Content Include="Content\themes\base\CSS\modern.css" />
     <Content Include="favicon.ico" />
@@ -206,30 +212,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\libraries\backbone-0.9.9.min.js" />
     <Content Include="Scripts\libraries\icanhaz-0.10.5.js" />
-    <Content Include="Scripts\libraries\hammer-0.6.4.min.js" />
-    <Content Include="Scripts\libraries\head-0.99.min.js" />
-    <Content Include="Scripts\init.js" />
     <Content Include="Scripts\libraries\lib.js" />
-    <Content Include="Scripts\libraries\jquery-1.8.3.min.js" />
-    <Content Include="Scripts\jquery-plugins\jquery.hammer.js" />
-    <Content Include="Scripts\libraries\jquery-ui-1.9.2.custom.min.js" />
-    <Content Include="Scripts\libraries\jquery.jscrollpane.min.js" />
-    <Content Include="Scripts\libraries\jquery.mousewheel.js" />
-    <Content Include="Scripts\libraries\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Content\themes\base\fonts\iconFont.eot" />
     <Content Include="Content\themes\base\fonts\iconFont.ttf" />
     <Content Include="Content\themes\base\fonts\iconFont.woff" />
-    <None Include="Scripts\libraries\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\libraries\jquery.validate.min.js" />
-    <Content Include="Scripts\libraries\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\libraries\keyboard.js" />
+    <Content Include="Content\themes\base\LESS\structure.less" />
     <Content Include="Scripts\libraries\yepnope-1.5.4.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\models\model.chat.js" />
     <Content Include="Scripts\models\model.server.js" />
-    <Content Include="Scripts\libraries\modernizr-2.5.3.js" />
     <Content Include="Scripts\modern\accordion.js" />
     <Content Include="Scripts\modern\buttonset.js" />
     <Content Include="Scripts\modern\carousel.js" />
@@ -240,9 +232,6 @@
     <Content Include="Scripts\modern\slider.js" />
     <Content Include="Scripts\modern\tile-drag.js" />
     <Content Include="Scripts\modern\tile-slider.js" />
-    <Content Include="Scripts\libraries\moment.min.js" />
-    <Content Include="Scripts\libraries\mousetrap-1.2.2.min.js" />
-    <Content Include="Scripts\libraries\preloadjs-0.2.0.min.js" />
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
     <Content Include="Scripts\router.js" />
@@ -280,6 +269,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\jquery-plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

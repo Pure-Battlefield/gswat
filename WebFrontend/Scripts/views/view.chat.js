@@ -12,12 +12,12 @@
             className: 'page',
 
             initialize: function () {
-                this.model.on("change:update_msgs", this.render, this);
-                this.model.on("change:iframe_url", this.render, this);
+                this.model.on("change:iframe_url", this.render_iframe, this);
                 this.model.on("change:show_server_msgs", this.toggle_server_msgs, this);
                 this.view = {};
                 this.subviews = {};
-                this.subviews.chat_settings = PBF.get_view('chat_settings', this.model);
+                this.subviews.chat_messages = PBF.get({view:{name:'chat_messages'},model:this.model});
+                this.subviews.chat_settings = PBF.get({view:{name:'chat_settings'},model:this.model});
             },
 
             quick_settings: function (event) {
@@ -30,13 +30,9 @@
                 this.model.get_msgs();
             },
 
-            render_messages: function(){
-                this.view.messages = this.model.get('all_msgs');
-            },
-
             render_iframe: function () {
-                this.view.iframe_url = this.model.get('iframe_url');
-                this.render(view);
+                this.render();
+                this.model.set({iframe_url:''},{silent:true});
             },
 
             toggle_server_msgs: function () {
@@ -61,11 +57,36 @@
             render_sub_views: function () {
                 var view = this;
                 _.each(view.subviews, function (sub_view) {
-                    sub_view.render();
-                    view.$el.find('#' + sub_view.id).replaceWith(sub_view.el);
+                    view.$el.find('#' + sub_view.id).replaceWith(sub_view.render().el);
                     sub_view.delegateEvents(); // TODO: Properly fix this event issue
                 });
             }
+        }),
+
+        chat_messages: Backbone.View.extend({
+            id: 'chat-contents-ul',
+
+            tagName: 'ul',
+
+            initialize: function () {
+                this.model.on("change:new_msgs", this.render, this);
+            },
+
+            render: function () {
+				var ele = $("#chat-contents");
+				if(ele.prop('offsetHeight') + ele.prop('scrollTop') == ele.prop('scrollHeight')){
+					this.append_message();
+					ele.scrollTop(ele.prop('scrollHeight'));
+				} else {
+					this.append_message();
+				}
+				return this;
+            },
+
+			append_message: function(message){
+				message = message || this.model.get('new_msgs');
+				this.$el.append(ich.tpl_chat_messages({all_msgs:message}));
+			}
         })
     });
 }(window, jQuery, _, ich));

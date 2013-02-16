@@ -1,14 +1,4 @@
-﻿/* Global */
-.page {
-    max-width:940px;
-    margin:0 auto;
-}
-
-html {
-    background:#CCC;
-}
-
-/* Header */
+﻿/* Header */
 #header li i,
 #header li a {
     font-size:12pt;
@@ -20,14 +10,13 @@ html {
     color:rgba(45, 173, 237, 0.8);
 }
 
-/* Footer */
-#footer {
+.nav-bar .nav-bar-inner > ul.menu > li {
+    display:inline-block;
+    float:none;
 }
 
-/* Content */
-#content .page {
-    background:#FFF;
-    min-height:400px;
+/* Footer */
+#footer {
 }
 
 /* Chat Page */
@@ -49,13 +38,19 @@ html {
     margin: 0;
 }
 
-#chatContents {
+#chat-contents {
     overflow:scroll;
     overflow-x:visible;
     overflow-y:scroll;
+	max-height:600px;
 }
 
-#chatContents p {
+#chat-contents-ul {
+    margin: 0;
+    list-style:none;
+}
+
+#chat-contents li {
     margin: 0 0 2px;
 }
 
