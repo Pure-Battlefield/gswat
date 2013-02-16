@@ -2,7 +2,6 @@
     _.extend(window.GSWAT.prototype.view_definitions, {
         header: Backbone.View.extend({
             events: {
-				//'alert'				: 'trigger_alert',
 				'click .navbar a'	: 'set_active'
             },
 
@@ -13,20 +12,9 @@
                 this.render();
             },
 
-			trigger_alert: function(alert){
-				var alert_html = ich.tpl_alert(alert);
-				this.$el.find('.navbar').append(alert_html);
-				this.$el.find('#header-alert').fadeIn(300);
-				this.error_timeout = window.setTimeout(function(){
-					$('#header-alert').fadeOut(300,function(){
-						$(this).remove();
-					});
-				},2500);
-
-				this.$el.find('.close').on('click',function(){
-					this.$el.find('#header-alert').remove();
-					clearTimeout(this.error_timeout);
-				}, this);
+			trigger_alert: function(data){
+				var alert = PBF.get({view:{name:'alert'},model:{name:'alert',data:data}});
+				this.$el.find('.navbar').append(alert.render().el);
 			},
 
 			set_active: function(e){
@@ -36,7 +24,7 @@
 			},
 
             render: function () {
-                this.$el.html(ich.tpl_header());
+                this.$el.html(ich.tpl_header(this.model.toJSON()));
             }
         }),
 
@@ -44,12 +32,19 @@
             el: '#footer',
 
             initialize: function(){
+				this.on('modal',this.trigger_modal,this);
                 this.render();
 				this.$el.show();
             },
 
+			trigger_modal: function(data,callback){
+				var modal = PBF.get({view:{name:'modal',reset:true},model:{name:'modal',data:data,options:{callback:callback}}});
+				this.$el.append(modal.render().el);
+				modal.$modal.modal();
+			},
+
             render: function(){
-                this.$el.html(ich.tpl_footer());
+                this.$el.html(ich.tpl_footer(this.model.toJSON()));
             }
         }),
 
@@ -69,6 +64,37 @@
             }
         }),
 
+		alert: Backbone.View.extend({
+			events: {
+				'.close'	: 'hide_alert'
+			},
+
+			id: 'header-alert',
+
+			className: 'hide',
+
+			show_alert: function(){
+				var view = this;
+				this.error_timeout = window.setTimeout(function(){
+					view.hide_alert();
+				},2500);
+			},
+
+			hide_alert: function(){
+				var view = this;
+				clearTimeout(this.error_timeout);
+				this.$el.fadeOut(300,function(){
+					view.remove();
+				});
+			},
+
+			render: function(){
+				this.show_alert();
+				this.$el.html(ich.tpl_alert(this.model.toJSON())).fadeIn(300);
+				return this;
+			}
+		}),
+
 		modal: Backbone.View.extend({
 			events: {
 				'click .btn-confirm'	: 'confirm'
@@ -78,12 +104,6 @@
 
 			initialize: function(){
 				this.render();
-			},
-
-			show_modal: function(){
-				$('#footer').append(this.el);
-				this.$modal.modal();
-				this.delegateEvents();
 			},
 
 			confirm: function(){
@@ -100,6 +120,7 @@
 			render: function(){
 				this.$el.html(ich.tpl_confirm_dialogue(this.model.toJSON()));
 				this.$modal = this.$el.find('#modal');
+				return this;
 			}
 		})
     });

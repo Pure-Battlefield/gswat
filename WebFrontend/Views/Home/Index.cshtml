@@ -7,7 +7,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="#home">GSWAT <small>0.0.5</small></a>
+                <a class="brand" href="#home">{{name}} <small>{{version}}</small></a>
                 <div class="nav-collapse navbar-inverse-collapse collapse">
                     <ul class="nav">
                         <li><a href="#home"><i class="icon-home"></i> Home</a></li>
@@ -35,12 +35,12 @@
 
 <script id="tpl_footer" type="text/html">
     <div class="container">
-        <p>&copy;2013 PureBattlefield <span class="pull-right">View the Source on <a href="https://github.com/Pure-Battlefield/gswat"><i class="icon-github"></i> GitHub</a></span></p>
+        <p>&copy;{{year}} {{copyright}} <span class="pull-right">View the Source on <a href="{{github}}"><i class="icon-github"></i> GitHub</a></span></p>
     </div>
 </script>
 
 <script id="tpl_alert" type="text/html">
-    <div id="header-alert" class="container hide">
+    <div class="container">
 	    <div class="row-fluid">
 		    <div class="alert alert-{{type}}">
 			    <button class="close" type="button" data-dismiss="alert">&times;</button>

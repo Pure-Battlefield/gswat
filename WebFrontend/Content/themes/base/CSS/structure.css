@@ -9,7 +9,7 @@ body {
     }
 }
 
-#header-alert {
+#header-alert .container {
 	padding:20px 0 0;
 	width:25%;
 }
