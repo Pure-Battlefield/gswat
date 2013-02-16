@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width" />
         <title>GSWAT - Brought to you by Pure Battlefield</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        @Styles.Render("~/Content/themes/base/CSS/modern.css")
-        @Styles.Render("~/Content/themes/base/CSS/modern-responsive.css")
+        @Styles.Render("~/Content/themes/base/CSS/bootstrap.min.css")
+        @Styles.Render("~/Content/themes/base/CSS/bootstrap-responsive.min.css")
         @Styles.Render("~/Content/themes/base/CSS/loading.css")
 
         <!-- Libraries -->
@@ -20,8 +20,10 @@
 				var load_files = [
 					'/Scripts/libraries/mustache-0.7.3.js',
 					ichUrl,
+                    '/Content/themes/base/CSS/font-awesome.min.css',
                     '/Scripts/libraries/jquery-ui-1.10.0.custom.min.js',
                     '/Content/themes/base/jquery-ui-1.10.0.custom.min.css',
+                    '/Scripts/libraries/bootstrap-2.3.0.min.js',
                     '/Content/themes/base/CSS/structure.css',
                     '/Scripts/libraries/toe-1.2.min.js',
                     '/Scripts/libraries/moment-2.0.0.min.js',
@@ -68,15 +70,15 @@
     </head>
     <body id="body">
         <header id="header"></header>
-        <section id="content">
-            <div id="first-loading" class="page padding10">
-				<div class="row">
-					<h2>Loading Base Application <small>- Please Wait</small></h2>
-					<div class="progress-bar">
-						<div id="progress-bar-inner" class="bar bg-color-blue"></div>
-					</div>
+        <section id="content" class="container">
+			<div id="loading" class="row-fluid">
+				<div class="well">
+                    <h3>Loading Base Application <small>- Please Wait</small></h3>
+                    <div class="progress progress-striped active">
+                        <div id="progress-bar-inner" class="bar" style="width: 40%;"></div>
+                    </div>
 				</div>
-            </div>
+			</div>
         </section>
         <footer id="footer"></footer>
     </body>
