@@ -85,7 +85,9 @@
 
 			append_message: function(messages){
 				messages = messages || this.model.get('new_msgs');
-				this.$el.append(ich.tpl_chat_messages(messages));
+				if(messages.length > 0 && _.isArray(messages)){
+					this.$el.append(ich.tpl_chat_messages(messages));
+				}
 			}
         })
     });
