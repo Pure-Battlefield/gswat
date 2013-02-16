@@ -85,6 +85,7 @@ namespace WebFrontend.Controllers
                     break;
                 case ("GetByDay"):
                     return GetByDay(timestamp);
+                    break;
             }
 
             return null;
