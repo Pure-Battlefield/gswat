@@ -140,51 +140,66 @@ namespace core
                 // Only overwrite the last-saved connection if the passwords match
                 if (Oldsettings.Password == oldPass)
                 {
-                    // Disconnect from current server
-                    MessageQueue.Clear();
-                    CommHandler.Disconnect();
-
-                    Oldsettings.Address = address;
-                    Oldsettings.Port = port;
-                    Oldsettings.Password = password;
-                    Oldsettings.PartitionKey = "Last";
-                    Oldsettings.RowKey = "Server";
-                    TableOperation updateOp = TableOperation.Replace(Oldsettings);
-                    CredTable.Execute(updateOp);
                     try
                     {
+                        // Disconnect from current server
+                        MessageQueue.Clear();
+                        CommHandler.Disconnect();
+
+                        // Attempt to connect to the new server - if this fails, we leave the old "last server" entry in Table Store
                         CommHandler.Connect(address, port, password);
+
+                        // Update the "last server" entry in Table Store
+                        Oldsettings.Address = address;
+                        Oldsettings.Port = port;
+                        Oldsettings.Password = password;
+                        Oldsettings.PartitionKey = "Last";
+                        Oldsettings.RowKey = "Server";
+                        TableOperation updateOp = TableOperation.Replace(Oldsettings);
+                        CredTable.Execute(updateOp);
+
                         return "Connected to " + address;
                     }
-                    catch (Exception e) {
-
-                        return e.Message;
+                    catch (Exception e)
+                    {
+                        // Oops, the Connect failed - reconnect to our last known server
+                        LoadExistingConnection();
+                        throw new ArgumentException(e.Message);
                     }
+                }
+                else
+                {
+                    throw new ArgumentException("Old password was incorrect.");
                 }
             }
             else
             {
-                // Disconnect from current server
-                MessageQueue.Clear();
-                CommHandler.Disconnect();
-
-                // If there is no last-saved connection, add one
-                var settings = new ServerConfig(address, port, password);
-                settings.PartitionKey = "Last";
-                settings.RowKey = "Server";
-                TableOperation insertOp = TableOperation.Insert(settings);
-                CredTable.Execute(insertOp);
                 try
                 {
+                    // Disconnect from current server
+                    MessageQueue.Clear();
+                    CommHandler.Disconnect();
+                    
+                    // Attempt to connect to new server
+                    // If this fails, we do not change the last-saved connection
                     CommHandler.Connect(address, port, password);
-                }
-                catch (Exception e) {
 
-                    return e.Message;
+                    // Add the new "last server" entry in Table Store
+                    var settings = new ServerConfig(address, port, password);
+                    settings.PartitionKey = "Last";
+                    settings.RowKey = "Server";
+                    TableOperation insertOp = TableOperation.Insert(settings);
+                    CredTable.Execute(insertOp);
+
+                    return "Connected to " + address;
+                }
+                catch (Exception e)
+                {
+                    // Oops, the Connect failed - reconnect to our last known server
+                    LoadExistingConnection();
+                    throw new ArgumentException(e.Message);
                 }
             }
-
-            return null;
         }
 
         public void LoadExistingConnection()
@@ -199,7 +214,6 @@ namespace core
                     CommHandler.Connect(settings.Address, settings.Port, settings.Password);
                 }
                 catch (Exception e) {
-
                     Console.Write(e.Message);                
                 }
             }
@@ -218,7 +232,7 @@ namespace core
             TableOperation retrieveOp = TableOperation.Retrieve<ServerConfig>(partitionKey, rowKey);
             TableResult result = CredTable.Execute(retrieveOp);
 
-            if (result != null)
+            if (result.Result != null)
             {
                 return (ServerConfig)result.Result;
             }

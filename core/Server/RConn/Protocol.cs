@@ -116,12 +116,14 @@ namespace core.Server.RConn
             return buffer.BytesToPacket();
         }
 
-        private void SendRequest(Packet packet)
+        public Packet SendRequest(Packet packet)
         {
             packet.OrigininatesFromClient = true;
             packet.IsRequest = true;
             packet.SequenceNumber = SequenceCounter++;
             Sock.Send(packet.Emit());
+
+            return packet;
         }
 
         private void SendOkResponse(Packet packet)
