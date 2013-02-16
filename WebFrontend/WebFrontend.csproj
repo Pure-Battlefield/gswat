@@ -227,6 +227,7 @@
     <Content Include="Scripts\libraries\yepnope-1.5.4.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\models\model.chat.js" />
+    <Content Include="Scripts\models\model.globals.js" />
     <Content Include="Scripts\models\model.server.js" />
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />

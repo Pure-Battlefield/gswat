@@ -26,9 +26,8 @@
 
         chat_settings: Backbone.View.extend({
             events: {
-                'click input:submit'    : 'submit',
-                'click button.helper'   : 'clear_field',
-                'change .switch input'  : 'change_switch'
+                'click button.submit'		: 'submit',
+                'change .checkbox input'	: 'change_switch'
             },
 
             id: 'chat-settings',
@@ -50,11 +49,6 @@
                 this.model.set(val);
             },
 
-            clear_field: function (event) {
-                event.preventDefault();
-                $(event.currentTarget).siblings('input').val('');
-            },
-
             render: function () {
                 this.$el.html(ich.tpl_chat_settings(this.model.toJSON()));
 				return this;
@@ -63,8 +57,7 @@
 
         server_settings: Backbone.View.extend({
             events: {
-                'click input:submit'    : 'submit',
-                'click button.helper'   : 'clear_field'
+                'click button.submit'    : 'submit'
             },
 
             id: 'server-settings',
@@ -87,11 +80,6 @@
 
             update_confirm: function () {
                 console.log('success',this.model.get('settings_success'));
-            },
-
-            clear_field: function (event) {
-                event.preventDefault();
-                $(event.currentTarget).siblings('input').val('');
             },
 
             render: function () {

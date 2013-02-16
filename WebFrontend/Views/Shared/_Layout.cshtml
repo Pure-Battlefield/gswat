@@ -32,7 +32,8 @@
                     '/Scripts/main.js',
                     '/Scripts/libraries/lib.js',
                     '/Scripts/router.js',
-                    '/Scripts/views/view.globals.js'
+                    '/Scripts/views/view.globals.js',
+                    '/Scripts/models/model.globals.js'
 				];
 
 				var increment = 100 / load_files.length;
@@ -47,7 +48,7 @@
 					},
 					complete: function(){
 						window.setTimeout(function(){
-							$('#first-loading').slideUp(function(){
+							$('#loading').slideUp(function(){
 								var PBF = new window.GSWAT();
 								$(this).remove();
 								_.extend(window,{PBF:PBF});
@@ -75,12 +76,12 @@
 				<div class="well">
                     <h3>Loading Base Application <small>- Please Wait</small></h3>
                     <div class="progress progress-striped active">
-                        <div id="progress-bar-inner" class="bar" style="width: 40%;"></div>
+                        <div id="progress-bar-inner" class="bar"></div>
                     </div>
 				</div>
 			</div>
         </section>
-        <footer id="footer"></footer>
+        <footer id="footer" class="footer"></footer>
     </body>
 </html>
 @helper Script(string scriptName) {
