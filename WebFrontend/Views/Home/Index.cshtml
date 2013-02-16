@@ -111,14 +111,14 @@
 </script>
 
 <script id="tpl_chat_messages" type="text/html">
-    {{#all_msgs}}
+    {{#.}}
         <li {{#Server}}class="server-message"{{/Server}}>
             [<span class="timestamp">{{MessageTimeStamp}}</span>]
             [<span class="team team-{{MessageType}}">{{MessageType}}</span>{{#SquadName}} <span class="team squad">{{SquadName}}</span>{{/SquadName}}]
             <span class="player-name">{{Speaker}}</span>:
             <span class="message">{{Text}}</span>
         </li>
-    {{/all_msgs}}
+    {{/.}}
 </script>
 
 <script id="tpl_settings" type="text/html">
