@@ -1,14 +1,4 @@
-﻿/* Global */
-.page {
-    max-width:940px;
-    margin:0 auto;
-}
-
-html {
-    background:#CCC;
-}
-
-/* Header */
+﻿/* Header */
 #header li i,
 #header li a {
     font-size:12pt;
@@ -27,17 +17,6 @@ html {
 
 /* Footer */
 #footer {
-}
-
-/* Content */
-#content .page {
-    background:#FFF;
-    min-height:400px;
-}
-
-#content #first-loading {
-	min-height:0;
-	margin-top:10px;
 }
 
 /* Chat Page */
