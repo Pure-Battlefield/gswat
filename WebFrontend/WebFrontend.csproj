@@ -168,6 +168,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Content\themes\base\CSS\loading.css" />
     <Content Include="Content\themes\base\jquery-ui-1.10.0.custom.min.css" />
     <Content Include="Scripts\libraries\backbone-0.9.10.min.js" />
     <Content Include="Scripts\libraries\jquery-1.9.1.min.js" />
