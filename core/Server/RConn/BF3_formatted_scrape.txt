@@ -1,0 +1,379 @@
+Request:        player.onAuthenticated <soldier name: string> 
+Response:       OK 
+Request:       player.onJoin <soldier name: string> <id: GUID> 
+Response:      OK 
+Request:       player.onLeave <soldier name: string> <soldier info: player info block> 
+Response:      OK 
+Request:       player.onSpawn <soldier name: string> <team: Team ID> 
+Response:      OK 
+Request:       player.onKill <killing soldier name: string> <killed soldier name: string> <weapon: string> 
+Response:      OK 
+Request:       player.onChat <source soldier name: string> <text: string> <target players: player subset> 
+Response:      OK 
+Request:       player.onSquadChange <soldier name: player name> <team: Team ID> <squad: Squad ID> 
+Response:      OK 
+Request:       player.onTeamChange <soldier name: player name> <team: Team ID> <squad: Squad ID> 
+Response:      OK 
+Request:       punkBuster.onMessage <message: string> 
+Response:      OK 
+Request:       server.onMaxPlayerCountChange <count: int> 
+Response:      OK 
+Request:       server.onLevelLoaded <level name: string> <gamemode: string> <roundsPlayed: int> 
+Response:      OK 
+Request:       server.onRoundOver <winning team: Team ID> 
+Response:      OK 
+Request:       server.onRoundOverPlayers <end>
+Response:      OK 
+Request:       server.onRoundOverTeamScores <end>
+Response:      OK 
+Request:       login.plainText <password: string> 
+Response:      OK                           
+Response:      InvalidPassword              
+Response:      PasswordNotSet               
+Response:      InvalidArguments 
+Request:       login.hashed 
+Response:      OK <salt: HexString>         
+Response:      PasswordNotSet               
+Response:      InvalidArguments 
+Request:       login.hashed <passwordHash: HexString> 
+Response:      OK                           
+Response:      PasswordNotSet               
+Response:      InvalidPasswordHash          
+Response:      InvalidArguments 
+Request:       logout 
+Response:      OK                           
+Response:      InvalidArguments 
+Request:       quit 
+Response:      OK 
+Response:      InvalidArguments 
+Request:       version 
+Response:      OK BF3 <version> 
+Response:      InvalidArguments 
+Request:       listPlayers <players: player subset> 
+Response:      OK <player info> 
+Response:      InvalidArguments 
+Request:       admin.eventsEnabled [enabled: boolean] 
+Response:      OK                            
+Response:      OK <enabled: boolean>         
+Response:      InvalidArguments 
+Request:       admin.password [password: password] 
+Response:      OK                            
+Response:      OK <password>                 
+Response:      InvalidArguments 
+Response:      InvalidPassword               
+Request:       admin.help 
+Response:      OK <all commands available on server, as separate words> 
+Response:      InvalidArguments 
+Request:       punkBuster.isActive 
+Response:      OK <active: Boolean> 
+Request:       punkBuster.activate 
+Response:      OK 
+Request:       punkBuster.pb_sv_command <command: string> 
+Response:      OK                            
+Response:      InvalidArguments 
+Response:      InvalidPbServerCommand        
+Request:       serverInfo 
+Response:      OK <serverName: string> <current playercount: integer> <effective max playercount: integer> 
+Response:       InvalidArguments 
+Request:        admin.effectiveMaxPlayers 
+Response:       OK <current max players: int> 
+Response:       InvalidArguments 
+Request:        admin.say <message: string> <players: player subset> 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidTeam 
+Response:       InvalidSquad 
+Response:       PlayerNotFound 
+Response:       TooLongMessage 
+Request:        admin.yell <message: string> [duration: seconds] [players: player subset] 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       PlayerNotFound 
+Response:       MessageIsTooLong 
+Request:        admin.kickPlayer <soldier name: player name> [reason: string] 
+Response:       OK                             
+Response:       InvalidArguments 
+Response:       PlayerNotFound                 
+Request:        admin.listPlayers <players: player subset> 
+Response:       OK <player info> 
+Response:       InvalidArguments 
+Request:        admin.movePlayer <name: player name> <teamId: Team ID> <squadId: Squad ID> <forceKill: boolean> 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidTeamId 
+Response:       InvalidSquadId 
+Response:       InvalidPlayerName 
+Response:       InvalidForceKill 
+Response:       PlayerNotDead                  
+Response:       SetTeamFailed 
+Response:       SetSquadFailed 
+Request:        admin.killPlayer <name: player name> 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidPlayerName 
+Response:       SoldierNotAlive 
+Request:        reservedSlotsList.load 
+Response:       OK 
+Response:       PlayerAlreadyInList 
+Response:       InvalidArguments 
+Response:       Full 
+Response:       InvalidName 
+Response:       AccessError                    
+Response:       IncompleteRead                 
+Request:        reservedSlotsList.save 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       AccessError                    
+Request:        reservedSlotsList.add <id: string> 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidName 
+Response:       PlayerAlreadyInList 
+Response:       Full 
+Request:        reservedSlotsList.remove <id>
+Response:       OK 
+Response:       InvalidArguments 
+Response:       PlayerNotInList 
+Request:        reservedSlotsList.clear 
+Response:       OK 
+Response:       InvalidArguments 
+Request:        reservedSlotsList.list [startOffset: integer] 
+Response:       OK <player entries> 
+Response:       InvalidArguments 
+Request:        reservedSlotsList.aggressiveJoin 
+Response:       OK 
+Response:       InvalidArguments 
+Request:        banList.load 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidIdType 
+Response:        InvalidBanType 
+Response:        InvalidTimeStamp                  
+Response:        IncompleteBan                     
+Response:        AccessError                       
+Request:         banList.save 
+Response:        OK 
+Response:        InvalidArguments 
+Response:        AccessError                       
+Request:         banList.add <id>
+Response:        OK 
+Response:        InvalidArguments 
+Response:        BanListFull 
+Request:         banList.remove <id>
+Response:        OK 
+Response:        InvalidArguments 
+Response:        NotFound         
+Request:         banList.clear 
+Response:        OK 
+Response:        InvalidArguments 
+Request:        banList.list [startOffset: integer] 
+Response:       OK <player ban entries> 
+Response:       InvalidArguments 
+Request:        mapList.load 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       AccessError                    – file I/O error 
+Response:       InvalidMap                     – incorrect map name 
+Response:       InvalidGameModeOnMap           – gamemode does not exist for that map 
+Response:       InvalidRoundsPerMap            – number of rounds must be 1 or greater 
+Response:       Full                           – Map list maximum size has been reached 
+Request:        mapList.save 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       AccessError                    – file I/O error 
+Request:        mapList.add <map: string> <gamemode: string> <rounds: integer> 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidMap                     – incorrect map name 
+Response:       InvalidGameModeOnMap           – gamemode does not exist for that map 
+Response:       InvalidRoundsPerMap            – number of rounds must be 1 or greater 
+Response:       Full                           – Map list maximum size has been reached 
+Response:       InvalidMapIndex                – Index value is out of range 
+Request:        mapList.remove <index: integer> 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidMapIndex                – Index value is out of range 
+Request:        mapList.clear 
+Response:       OK 
+Response:       InvalidArguments 
+Request:        mapList.list [startIndex] 
+Response:       OK < map list: MapList> 
+Response:       InvalidArguments 
+Request:        mapList.setNextMapIndex <index: integer> 
+Response:       OK 
+Response:       InvalidArguments 
+Response:       InvalidMapIndex                – Index value is out of range 
+Request:        mapList.getMapIndices 
+Response:       OK <current map index: integer> <next map index: integer> 
+Response:       InvalidArguments 
+Request:        mapList.getRounds 
+Response:       OK <current round: integer> <total rounds to play on this map: integer> 
+Response:       InvalidArguments 
+Request:      mapList.runNextRound 
+Response:     OK 
+Response:     InvalidArguments 
+Request:      mapList.restartRound 
+Response:     OK 
+Response:     InvalidArguments 
+Request:      mapList.endRound <winner: Team ID> 
+Response:     OK 
+Response:     InvalidArguments 
+Request:      mapList.availableMaps <…> 
+Response:     OK 
+Request:      vars.ranked [ranked: boolean] 
+Response:     OK                           
+Response:     OK <ranked: boolean>         
+Response:     InvalidArguments 
+Request:      vars.serverName [name: string] 
+Response:     OK                           
+Response:     OK <name>                    
+Response:     InvalidArguments 
+Response:     TooLongName                  
+Request:      vars.gamePassword [password : password] 
+Response:     OK                           
+Response:      OK <password>                  
+Response:      InvalidArguments 
+Response:      InvalidPassword                
+Response:      InvalidConfig                  
+Request:       vars.autoBalance [enabled: boolean] 
+Response:      OK                             
+Response:      OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.friendlyFire [enabled: boolean] 
+Response:      OK                             
+Response:      OK <enabled: boolean>          
+Response:      InvalidArguments 
+Response:      LevelNotLoaded                 
+Request:       vars.maxPlayers [nr of players: integer] 
+Response:      OK                             
+Response:      OK <nr of players: integer>    
+Response:      InvalidArguments 
+Response:      InvalidNrOfPlayers             
+Request:       vars.serverDescription [description: string] 
+Response:      OK                             
+Response:      OK <description: string>       
+Response:      InvalidArguments 
+Request:       vars.serverMessage [description: string] 
+Response:      OK                             
+Response:      OK <description: string>       
+Response:       InvalidArguments 
+Request:       vars.killCam [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.miniMap [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.hud [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.crossHair [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.3dSpotting [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.miniMapSpotting [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.nameTag [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.3pCam [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.regenerateHealth [enabled: boolean] 
+Response:       OK                             
+Response:       OK <enabled: boolean>          
+Response:       InvalidArguments 
+Request:       vars.teamKillCountForKick [count: integer] 
+Response:       OK                             
+Response:       OK <count: integer>            
+Response:       InvalidArguments 
+Request:       vars.teamKillValueForKick [count: integer] 
+Response:       OK                             
+Response:       OK <count: integer>            
+Response:       InvalidArguments 
+Request:        vars.teamKillValueIncrease [count: integer] 
+Response:       OK                             
+Response:       OK <count: integer>            
+Response:       InvalidArguments 
+Request:        vars.teamKillValueDecreasePerSecond [count: integer] 
+Response:       OK                             
+Response:       OK <count: integer>            
+Response:       InvalidArguments 
+Request:        vars.teamKillKickForBan         [count: integer] 
+Response:       OK                             
+Response:       OK <count: integer>            
+Response:       InvalidArguments 
+Request:        vars.idleTimeout [time: seconds] 
+Response:       OK                             
+Response:       OK <time: seconds>             
+Response:       InvalidArguments 
+Request:        vars.idleBanRounds [number of rounds: integer] 
+Response:       OK                             
+Response:       OK <rounds: integer>           
+Response:       InvalidArguments 
+Request:        vars.roundStartPlayerCount [nr of players: integer] 
+Response:       OK [nr of players: integer]    
+Response:       OK < nr of players: integer >  
+Response:       InvalidArguments 
+Request:       vars.roundRestartPlayerCount [nr of players: integer] 
+Response:      OK [nr of players: integer]   
+Response:      OK < nr of players: integer > 
+Response:      InvalidArguments 
+Request:       vars. roundLockdownCountdown [time: seconds] 
+Response:      OK [time: seconds]            
+Response:      OK < time: seconds >          
+Response:      InvalidArguments 
+Request:       vars.vehicleSpawnAllowed [enabled: boolean] 
+Response:      OK                            
+Response:      OK <enabled: boolean>         
+Response:      InvalidArguments 
+Request:       vars.vehicleSpawnDelay [modifier: integer] 
+Response:      OK                            
+Response:      OK < modifier: integer >      
+Response:      InvalidArguments 
+Request:       vars.soldierHealth [modifier: integer] 
+Response:      OK                            
+Response:      OK < modifier: integer >      
+Response:      InvalidArguments 
+Request:       vars.playerRespawnTime [modifier: integer] 
+Response:      OK                            
+Response:      OK < modifier: integer >      
+Response:      InvalidArguments 
+Request:       vars.playerManDownTime [modifier: integer] 
+Response:      OK                            
+Response:      OK < modifier: integer >      
+Response:      InvalidArguments 
+Request:       vars.bulletDamage [modifier: integer] 
+Response:      OK                            
+Response:      OK < modifier: integer >      
+Response:      InvalidArguments 
+Request:       vars.gameModeCounter [modifier: integer] 
+Response:      OK                            
+Response:      OK < modifier: integer >      
+Response:      InvalidArguments 
+Request:       vars.onlySquadLeaderSpawn [enabled: boolean] 
+Response:      OK                            
+Response:      OK <enabled: boolean>         
+Response:      InvalidArguments 
+Request:       vars.unlockMode [mode: Unlock mode] 
+Response:      OK                            
+Response:      OK <mode: Unlock mode>        
+Response:      InvalidArguments 
+Request:       vars.premiumStatus [enabled: boolean] 
+Response:      OK                           
+Response:      OK <enabled: boolean>        
+Response:      InvalidArguments 
+Request:      vars.gunMasterWeaponsPreset [modifier: integer] 
+Response:      OK                           
+Response:      OK < modifier: integer >     
+Response:      InvalidArguments 
