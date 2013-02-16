@@ -152,17 +152,17 @@ namespace WebFrontend.Controllers
 
         [HttpPost]
         [ActionName("SetServerInfo")]
-        public HttpResponseMessage SetServerInfo([FromBody]ConnectionInfo connection)
+        public String SetServerInfo([FromBody]ConnectionInfo connection)
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
             try
             {
-                GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                //GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
+                return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword));
             }
             catch (ArgumentException e)
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                return json.Serialize(e.Message);
             }
         }
 
@@ -171,15 +171,12 @@ namespace WebFrontend.Controllers
 
        [HttpGet]
        [ActionName("GetServerSettings")]
-        public String GetServerSettings()
-        {
+       public String GetServerSettings()
+       {
            // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
-            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
-
-            JavaScriptSerializer json = new JavaScriptSerializer();
-           
-            return json.Serialize(new string[]{settings.Address,settings.Port.ToString()});
-
-        }
+           var settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+           JavaScriptSerializer json = new JavaScriptSerializer();
+           return json.Serialize(new string[]{settings.Address,settings.Port.ToString()});
+       }
     }
 }
