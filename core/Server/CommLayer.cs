@@ -11,16 +11,20 @@ namespace core.Server
         private Protocol RconProtocol { get; set; }
         private Dictionary<uint, MessageEventHandler> RequestCallbacks;
         private Dictionary<uint, Packet> RequestPackets;
+        private string Address, Password;
+        private int Port;
 
         public event ChatEventHandler CommHandler;
 
-        // Event handler for all message types.
-        public delegate void MessageEventHandler(object sender, Dictionary<string, string> message);
-        // Directory of handlers for various message types.
-        public Dictionary<string, MessageEventHandler> MessageEvents;
+        public CommLayer()
+        {
+            MessageEvents = new Dictionary<string, MessageEventHandler>();
+            RequestCallbacks = new Dictionary<uint, MessageEventHandler>();
+            RequestPackets = new Dictionary<uint, Packet>();
+            RecognizedPacket.LoadScrapedData();
+        }
 
-
-        public void Connect(string address, int port, string password)
+        public override void Connect(string address, int port, string password)
         {
             RconProtocol = new Protocol(address, port, password);
             RconProtocol.PacketEvent += RConnPacketHandler;
@@ -29,16 +33,14 @@ namespace core.Server
             RequestCallbacks = new Dictionary<uint, MessageEventHandler>();
             RequestPackets = new Dictionary<uint, Packet>();
 
+            Address = address;
+            Port = port;
+            Password = password;
+
             RecognizedPacket.LoadScrapedData();
         }
 
-
-        public void NotifyCommHandler(object sender, ChatEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Disconnect()
+        public override void Disconnect()
         {
             if (RconProtocol != null)
             {
@@ -55,8 +57,16 @@ namespace core.Server
             RequestPackets[request.SequenceNumber] = request;
         }
 
-        private void RConnPacketHandler(Packet args)
+        public void RConnPacketHandler(Packet args)
         {
+            //Detect a socket exception and initiate a reconnect.
+            if (args.FirstWord == "SocketException")
+            {
+                Disconnect();
+                Connect(Address, Port, Password);
+                return;
+            }
+
             if (args.IsRequest)
             {
                 var formattedPacket = RecognizedPacket.FormatRequestPacket(args);
@@ -70,22 +80,6 @@ namespace core.Server
             {
                 Packet request = RequestPackets[args.SequenceNumber];
                 RequestCallbacks[args.SequenceNumber](this, RecognizedPacket.FormatResponsePacket(request, args));
-            }
-
-            //Version .1 we only want player.onChat, admin.say, and admin.yell
-            if (OnChat.IsOnChat(args))
-            {
-                var chat = new OnChat(args);
-                var message = new ChatMessage
-                    {
-                        MessageTimeStamp = DateTime.UtcNow,
-                        Text = chat.Text,
-                        Speaker = chat.SoldierName,
-                        MessageType = chat.TargetPlayers.ToString()
-                    };
-
-                var chatArgs = new ChatEventArgs(message);
-                CommHandler(this, chatArgs);
             }
         }
     }

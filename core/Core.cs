@@ -6,7 +6,6 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.ChatMessageUtilities;
 using core.Server;
-using core.ServerInterface;
 using core.TableStore;
 
 namespace core
@@ -18,7 +17,7 @@ namespace core
     public class Core : ICore
     {
         // Implements ICore
-        public ICommHandler CommHandler { get; set; }
+        public ICommLayer CommLayer { get; set; }
         public CloudTable MessageTable { get; set; }
         public CloudTable CredTable { get; set; }
         public Queue<ChatMessage> MessageQueue { get; set; }
@@ -30,8 +29,8 @@ namespace core
         /// </summary>
         public Core()
         {
-            CommHandler = new CommHandler();
-            CommHandler.CoreListener += MessageHandler;
+            CommLayer = new CommLayer();
+            CommLayer.MessageEvents["player.onChat"] = MessageHandler;
 
             MessageQueue = new Queue<ChatMessage>();
             ServerMessages = new Dictionary<string, DateTime>();
@@ -44,41 +43,43 @@ namespace core
         }
 
         // Implements ICore
-        public void MessageHandler(object sender, ChatEventArgs e)
+        public void MessageHandler(object sender, Dictionary<string, string> packet)
         {
             // Filter for server messages here - do not want the spam
-            if (e != null)
+            if (packet != null)
             {
-                if (e.ServerMessage.Speaker == "Server")
+                ChatMessage msg = new ChatMessage(DateTime.UtcNow, packet["source soldier name"], packet["text"], packet["target players"]);
+                if (msg.Speaker == "Server")
                 {
-                    if (ServerMessages.ContainsKey(e.ServerMessage.Text))
+                    if (ServerMessages.ContainsKey(msg.Text))
                     {
-                        DateTime lastShown = ServerMessages[e.ServerMessage.Text];
+                        DateTime lastShown = ServerMessages[msg.Text];
                         DateTime now = DateTime.UtcNow;
                         TimeSpan ts = now - lastShown;
                         double diff = ts.TotalMinutes;
+                        
                         if (diff > 30)
                         {
                             // Message needs to be displayed again
-                            EnqueueMessage(e.ServerMessage);
+                            EnqueueMessage(msg);
 
                             // Timestamp in Dictionary also needs to be updated
-                            ServerMessages[e.ServerMessage.Text] = now;
+                            ServerMessages[msg.Text] = now;
                         }
                     }
                     else
                     {
                         // Message needs to be displayed, as it has not been seen
-                        EnqueueMessage(e.ServerMessage);
+                        EnqueueMessage(msg);
 
                         // Also need to add it to the Dictionary
                         DateTime now = DateTime.UtcNow;
-                        ServerMessages.Add(e.ServerMessage.Text, now);
+                        ServerMessages.Add(msg.Text, now);
                     }
                 }
                 else
                 {
-                    EnqueueMessage(e.ServerMessage);
+                    EnqueueMessage(msg);
                 }
             }
         }
@@ -142,7 +143,7 @@ namespace core
                 {
                     // Disconnect from current server
                     MessageQueue.Clear();
-                    CommHandler.Disconnect();
+                    CommLayer.Disconnect();
 
                     Oldsettings.Address = address;
                     Oldsettings.Port = port;
@@ -153,7 +154,7 @@ namespace core
                     CredTable.Execute(updateOp);
                     try
                     {
-                        CommHandler.Connect(address, port, password);
+                        CommLayer.Connect(address, port, password);
                         return "Connected to " + address;
                     }
                     catch (Exception e) {
@@ -166,7 +167,7 @@ namespace core
             {
                 // Disconnect from current server
                 MessageQueue.Clear();
-                CommHandler.Disconnect();
+                CommLayer.Disconnect();
 
                 // If there is no last-saved connection, add one
                 var settings = new ServerConfig(address, port, password);
@@ -176,7 +177,7 @@ namespace core
                 CredTable.Execute(insertOp);
                 try
                 {
-                    CommHandler.Connect(address, port, password);
+                    CommLayer.Connect(address, port, password);
                 }
                 catch (Exception e) {
 
@@ -196,7 +197,7 @@ namespace core
             {
                 try
                 {
-                    CommHandler.Connect(settings.Address, settings.Port, settings.Password);
+                    CommLayer.Connect(settings.Address, settings.Port, settings.Password);
                 }
                 catch (Exception e) {
 

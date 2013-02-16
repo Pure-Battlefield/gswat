@@ -20,7 +20,6 @@ namespace test.Server
 
             // Subscribe to CommHandler
             bool raised = false;
-            commLayer.CommHandler += delegate { raised = true; };
 
             // Raise MessageSent event in Server
             var msg = new ChatMessage(new DateTime(2012, 12, 18), "Llamautomatic", "This is a test message", "all");

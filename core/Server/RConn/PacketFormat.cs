@@ -25,7 +25,14 @@ namespace core.Server.RConn
             foreach(Match match in parameterMatches) 
             {
                 Parameters.Add(new Parameter(match.Value));
-            }   
+            }
+
+            Regex optionalParameterRegex = new Regex("\\[.+?\\]");
+            MatchCollection optionalMatches = optionalParameterRegex.Matches(format);
+            foreach (Match match in optionalMatches)
+            {
+                Parameters.Add(new Parameter(match.Value));
+            }
         }
 
 

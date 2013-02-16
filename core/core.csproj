@@ -74,8 +74,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServerInterface\CommHandler.cs" />
-    <Compile Include="ServerInterface\ICommHandler.cs" />
     <Compile Include="Server\RConn\PacketFormat.cs" />
     <Compile Include="Server\RConn\Parameter.cs" />
     <Compile Include="Server\RConn\RecognizedPacket.cs" />

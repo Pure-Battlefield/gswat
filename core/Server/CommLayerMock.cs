@@ -12,29 +12,19 @@
             Server = server;
             if (server != null)
             {
-                Server.MessageSent += NotifyCommHandler;
+                
             }
         }
 
         public IServerMock Server { get; private set; }
-        public event ChatEventHandler CommHandler;
 
         // Implements ICommLayer
-        public void Connect(string address, int port, string password)
+        public override void Connect(string address, int port, string password)
         {
         }
 
         // Implements ICommLayer
-        public void NotifyCommHandler(object sender, ChatEventArgs e)
-        {
-            if (CommHandler != null)
-            {
-                CommHandler(this, e);
-            }
-        }
-
-        // Implements ICommLayer
-        public void Disconnect()
+        public override void Disconnect()
         {
         }
     }

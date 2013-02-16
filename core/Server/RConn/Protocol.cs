@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Collections.Generic;
 using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
@@ -63,21 +64,35 @@ namespace core.Server.RConn
 
         private void ReceivePackets()
         {
-            while (Sock.Connected)
+            try
             {
-                Packet packet = ReceivePacket();
-
-                if (packet != null)
+                while (Sock.Connected)
                 {
-                    if (packet.IsRequest)
+                    Packet packet = ReceivePacket();
+                    
+                    if (packet != null)
                     {
-                        HandleRequest(packet);
-                    }
-                    else
-                    {
-                        HandleResponse(packet);
+                        if (packet.IsRequest)
+                        {
+                            HandleRequest(packet);
+                        }
+                        else if (packet.IsResponse)
+                        {
+                            HandleResponse(packet);
+                        }
                     }
                 }
+            }
+            catch (SocketException ex)
+            {
+                Packet serverDied = new Packet();
+                List<Word> words = new List<Word>();
+                words.Add(new Word("SocketException"));
+                words.Add(new Word(ex.Message));
+                serverDied.Words = words;
+
+                PacketEvent(serverDied);
+                return;
             }
         }
 
@@ -120,7 +135,7 @@ namespace core.Server.RConn
         {
             packet.OrigininatesFromClient = true;
             packet.IsRequest = true;
-            packet.SequenceNumber = SequenceCounter++;
+            packet.SequenceNumber = ++SequenceCounter;
             Sock.Send(packet.Emit());
 
             return packet;
@@ -128,10 +143,7 @@ namespace core.Server.RConn
 
         private void SendOkResponse(Packet packet)
         {
-            packet.OrigininatesFromClient = packet.OrigininatesFromClient;
-            packet.IsRequest = false;
-            packet.SequenceNumber = packet.SequenceNumber;
-            Sock.Send(packet.Emit());
+            Sock.Send(new ResponseOk(packet).Emit());
         }
 
         public void Disconnect()
