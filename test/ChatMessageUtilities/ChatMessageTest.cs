@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using core.ChatMessageUtilities;
+using core.TableStoreEntities;
 
 namespace test.ChatMessageUtilities
 {

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using core.TableStoreEntities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,10 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Script.Serialization;
-using System.Diagnostics;
 using WebFrontend.Models;
-using core.ChatMessageUtilities;
-using core.TableStore;
 
 namespace WebFrontend.Controllers
 {
@@ -157,7 +154,6 @@ namespace WebFrontend.Controllers
             JavaScriptSerializer json = new JavaScriptSerializer();
             try
             {
-                //GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword);
                 return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword));
             }
             catch (ArgumentException e)

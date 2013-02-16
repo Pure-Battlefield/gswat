@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="AuthHandler\AuthHandler.cs" />
     <Compile Include="AuthHandler\IAuthHandler.cs" />
-    <Compile Include="ChatMessageUtilities\ChatMessage.cs" />
+    <Compile Include="TableStoreEntities\ChatMessage.cs" />
     <Compile Include="ICore.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -79,7 +79,8 @@
     <Compile Include="Server\RConn\PacketFormat.cs" />
     <Compile Include="Server\RConn\Parameter.cs" />
     <Compile Include="Server\RConn\RecognizedPacket.cs" />
-    <Compile Include="TableStore\ServerConfig.cs" />
+    <Compile Include="TableStoreEntities\LogMessage.cs" />
+    <Compile Include="TableStoreEntities\ServerConfig.cs" />
     <Compile Include="Server\ICommLayer.cs" />
     <Compile Include="Server\IServerMock.cs" />
     <Compile Include="Server\CommLayerMock.cs" />
@@ -119,6 +120,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Server\RConn\BF3_formatted_scrape.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ChatMessageUtilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
