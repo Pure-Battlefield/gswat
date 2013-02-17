@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using ServiceStack.ServiceInterface;
@@ -22,11 +23,14 @@ namespace WebFrontend.Controllers
 
             try
             {
+                Response.StatusCode = 200; // HttpStatusCode.OK
                 return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password,
                                                     connection.OldPassword));
+
             }
             catch (ArgumentException e)
             {
+                Response.StatusCode = 500; // HttpStatusCode.Error
                 return json.Serialize(e.Message);
             }
         }
