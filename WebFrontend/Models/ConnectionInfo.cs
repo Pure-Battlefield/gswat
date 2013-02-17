@@ -6,7 +6,7 @@ using ServiceStack.ServiceHost;
 
 namespace WebFrontend.Models
 {
-    [Route("/serverInfo/","POST")]
+    [Route("/serverInfo/","PUT")]
     public class ConnectionInfo
     {
         public string ServerIP { get; set; }
