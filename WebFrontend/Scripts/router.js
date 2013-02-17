@@ -1,8 +1,10 @@
 (function(window,$){
 	window.GSWAT.prototype.router = Backbone.Router.extend({
 		initialize: function(){
-			var header = PBF.get({view:{name:'header'}});
-			var footer = PBF.get({view:{name:'footer'}});
+			var header = PBF.get({view:{name:'header'},model:{name:'header'}});
+			var footer = PBF.get({view:{name:'footer'},model:{name:'footer'}});
+
+			header.set_active(Backbone.History.prototype.getHash(window));
 		},
 
 		render_home: function(){
@@ -28,7 +30,6 @@
 				var server = PBF.get({model:{name:'server_model'}});
 				var chat = PBF.get({view:{name:'chat'},model:{name:'chat_model'}});
 				PBF.render(chat);
-				//$(PBF.main_ele).html(chat.$el);
 			});
 		},
 
@@ -55,8 +56,15 @@
 		},
 
 		render_map_rotation: function(){
-			var map_rotation = PBG.get({view:{name:'map_rotation'}});
-			PBF.render(map_rotation);
+			var files = [
+				PBF.CDN + 'Scripts/models/model.server.js',
+				PBF.CDN + 'Scripts/models/model.map-rotation.js',
+				PBF.CDN + 'Scripts/views/view.map-rotation.js'
+			];
+			PBF.load(files,function(){
+				var map_rotation = PBF.get({view:{name:'map_rotation'},model:{name:'map_rotation'}});
+				PBF.render(map_rotation);
+			});
 		},
 
 		routes: {

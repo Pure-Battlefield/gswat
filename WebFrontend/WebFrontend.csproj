@@ -66,6 +66,33 @@
     <Reference Include="Moq">
       <HintPath>..\lib\moq\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack">
+      <HintPath>..\packages\ServiceStack.3.9.35\lib\net35\ServiceStack.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\packages\ServiceStack.Common.3.9.35\lib\net35\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.FluentValidation.Mvc3">
+      <HintPath>..\packages\ServiceStack.Mvc.3.9.35\lib\net40\ServiceStack.FluentValidation.Mvc3.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\packages\ServiceStack.Common.3.9.35\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.35\lib\ServiceStack.OrmLite.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.SqlServer">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.35\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\packages\ServiceStack.Redis.3.9.35\lib\net35\ServiceStack.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\packages\ServiceStack.3.9.35\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\packages\ServiceStack.Text.3.9.35\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -140,6 +167,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
@@ -150,11 +180,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AppHost.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App_Start\WebServiceExamples.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -168,9 +201,20 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Content Include="Content\themes\base\CSS\bootstrap-responsive.min.css" />
+    <Content Include="Content\themes\base\CSS\bootstrap.min.css" />
+    <Content Include="Content\themes\base\CSS\font-awesome.min.css" />
+    <Content Include="Content\js\ss-validation.js" />
     <Content Include="Content\themes\base\CSS\loading.css" />
+    <Content Include="Content\themes\base\font\fontawesome-webfont.svg" />
+    <Content Include="Content\themes\base\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\themes\base\img\glyphicons-halflings.png" />
     <Content Include="Content\themes\base\jquery-ui-1.10.0.custom.min.css" />
+    <Content Include="default.htm" />
+    <Content Include="jqunback-1.51.min.js" />
+    <Content Include="README.txt" />
     <Content Include="Scripts\libraries\backbone-0.9.10.min.js" />
+    <Content Include="Scripts\libraries\bootstrap-2.3.0.min.js" />
     <Content Include="Scripts\libraries\jquery-1.9.1.min.js" />
     <Content Include="Scripts\libraries\jquery-ui-1.10.0.custom.min.js" />
     <Content Include="Scripts\libraries\keyboard-0.4.1.min.js" />
@@ -201,8 +245,6 @@
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\CSS\modern-responsive.css" />
-    <Content Include="Content\themes\base\CSS\modern.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\chatRefreshBtn.png" />
@@ -214,7 +256,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\libraries\icanhaz-0.10.5.js" />
-    <Content Include="Scripts\libraries\lib.js" />
+    <Content Include="Scripts\lib.js" />
     <Content Include="Content\themes\base\fonts\iconFont.eot" />
     <Content Include="Content\themes\base\fonts\iconFont.ttf" />
     <Content Include="Content\themes\base\fonts\iconFont.woff" />
@@ -222,20 +264,13 @@
     <Content Include="Scripts\libraries\yepnope-1.5.4.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\models\model.chat.js" />
+    <Content Include="Scripts\models\model.globals.js" />
+    <Content Include="Scripts\models\model.map-rotation.js" />
     <Content Include="Scripts\models\model.server.js" />
-    <Content Include="Scripts\modern\accordion.js" />
-    <Content Include="Scripts\modern\buttonset.js" />
-    <Content Include="Scripts\modern\carousel.js" />
-    <Content Include="Scripts\modern\dropdown.js" />
-    <Content Include="Scripts\modern\input-control.js" />
-    <Content Include="Scripts\modern\pagecontrol.js" />
-    <Content Include="Scripts\modern\rating.js" />
-    <Content Include="Scripts\modern\slider.js" />
-    <Content Include="Scripts\modern\tile-drag.js" />
-    <Content Include="Scripts\modern\tile-slider.js" />
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
     <Content Include="Scripts\router.js" />
+    <Content Include="Scripts\views\view.map-rotation.js" />
     <Content Include="Scripts\views\view.settings.js" />
     <Content Include="Scripts\views\view.chat.js" />
     <Content Include="Scripts\views\view.globals.js" />
@@ -283,6 +318,12 @@
       <Project>{66f21ec9-ebd1-4ed9-bb51-571ffa6c6225}</Project>
       <Name>core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\themes\base\font\fontawesome-webfont.eot" />
+    <Content Include="Content\themes\base\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\themes\base\font\fontawesome-webfont.woff" />
+    <Content Include="Content\themes\base\font\FontAwesome.otf" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
