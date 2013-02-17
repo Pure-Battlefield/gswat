@@ -21,7 +21,7 @@ namespace core
     public class Core : ICore
     {
         // Implements ICore
-        public ICommHandler CommHandler { get; set; }
+        public ICommLayer CommLayer { get; set; }
         public CloudTable MessageTable { get; set; }
         
         public CloudTable CredTable { get; set; }
@@ -35,8 +35,8 @@ namespace core
         /// </summary>
         public Core()
         {
-            CommHandler = new CommHandler();
-            CommHandler.CoreListener += MessageHandler;
+            CommLayer = new CommLayer();
+            CommLayer.MessageEvents["player.onChat"] = MessageHandler;
 
             MessageQueue = new Queue<ChatMessageEntity>();
             ServerMessages = new Dictionary<string, DateTime>();
@@ -59,41 +59,43 @@ namespace core
         }
 
         // Implements ICore
-        public void MessageHandler(object sender, ChatEventArgs e)
+        public void MessageHandler(object sender, Dictionary<string, string> packet)
         {
             // Filter for server messages here - do not want the spam
-            if (e != null)
+            if (packet != null)
             {
-                if (e.ServerMessage.Speaker == "Server")
+                ChatMessage msg = new ChatMessage(DateTime.UtcNow, packet["source soldier name"], packet["text"], packet["target players"]);
+                if (msg.Speaker == "Server")
                 {
-                    if (ServerMessages.ContainsKey(e.ServerMessage.Text))
+                    if (ServerMessages.ContainsKey(msg.Text))
                     {
-                        var lastShown = ServerMessages[e.ServerMessage.Text];
-                        var now = DateTime.UtcNow;
-                        var ts = now - lastShown;
+                        DateTime lastShown = ServerMessages[msg.Text];
+                        DateTime now = DateTime.UtcNow;
+                        TimeSpan ts = now - lastShown;
                         double diff = ts.TotalMinutes;
+                        
                         if (diff > 30)
                         {
                             // Message needs to be displayed again
-                            EnqueueMessage(e.ServerMessage);
+                            EnqueueMessage(msg);
 
                             // Timestamp in Dictionary also needs to be updated
-                            ServerMessages[e.ServerMessage.Text] = now;
+                            ServerMessages[msg.Text] = now;
                         }
                     }
                     else
                     {
                         // Message needs to be displayed, as it has not been seen
-                        EnqueueMessage(e.ServerMessage);
+                        EnqueueMessage(msg);
 
                         // Also need to add it to the Dictionary
-                        var now = DateTime.UtcNow;
-                        ServerMessages.Add(e.ServerMessage.Text, now);
+                        DateTime now = DateTime.UtcNow;
+                        ServerMessages.Add(msg.Text, now);
                     }
                 }
                 else
                 {
-                    EnqueueMessage(e.ServerMessage);
+                    EnqueueMessage(msg);
                 }
             }
         }
@@ -163,10 +165,10 @@ namespace core
                     {
                         // Disconnect from current server
                         MessageQueue.Clear();
-                        CommHandler.Disconnect();
+                    CommLayer.Disconnect();
 
                         // Attempt to connect to the new server - if this fails, we leave the old "last server" entry in Table Store
-                        CommHandler.Connect(address, port, password);
+                        CommLayer.Connect(address, port, password);
 
                         // Update the "last server" entry in Table Store
                         oldsettings.Address = address;
@@ -194,11 +196,11 @@ namespace core
             {
                 // Disconnect from current server
                 MessageQueue.Clear();
-                CommHandler.Disconnect();
+                CommLayer.Disconnect();
                     
                 // Attempt to connect to new server
                 // If this fails, we do not change the last-saved connection
-                CommHandler.Connect(address, port, password);
+                    CommLayer.Connect(address, port, password);
 
                 // Add the new "last server" entry in Table Store
                 var settings = new ServerSettingsEntity(address, port, password)
@@ -230,7 +232,7 @@ namespace core
             {
                 try
                 {
-                    CommHandler.Connect(settings.Address, settings.Port, settings.Password);
+                    CommLayer.Connect(settings.Address, settings.Port, settings.Password);
                 }
                 catch (Exception e) {
                     LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);

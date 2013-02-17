@@ -21,7 +21,7 @@ namespace core.Server.RConn
             {
                 IsOptional = false;
             }
-            else if (format.Contains('>'))
+            else if (format.Contains('['))
             {
                 IsOptional = true;
             }

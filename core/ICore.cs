@@ -1,5 +1,4 @@
 ﻿using core.Server;
-using core.ServerInterface;
 using core.TableStoreEntities;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
@@ -10,7 +9,7 @@ namespace core
     public interface ICore
     {
         // CommHandler that this Core instance is hooked to
-        ICommHandler CommHandler { get; set; }
+        ICommLayer CommLayer { get; set; }
 
         // CloudTable object for ChatMessages
         CloudTable MessageTable { get; set; }
@@ -23,14 +22,6 @@ namespace core
 
         // ServerMessage dictionary for filtering
         Dictionary<string, DateTime> ServerMessages { get; set; } 
-
-        /// <summary>
-        ///     Process a received message
-        ///     Triggered by CommHandler object
-        /// </summary>
-        /// <param name="sender">Object that sent the event</param>
-        /// <param name="e">ChatEventArgs object containing the ChatMessage</param>
-        void MessageHandler(object sender, ChatEventArgs e);
 
         /// <summary>
         ///     Retrieves the current message queue
