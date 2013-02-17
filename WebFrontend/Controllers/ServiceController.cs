@@ -43,12 +43,24 @@ namespace WebFrontend.Controllers
 
             var json = new JavaScriptSerializer();
 
-            return
-                json.Serialize(new Dictionary<String, String>
-                    {
-                        {"ServerIP", settings.Address},
-                        {"ServerPort", settings.Port.ToString()}
-                    });
+            if (settings != null)
+            {
+                return
+                    json.Serialize(new Dictionary<String, String>
+                        {
+                            {"ServerIP", settings.Address},
+                            {"ServerPort", settings.Port.ToString()}
+                        });
+            }
+            else
+            {
+                return
+                    json.Serialize(new Dictionary<String, String>
+                        {
+                            {"ServerIP", ""},
+                            {"ServerPort", ""}
+                        });
+            }
         }
     }
 

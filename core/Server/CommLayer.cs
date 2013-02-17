@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using core.Logging;
 using core.Server.RConn;
 using core.Server.RConn.Commands;
 using System.Collections.Generic;
@@ -68,11 +70,19 @@ namespace core.Server
 
             if (args.IsRequest)
             {
-                var formattedPacket = RecognizedPacket.FormatRequestPacket(args);
-
-                if (MessageEvents.ContainsKey(args.FirstWord) && MessageEvents[args.FirstWord] != null)
+                try
                 {
-                    MessageEvents[args.FirstWord](this, formattedPacket);
+                    var formattedPacket = RecognizedPacket.FormatRequestPacket(args);
+
+                    if (MessageEvents.ContainsKey(args.FirstWord) && MessageEvents[args.FirstWord] != null)
+                    {
+                        MessageEvents[args.FirstWord](this, formattedPacket);
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+                    //TODO: Investigate why FormatRequestPacket is throwing an exception upon server reconnects
                 }
             }
             else if (args.IsResponse && RequestCallbacks.ContainsKey(args.SequenceNumber))
