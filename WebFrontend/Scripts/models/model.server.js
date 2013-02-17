@@ -12,7 +12,7 @@
 			if(this.get('ServerIP') == ''){
 				this.get_settings();
 			}
-			this.on('change:Password',this.update_settings,this);
+			this.on('submit',this.update_settings,this);
 		},
 
 		get_settings: function(){
@@ -56,10 +56,12 @@
                 success: function (success) {
 					PBF.alert({type:'success',title:'Success!',message:'Settings saved!'});
                     chat_settings.set({'server_set':true});
+					model.trigger('update_complete');
                 },
                 error: function (error) {
 					PBF.alert({type:'error',title:'An error occurred:',message:error.responseText});
                     chat_settings.set({'server_set':false});
+					model.trigger('update_complete');
                 }
             });
         }
