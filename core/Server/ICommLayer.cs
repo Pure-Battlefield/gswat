@@ -1,9 +1,11 @@
-﻿namespace core.Server
+﻿using System.Collections.Generic;
+
+namespace core.Server
 {
     public interface ICommLayer
     {
         // Event handler to pass ChatMessages to CommHandler
-        event ChatEventHandler CommHandler;
+        event ChatEventHandler CommHandler; 
 
         /// <summary>
         ///     Connect to a given server

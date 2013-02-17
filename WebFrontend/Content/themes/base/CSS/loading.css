@@ -1,11 +1,6 @@
 ﻿/* Global */
-.page {
-    max-width:940px;
-    margin:0 auto;
-}
-
-html {
-    background:#CCC;
+html, body {
+    background:#FEFEFE;
 }
 
 /* Content */
@@ -14,7 +9,7 @@ html {
     min-height:400px;
 }
 
-#content #first-loading {
+#loading {
 	min-height:0;
 	margin-top:10px;
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace core.TableStore
+namespace core.TableStoreEntities
 {
     public class ServerConfig : TableEntity
     {

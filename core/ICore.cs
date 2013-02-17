@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Table;
-using core.ChatMessageUtilities;
-using core.Server;
+﻿using core.Server;
 using core.ServerInterface;
-using core.TableStore;
+using core.TableStoreEntities;
+using Microsoft.WindowsAzure.Storage.Table;
+using System;
+using System.Collections.Generic;
 
 namespace core
 {
@@ -19,8 +15,17 @@ namespace core
         // CloudTable object for ChatMessages
         CloudTable MessageTable { get; set; }
 
+        // CloudTable object for LogMessages
+        CloudTable LogTable { get; set; }
+
+        // CloudTable object for CredMessages
+        CloudTable CredTable { get; set; }
+
         // Current queue of messages
         Queue<ChatMessage> MessageQueue { get; set; }
+
+        // ServerMessage dictionary for filtering
+        Dictionary<string, DateTime> ServerMessages { get; set; } 
 
         /// <summary>
         ///     Process a received message

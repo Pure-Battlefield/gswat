@@ -1,111 +1,151 @@
 ﻿<script id="tpl_header" type="text/html">
-    <div class="page">
-        <div class="nav-bar">
-            <div class="nav-bar-inner padding10 bg-color-darken">
-                <span class="pull-menu"></span>
-                <a href="#home"><span class="element brand">GSWAT <small>0.0.5</small></span></a>
-                <span class="divider"></span>
-                <ul class="menu">
-                    <li><a href="#home"><i class="icon-home"></i> Home</a></li>
-                    <li><a href="#chat"><i class="icon-comments-2"></i> Chat</a></li>
-                    <li><a href="#coming-soon"><i class="icon-earth"></i> Map Rotation</a></li>
-                    <li><a href="#coming-soon"><i class="icon-list"></i> Players</a></li>
-                    <li><a href="#settings"><i class="icon-cog"></i> Settings</a></li>
-                    <li><a href="#coming-soon"><i class="icon-user-2"></i> Account</a></li>
-                </ul>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="#home">{{name}} <small>{{version}}</small></a>
+                <div class="nav-collapse navbar-inverse-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="#home"><i class="icon-home"></i> Home</a></li>
+                        <li><a href="#chat"><i class="icon-comments"></i> Chat</a></li>
+                        <li><a href="#map-rotation"><i class="icon-globe"></i> Map Rotation</a></li>
+                        <li><a href="#coming-soon"><i class="icon-list"></i> Players</a></li>
+                        <li><a href="#settings"><i class="icon-cog"></i> Settings</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> Account <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#coming-soon"><i class="icon-signin"></i> Login</a></li>
+                                <li><a href="#coming-soon"><i class="icon-signout"></i> Logout</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#coming-soon"><i class="icon-wrench"></i> My Account</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </script>
 
 <script id="tpl_footer" type="text/html">
-    <div class="page">
-        <div class="nav-bar">
-            <div class="nav-bar-inner padding10 bg-color-blueDark">
-                <span class="element">&copy;2013 PureBattlefield</span>
-                <span class="divider"></span>
-                <ul class="menu">
-                    <li><a href="https://github.com/Pure-Battlefield/gswat"><i class="icon-github-2"></i> GitHub</a></li>
-                </ul>
+    <div class="container">
+        <p>&copy;{{year}} {{copyright}} <span class="pull-right">View the Source on <a href="{{github}}"><i class="icon-github"></i> GitHub</a></span></p>
+    </div>
+</script>
+
+<script id="tpl_alert" type="text/html">
+    <div class="container">
+	    <div class="row-fluid">
+		    <div class="alert alert-{{type}}">
+			    <button class="close" type="button" data-dismiss="alert">&times;</button>
+			    <strong>{{title}}</strong>
+			    <span>{{message}}</span>
             </div>
         </div>
-        <div id="footerPopup" style="display:none"></div>
+    </div>
+</script>
+
+<script id="tpl_confirm_dialogue" type="text/html">
+    <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-header">
+		    <button class="close" type="button" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 id="modal-title">{{title}}</h3>
+        </div>
+	    <div class="modal-body">
+		    <p>{{message}}</p>
+        </div>
+        <div class="modal-footer">
+		    <button class="btn btn-cancel" data-dismiss="modal" aria-hidden="true">Cancel</button>
+		    <button class="btn btn-confirm btn-{{button}}">{{button-text}}</button>
+        </div>
     </div>
 </script>
 
 <script id="tpl_loading" type="text/html">
-    <div id="loading" class="page padding10">
-        <div class="row">
-			<h2>Loading <small>- Please Wait</small></h2>
-			<div class="progress-bar">
-				<div id="progress-bar-inner" class="bar bg-color-blue"></div>
-			</div>
-		</div>
-    </div>
+    <div id="loading" class="row-fluid">
+        <h3>Loading <small>- Please Wait</small></h3>
+        <div class="progress progress-striped active">
+            <div id="progress-bar-inner" class="bar"></div>
+        </div>
+	</div>
 </script>
 
 <script id="tpl_coming_soon" type="text/html">
-    <div class="page padding10">
+    <div class="row-fluid">
         <div class="page-header">
             <h1>Coming Soon!</h1>
         </div>
-        <div class="page-region">
-            <div class="page-region-content">
-                <p class="body-text">This page hasn't been built yet, but don't worry, it's coming soon!</p>
-            </div>
+        <div class="page-content">
+            <p>This page hasn't been built yet, but don't worry, it's coming soon!</p>
         </div>
     </div>
 </script>
 
 <script id="tpl_body" type="text/html">
-    <div class="page padding10">
+    <div class="row-fluid">
         <div class="page-header">
             <h1>Welcome!</h1>
         </div>
-        <div class="page-region">
-            <div class="page-region-content">
-                <p class="body-text">This is the Pure Game Server Web Administration Tool, or GSWAT for short. It's purpose is to try and simplify the task of administering servers from any platform that has a modern browser. We hope you enjoy it!</p>
-            </div>
+        <div class="page-content">
+            <p>This is the Pure Game Server Web Administration Tool, or GSWAT for short. It's purpose is to try and simplify the task of administering servers from any platform that has a modern browser. We hope you enjoy it!</p>
         </div>
     </div>
 </script>
 
 <script id="tpl_chat" type="text/html">
-    <div class="grid page-region">
-        <div class="row bg-color-lighten padding5">
-            <a id="chat-force-refresh" href="#"><span><i class="icon-loop"></i> Refresh</span></a>
-            <a id="chat-toggle-options" href="#" class="place-right"><span><i class="icon-wrench"></i> Options & Archives</span></a>
+    <div class="row-fluid">
+        <ul class="nav nav-pills pull-left">
+            <li>
+                <a id="chat-force-refresh" href="#"><span><i class="icon-retweet"></i> Refresh</span></a>
+            </li>
+            <li>
+                <a href="#settings">Server IP: <span id="server-ip">{{ServerIP}}</span></a>
+            </li>
+        </ul>
+        <ul class="nav nav-pills pull-right">
+            <li>
+                <a id="chat-toggle-options" href="#" class="place-right"><span><i class="icon-cogs"></i> Options & Archives</span></a>
+            </li>
+        </ul>
+    </div>
+    <div id="chat-quick-settings" class="row-fluid">
+        <div class="page-header">
+            <h1>Quick Settings</h1>
         </div>
-        <div id="chat-quick-settings" class="row bg-color-white padding10">
-            <h2>Quick Settings</h2>
-            <div class="span4">
+        <div class="page-content">
+            <div class="span5">
                 <form id="historical-chat-form">
                     <fieldset>
                         <legend>Load past history</legend>
-                        <label>This will disable chat auto-refresh</label>
-                        <div class="input-control text">
-                            <input type="text" id="chat-date-input" name="chat-date" placeholder="Enter Date (DD/MM/YYYY)" />
-                            <button class="helper"></button>
+                        <label for="chat-date">This will disable chat auto-refresh</label>
+                        <input type="text" id="chat-date-input" name="chat-date" placeholder="Enter Date (DD/MM/YYYY)" />
+                        <div class="control-group">
+                            <button type="submit" id="load-archive" class="btn archive-btn">Load</button>
+                            <button type="button" id="save-archive" class="btn archive-btn">Save</button>
                         </div>
-                        <input type="submit" id="load-archive" class="archive-btn" value="Load"/>
-                        <input type="button" id="save-archive" class="archive-btn" value="Save"/>
                         <iframe id="download-chat-iframe" src="{{iframe_url}}" style="display:none"></iframe>
                     </fieldset>
                 </form>
             </div>
-            <div class="span6">
+            <div class="span7">
                 <div id="chat-settings"></div>
             </div>
         </div>
-        <div class="row padding10">
-            <div class="page-header">
-                <h1>Server Chat</h1>
-            </div>
+    </div>
+    <div class="row-fluid">
+        <div class="page-header">
+            <h1>Server Chat</h1>
         </div>
-        <div class="row padding10">
-            <div id="chat-contents" class="bg-color-blueLight row padding10 {{^show_server_msgs}}hide-server-msgs{{/show_server_msgs}}">
-                <ul id="chat-contents-ul"></ul>
-            </div>
+    </div>
+    <div class="row-fluid">
+        <div id="chat-contents" class="{{^show_server_msgs}}hide-server-msgs{{/show_server_msgs}}">
+            <ul id="chat-contents-ul"></ul>
         </div>
     </div>
 </script>
@@ -127,9 +167,9 @@
             <h1>Settings</h1>
         </div>
         <div class="page-region">
-            <div class="page-region-content">
-                <div id="chat-settings"></div>
-                <div id="server-settings"></div>
+            <div class="page-region-content row-fluid">
+                <div class="span6"><div id="chat-settings"></div></div>
+                <div class="span6"><div id="server-settings"></div></div>
             </div>
         </div>
     </div>
@@ -140,22 +180,17 @@
     <form id="chat-settings-form">
         <fieldset>
             <legend>Chat Display Settings</legend>
-            <label id="chat-auto-refresh-field" class="input-control switch">
-                <input data-field="auto_refresh" type="checkbox" {{#auto_refresh}}checked{{/auto_refresh}}>
-                <span class="helper">Auto-refresh</span>
+            <label id="chat-auto-refresh-field" class="checkbox">
+                <input data-field="auto_refresh" type="checkbox" {{#auto_refresh}}checked{{/auto_refresh}}> Auto-refresh
             </label>
-            <label id="chat-servers-msgs-field" class="input-control switch">
-                <input data-field="show_server_msgs" type="checkbox" {{#show_server_msgs}}checked{{/show_server_msgs}}>
-                <span class="helper">Show Server MSGs</span>
+            <label id="chat-servers-msgs-field" class="checkbox">
+                <input data-field="show_server_msgs" type="checkbox" {{#show_server_msgs}}checked{{/show_server_msgs}}> Show Server MSGs
             </label>
-            <div>
-                <label>Refresh Interval in Seconds</label>
-                <div id="chat-interval-field" class="input-control text">
-                    <input data-field="interval" type="text" value="{{interval}}"/>
-                    <button class="helper"></button>
-                </div>
+            <div class="control-group input-append">
+                <label for="chat-interval">Refresh Interval in Seconds</label>
+                <input id="chat-interval-field" name="chat-interval" data-field="interval" type="text" value="{{interval}}" class="input-block-level"/>
+                <button type="submit" class="btn btn-primary submit">Submit</button>
             </div>
-            <input type="submit" value="Submit" />
         </fieldset>
     </form>
 </script>
@@ -165,27 +200,30 @@
     <form id="server-settings-form">
         <fieldset>
             <legend>Connection Settings</legend>
-            <label>Server IP</label>
-            <div class="input-control text">
-                <input tabindex="1" name="ServerIP" data-field="server_ip" type="text" value="{{ServerIP}}"/>
-                <button class="helper"></button>
+            <div class="row-fluid">
+                <div class="control-group span6">
+                    <label for="ServerIP">Server IP</label>
+                    <input tabindex="1" name="ServerIP" data-field="server_ip" type="text" value="{{ServerIP}}" class="input-block-level"/>
+                    <label for="ServerPort">Server Port</label>
+                    <input tabindex="2" name="ServerPort" data-field="server_port" type="text" value="{{ServerPort}}" class="input-block-level"/>
+                </div>
+                <div class="control-group span6">
+                    <label for="Password">Server Password</label>
+                    <input tabindex="3" name="Password" data-field="server_password" type="text" value="{{Password}}" class="input-block-level"/>
+                    <label for="OldPassword">Old Server Password</label>
+                    <input tabindex="4" name="OldPassword" data-field="server_old_password" type="text" value="{{OldPassword}}" class="input-block-level"/>
+                </div>
             </div>
-            <label>Server Port</label>
-            <div class="input-control text">
-                <input tabindex="2" name="ServerPort" data-field="server_port" type="text" value="{{ServerPort}}"/>
-                <button class="helper"></button>
-            </div>
-            <label>Server Password</label>
-            <div class="input-control text">
-                <input tabindex="3" name="Password" data-field="server_password" type="text" value="{{Password}}"/>
-                <button class="helper"></button>
-            </div>
-            <label>Old Server Password</label>
-            <div class="input-control text">
-                <input tabindex="4" name="OldPassword" data-field="server_old_password" type="text" value="{{OldPassword}}"/>
-                <button class="helper"></button>
-            </div>
-            <input type="submit" value="Submit" />
+            <button type="submit" class="btn btn-primary submit">Submit</button>
         </fieldset>
     </form>
+</script>
+
+<script id="tpl_map_rotation" type="text/html">
+    <div class="page-header">
+        <h1>Map Rotation</h1>
+    </div>
+    <div class="page-content">
+        Map rotation page is here.. but empty! Whoops
+    </div>
 </script>
