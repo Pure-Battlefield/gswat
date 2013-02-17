@@ -39,7 +39,7 @@ namespace WebFrontend.Controllers
         public object Get(GetServerInfoModel getServerInfo)
         {
             // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
-            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+            ServerSettingsEntity settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
 
             var json = new JavaScriptSerializer();
 
@@ -114,7 +114,7 @@ namespace WebFrontend.Controllers
 
         public object Get(DateTimeInfoGetAll timestamp)
         {
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             var json = new JavaScriptSerializer();
             return json.Serialize(q);
         }
@@ -127,11 +127,11 @@ namespace WebFrontend.Controllers
             /*TODO: Note that this is still unsafe; while it is *highly unlikely* that two messages could be received in under a ms,
              * there still exists a race condition here, and a message may not be sent.  This should be fixed with sessions.  
             */
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             var constructedDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             constructedDateTime = constructedDateTime.AddMilliseconds(timestamp.DateTimeUnix);
 
-            List<ChatMessage> output =
+            List<ChatMessageEntity> output =
                 q.Where(chatMessage => (chatMessage.MessageTimeStamp - constructedDateTime).TotalMilliseconds >= 1)
                  .ToList();
 
@@ -144,12 +144,12 @@ namespace WebFrontend.Controllers
             try
             {
                 var temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
                 var stream = new MemoryStream();
                 var writer = new StreamWriter(stream);
 
-                foreach (ChatMessage message in q)
+                foreach (ChatMessageEntity message in q)
                 {
                     message.MessageType = message.MessageType.ToUpperInvariant();
                     foreach (var teamPair in Teams)
@@ -190,7 +190,7 @@ namespace WebFrontend.Controllers
             try
             {
                 var temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 var json = new JavaScriptSerializer();
                 Response.StatusCode = 200; // HttpStatusCode.OK
                 return json.Serialize(q);
@@ -199,7 +199,7 @@ namespace WebFrontend.Controllers
             {
                 var json = new JavaScriptSerializer();
                 Response.StatusCode = 500; // HttpStatusCode.Error
-                return json.Serialize(new List<ChatMessage>());
+                return json.Serialize(new List<ChatMessageEntity>());
             }
         }
 
