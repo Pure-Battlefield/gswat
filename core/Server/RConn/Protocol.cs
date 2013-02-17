@@ -91,21 +91,30 @@ namespace core.Server.RConn
                 words.Add(new Word(ex.Message));
                 serverDied.Words = words;
 
-                PacketEvent(serverDied);
+                if (PacketEvent != null)
+                {
+                    PacketEvent(serverDied);
+                }
                 return;
             }
         }
 
         private void HandleResponse(Packet packet)
         {
-            PacketEvent(packet);
+            if (PacketEvent != null) 
+            {
+                PacketEvent(packet);
+            }
         }
 
         private void HandleRequest(Packet packet)
         {
             //All requests we'll be getting for version .1 will be events.
             SendOkResponse(packet);
-            PacketEvent(packet);
+            if (PacketEvent != null)
+            {
+                PacketEvent(packet);
+            }
         }
 
         private Packet ReceivePacket()

@@ -2,7 +2,6 @@
 using core.Server.RConn;
 using core.Server.RConn.Commands;
 using System.Collections.Generic;
-using core.TableStoreEntities;
 
 namespace core.Server
 {
@@ -23,6 +22,7 @@ namespace core.Server
             RequestPackets = new Dictionary<uint, Packet>();
             RecognizedPacket.LoadScrapedData();
         }
+
         public override void Connect(string address, int port, string password)
         {
             RconProtocol = new Protocol(address, port, password);
@@ -37,10 +37,6 @@ namespace core.Server
             Password = password;
 
             RecognizedPacket.LoadScrapedData();
-            if (CommHandler != null)
-            {
-                CommHandler(this, e);
-            }
         }
 
         public override void Disconnect()
@@ -79,7 +75,7 @@ namespace core.Server
                     MessageEvents[args.FirstWord](this, formattedPacket);
                 }
             }
-            else if(args.IsResponse && RequestCallbacks.ContainsKey(args.SequenceNumber)) 
+            else if (args.IsResponse && RequestCallbacks.ContainsKey(args.SequenceNumber))
             {
                 Packet request = RequestPackets[args.SequenceNumber];
                 RequestCallbacks[args.SequenceNumber](this, RecognizedPacket.FormatResponsePacket(request, args));

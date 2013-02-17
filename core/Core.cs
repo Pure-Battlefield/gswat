@@ -9,7 +9,6 @@ using core.Logging;
 using core.Roles;
 using core.Roles.CoreRoleManager;
 using core.Server;
-using core.ServerInterface;
 using core.TableStoreEntities;
 
 namespace core
@@ -64,7 +63,7 @@ namespace core
             // Filter for server messages here - do not want the spam
             if (packet != null)
             {
-                ChatMessage msg = new ChatMessage(DateTime.UtcNow, packet["source soldier name"], packet["text"], packet["target players"]);
+                ChatMessageEntity msg = new ChatMessageEntity(DateTime.UtcNow, packet["source soldier name"], packet["text"], packet["target players"]);
                 if (msg.Speaker == "Server")
                 {
                     if (ServerMessages.ContainsKey(msg.Text))
