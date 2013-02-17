@@ -98,7 +98,7 @@
                         success: function (data) {
 							model.set({'update_msgs':false},{silent:true});
                             model.set({'auto_refresh':false});
-                            model.parse_msgs($.parseJSON(data));
+                            model.parse_msgs(data);
                         }
                     });
                 }
