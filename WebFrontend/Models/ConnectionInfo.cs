@@ -14,4 +14,9 @@ namespace WebFrontend.Models
         public string Password { get; set; }
         public string OldPassword { get; set; }
     }
+
+    [Route("/serverInfo/", "GET")]
+    public class GetServerInfoModel
+    {
+    }
 }

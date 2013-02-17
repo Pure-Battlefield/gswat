@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 using ServiceStack.ServiceInterface;
 using WebFrontend.Models;
 using core.ChatMessageUtilities;
+using core.TableStore;
 
 namespace WebFrontend.Controllers
 {
@@ -28,6 +29,19 @@ namespace WebFrontend.Controllers
             {
                 return json.Serialize(e.Message);
             }
+        }
+
+        /** Queries the Azure storage for the setting saved for the given Server
+         *  using the Core.LoadServerSettings() method. */
+
+        public object Get(GetServerInfoModel getServerInfo)
+        {
+            // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
+            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+
+            JavaScriptSerializer json = new JavaScriptSerializer();
+
+            return json.Serialize(new string[] { settings.Address, settings.Port.ToString() });
         }
     }
 
