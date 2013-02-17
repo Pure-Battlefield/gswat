@@ -12,4 +12,10 @@ namespace WebFrontend.Models
         public long DateTimeUnix  { get; set; }
         public String Action { get; set; }
     }
+
+    [Route("/messages/","GET")]
+    public class DateTimeInfoGetAll
+    {
+        
+    }
 }

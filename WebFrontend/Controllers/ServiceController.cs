@@ -105,6 +105,13 @@ namespace WebFrontend.Controllers
             return null;
         }
 
+        public object Get(DateTimeInfoGetAll timestamp)
+        {   
+            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            return json.Serialize(q);
+        }
+
         # region MessageFunctions
         public string GetAllMessagesFromTime(DateTimeInfo timestamp)
         {
