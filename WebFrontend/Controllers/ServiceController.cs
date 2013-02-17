@@ -10,8 +10,7 @@ using System.Web.Http;
 using System.Web.Script.Serialization;
 using ServiceStack.ServiceInterface;
 using WebFrontend.Models;
-using core.ChatMessageUtilities;
-using core.TableStore;
+using core.TableStoreEntities;
 
 namespace WebFrontend.Controllers
 {
