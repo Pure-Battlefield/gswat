@@ -5,29 +5,47 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using ServiceStack.ServiceInterface;
 using WebFrontend.Models;
 using core.ChatMessageUtilities;
+using core.TableStore;
 
 namespace WebFrontend.Controllers
 {
     public class ServerInfoService : Service
     {
-        public object Post(ConnectionInfo connection)
+        public object Put(ConnectionInfo connection)
         {
             var json = new JavaScriptSerializer();
 
             try
             {
+                Response.StatusCode = 200; // HttpStatusCode.OK
                 return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password,
                                                     connection.OldPassword));
+
             }
             catch (ArgumentException e)
             {
+                Response.StatusCode = 500; // HttpStatusCode.Error
                 return json.Serialize(e.Message);
             }
+        }
+
+        /** Queries the Azure storage for the setting saved for the given Server
+         *  using the Core.LoadServerSettings() method. */
+
+        public object Get(GetServerInfoModel getServerInfo)
+        {
+            // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
+            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+
+            JavaScriptSerializer json = new JavaScriptSerializer();
+
+            return json.Serialize(new string[] { settings.Address, settings.Port.ToString() });
         }
     }
 
@@ -89,6 +107,13 @@ namespace WebFrontend.Controllers
             }
 
             return null;
+        }
+
+        public object Get(DateTimeInfoGetAll timestamp)
+        {   
+            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            return json.Serialize(q);
         }
 
         # region MessageFunctions
@@ -161,11 +186,13 @@ namespace WebFrontend.Controllers
                 DateTime temp = new DateTime(dateTime.DateTimeUnix);
                 IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 JavaScriptSerializer json = new JavaScriptSerializer();
+                Response.StatusCode = 200; // HttpStatusCode.OK
                 return json.Serialize(q);
             }
             catch (Exception e)
             {
                 JavaScriptSerializer json = new JavaScriptSerializer();
+                Response.StatusCode = 500; // HttpStatusCode.Error
                 return json.Serialize(new List<ChatMessage>());
             }
         }
