@@ -164,9 +164,9 @@
             <h1>Settings</h1>
         </div>
         <div class="page-region">
-            <div class="page-region-content">
-                <div id="chat-settings"></div>
-                <div id="server-settings"></div>
+            <div class="page-region-content row-fluid">
+                <div class="span6"><div id="chat-settings"></div></div>
+                <div class="span6"><div id="server-settings"></div></div>
             </div>
         </div>
     </div>
@@ -185,7 +185,7 @@
             </label>
             <div class="control-group input-append">
                 <label for="chat-interval">Refresh Interval in Seconds</label>
-                <input id="chat-interval-field" name="chat-interval" data-field="interval" type="text" value="{{interval}}"/>
+                <input id="chat-interval-field" name="chat-interval" data-field="interval" type="text" value="{{interval}}" class="input-block-level"/>
                 <button type="submit" class="btn btn-primary submit">Submit</button>
             </div>
         </fieldset>
@@ -197,19 +197,19 @@
     <form id="server-settings-form">
         <fieldset>
             <legend>Connection Settings</legend>
-            <label for="ServerIP">Server IP</label>
-            <input tabindex="1" name="ServerIP" data-field="server_ip" type="text" value="{{ServerIP}}"/>
-            <div class="control-group">
-                <label for="ServerPort">Server Port</label>
-                <input tabindex="2" name="ServerPort" data-field="server_port" type="text" value="{{ServerPort}}"/>
-            </div>
-            <div class="control-group">
-                <label for="Password">Server Password</label>
-                <input tabindex="3" name="Password" data-field="server_password" type="text" value="{{Password}}"/>
-            </div>
-            <div class="control-group">
-                <label for="OldPassword">Old Server Password</label>
-                <input tabindex="4" name="OldPassword" data-field="server_old_password" type="text" value="{{OldPassword}}"/>
+            <div class="row-fluid">
+                <div class="control-group span6">
+                    <label for="ServerIP">Server IP</label>
+                    <input tabindex="1" name="ServerIP" data-field="server_ip" type="text" value="{{ServerIP}}" class="input-block-level"/>
+                    <label for="ServerPort">Server Port</label>
+                    <input tabindex="2" name="ServerPort" data-field="server_port" type="text" value="{{ServerPort}}" class="input-block-level"/>
+                </div>
+                <div class="control-group span6">
+                    <label for="Password">Server Password</label>
+                    <input tabindex="3" name="Password" data-field="server_password" type="text" value="{{Password}}" class="input-block-level"/>
+                    <label for="OldPassword">Old Server Password</label>
+                    <input tabindex="4" name="OldPassword" data-field="server_old_password" type="text" value="{{OldPassword}}" class="input-block-level"/>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary submit">Submit</button>
         </fieldset>
