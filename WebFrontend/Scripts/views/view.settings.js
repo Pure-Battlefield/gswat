@@ -62,10 +62,6 @@
 
             id: 'server-settings',
 
-            initialize: function () {
-                this.model.bind('change:settings_success', this.update_confirm());
-            },
-
             submit: function (event) {
                 event.preventDefault();
                 var form = this.$el.find('form').serializeArray();
@@ -74,12 +70,6 @@
                     values[input.name] = input.value;
                 });
                 this.model.update_settings(values);
-                values.settings_success = 3;
-                this.model.set(values, { silent: true });
-            },
-
-            update_confirm: function () {
-                console.log('success',this.model.get('settings_success'));
             },
 
             render: function () {
