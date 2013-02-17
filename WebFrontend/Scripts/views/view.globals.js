@@ -1,9 +1,7 @@
 (function(window, $, _, ich) {
     _.extend(window.GSWAT.prototype.view_definitions, {
         header: Backbone.View.extend({
-            events: {
-				'click .navbar a'	: 'set_active'
-            },
+            events: {},
 
             el: '#header',
 
