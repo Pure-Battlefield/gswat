@@ -16,7 +16,7 @@ namespace WebFrontend.Controllers
 {
     public class ServerInfoService : Service
     {
-        public object Post(ConnectionInfo connection)
+        public object Put(ConnectionInfo connection)
         {
             var json = new JavaScriptSerializer();
 
