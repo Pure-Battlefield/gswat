@@ -12,6 +12,7 @@
 			if(this.get('ServerIP') == ''){
 				this.get_settings();
 			}
+			this.on('change:Password',this.update_settings,this);
 		},
 
 		get_settings: function(){
@@ -38,8 +39,10 @@
 			});
 		},
 
-        update_settings: function (data) {
+        update_settings: function () {
             var model = this;
+			var data = this.model.getJSON();
+			delete data.server_settings_url;
             var chat_settings = PBF.get({model:{name:'chat_model'}});
             $.ajax({
                 type: 'PUT',

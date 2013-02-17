@@ -34,9 +34,9 @@
 
             submit: function (event) {
                 event.preventDefault();
-                var val = parseInt(this.$el.find('#chat-interval-field input').val());
+                var val = parseInt(this.$el.find('#chat-interval-field').val());
                 if (!isNaN(val)) {
-                    this.model.set({ 'interval': val });
+                    this.model.set({'interval':val});
                 } else {
                     // Not a number, do something
                 }
@@ -69,7 +69,7 @@
                 _.each(form, function (input) {
                     values[input.name] = input.value;
                 });
-                this.model.update_settings(values);
+                this.model.set(values);
             },
 
             render: function () {
