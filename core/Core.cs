@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using core.Logging;
+using core.Roles;
+using core.Roles.CoreRoleManager;
 using core.Server;
 using core.ServerInterface;
 using core.TableStoreEntities;
@@ -19,10 +23,11 @@ namespace core
         // Implements ICore
         public ICommHandler CommHandler { get; set; }
         public CloudTable MessageTable { get; set; }
-        public CloudTable LogTable { get; set; }
+        
         public CloudTable CredTable { get; set; }
-        public Queue<ChatMessage> MessageQueue { get; set; }
-        public Dictionary<string, DateTime> ServerMessages { get; set; } 
+        public Queue<ChatMessageEntity> MessageQueue { get; set; }
+        public Dictionary<string, DateTime> ServerMessages { get; set; }
+        public CoreRoleManager RoleManager { get; set; }
 
         /// <summary>
         ///     Constructs an instance of Core
@@ -33,23 +38,24 @@ namespace core
             CommHandler = new CommHandler();
             CommHandler.CoreListener += MessageHandler;
 
-            MessageQueue = new Queue<ChatMessage>();
+            MessageQueue = new Queue<ChatMessageEntity>();
             ServerMessages = new Dictionary<string, DateTime>();
 
-            // Create chatMessage table if it does not exist
+            // Connect to storage
             var storageAccount =
                 CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             var tableClient = storageAccount.CreateCloudTableClient();
+
+            // Create message table if it does not exist
             MessageTable = tableClient.GetTableReference("chatMessages");
             MessageTable.CreateIfNotExists();
-
-            // Create log table if it does not exist
-            LogTable = tableClient.GetTableReference("serverLogs");
-            LogTable.CreateIfNotExists();
 
             // Create cred table if it does not exist
             CredTable = tableClient.GetTableReference("serverSettings");
             CredTable.CreateIfNotExists();
+
+            // Create role manager if it does not exist
+            RoleManager = new CoreRoleManager();
         }
 
         // Implements ICore
@@ -96,7 +102,7 @@ namespace core
         /// Enqueues a message into both Table Store and the current cached queue
         /// </summary>
         /// <param name="msg"></param>
-        private void EnqueueMessage(ChatMessage msg)
+        private void EnqueueMessage(ChatMessageEntity msg)
         {
             try
             {
@@ -110,31 +116,31 @@ namespace core
             }
             catch (Exception e)
             {
-                Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
             }
         }
 
         // Implements ICore
-        public IEnumerable<ChatMessage> GetMessageQueue()
+        public IEnumerable<ChatMessageEntity> GetMessageQueue()
         {
-            return MessageQueue.ToList<ChatMessage>();
+            return MessageQueue.ToList();
         }
 
         // Implements ICore
-        public IEnumerable<ChatMessage> GetMoreMessages(int numMessages)
+        public IEnumerable<ChatMessageEntity> GetMoreMessages(int numMessages)
         {
             var query =
-                new TableQuery<ChatMessage>().Take(numMessages);
+                new TableQuery<ChatMessageEntity>().Take(numMessages);
             var output = MessageTable.ExecuteQuery(query).ToList();
             output.Reverse();
             return output;
         }
 
         // Implements ICore
-        public IEnumerable<ChatMessage> GetMessagesFromDate(DateTime date)
+        public IEnumerable<ChatMessageEntity> GetMessagesFromDate(DateTime date)
         {
             var query =
-                new TableQuery<ChatMessage>().Where(TableQuery.GenerateFilterCondition("PartitionKey",
+                new TableQuery<ChatMessageEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey",
                                                                                        QueryComparisons.Equal,
                                                                                        date.Date.ToString("yyyyMMdd")));
             var output = MessageTable.ExecuteQuery(query).ToList();
@@ -146,12 +152,12 @@ namespace core
         public String Connect(string address, int port, string password, string oldPass)
         {
             // Check for a last-saved connection - if present, oldPass must match
-            var Oldsettings = LoadServerSettings("Last", "Server");
+            var oldsettings = LoadServerSettings("Last", "Server");
 
-            if (Oldsettings != null)
+            if (oldsettings != null)
             {
                 // Only overwrite the last-saved connection if the passwords match
-                if (Oldsettings.Password == oldPass)
+                if (oldsettings.Password == oldPass)
                 {
                     try
                     {
@@ -163,66 +169,62 @@ namespace core
                         CommHandler.Connect(address, port, password);
 
                         // Update the "last server" entry in Table Store
-                        Oldsettings.Address = address;
-                        Oldsettings.Port = port;
-                        Oldsettings.Password = password;
-                        Oldsettings.PartitionKey = "Last";
-                        Oldsettings.RowKey = "Server";
-                        var updateOp = TableOperation.Replace(Oldsettings);
+                        oldsettings.Address = address;
+                        oldsettings.Port = port;
+                        oldsettings.Password = password;
+                        oldsettings.PartitionKey = "Last";
+                        oldsettings.RowKey = "Server";
+                        var updateOp = TableOperation.Replace(oldsettings);
                         CredTable.Execute(updateOp);
 
                         return "Connected to " + address;
                     }
                     catch (Exception e)
                     {
-                        Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
+                        LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
 
                         // Oops, the Connect failed - reconnect to our last known server
                         LoadExistingConnection();
                         throw new ArgumentException(e.Message);
                     }
                 }
-                else
-                {
-                    throw new ArgumentException("Old password was incorrect.");
-                }
+                throw new ArgumentException("Old password was incorrect.");
             }
-            else
+            try
             {
-                try
-                {
-                    // Disconnect from current server
-                    MessageQueue.Clear();
-                    CommHandler.Disconnect();
+                // Disconnect from current server
+                MessageQueue.Clear();
+                CommHandler.Disconnect();
                     
-                    // Attempt to connect to new server
-                    // If this fails, we do not change the last-saved connection
-                    CommHandler.Connect(address, port, password);
+                // Attempt to connect to new server
+                // If this fails, we do not change the last-saved connection
+                CommHandler.Connect(address, port, password);
 
-                    // Add the new "last server" entry in Table Store
-                    var settings = new ServerConfig(address, port, password);
-                    settings.PartitionKey = "Last";
-                    settings.RowKey = "Server";
-                    var insertOp = TableOperation.Insert(settings);
-                    CredTable.Execute(insertOp);
+                // Add the new "last server" entry in Table Store
+                var settings = new ServerSettingsEntity(address, port, password)
+                    {
+                        PartitionKey = "Last",
+                        RowKey = "Server"
+                    };
+                var insertOp = TableOperation.Insert(settings);
+                CredTable.Execute(insertOp);
 
-                    return "Connected to " + address;
-                }
-                catch (Exception e)
-                {
-                    Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
+                return "Connected to " + address;
+            }
+            catch (Exception e)
+            {
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
 
-                    // Oops, the Connect failed - reconnect to our last known server
-                    LoadExistingConnection();
-                    throw new ArgumentException(e.Message);
-                }
+                // Oops, the Connect failed - reconnect to our last known server
+                LoadExistingConnection();
+                throw new ArgumentException(e.Message);
             }
         }
 
         public void LoadExistingConnection()
         {
             // Check for a last-saved connection
-            ServerConfig settings = LoadServerSettings("Last", "Server");
+            ServerSettingsEntity settings = LoadServerSettings("Last", "Server");
 
             if (settings != null)
             {
@@ -231,7 +233,7 @@ namespace core
                     CommHandler.Connect(settings.Address, settings.Port, settings.Password);
                 }
                 catch (Exception e) {
-                    Log(System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
+                    LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
                 }
             }
         }
@@ -242,35 +244,16 @@ namespace core
         /// <param name="partitionKey">Partition key to query for</param>
         /// <param name="rowKey">Row key to query for</param>
         /// <returns>ServerConfig object containing server settings (or null if none was found)</returns>
-        public ServerConfig LoadServerSettings(String partitionKey, String rowKey)
+        public ServerSettingsEntity LoadServerSettings(String partitionKey, String rowKey)
         {
-            var retrieveOp = TableOperation.Retrieve<ServerConfig>(partitionKey, rowKey);
+            var retrieveOp = TableOperation.Retrieve<ServerSettingsEntity>(partitionKey, rowKey);
             var result = CredTable.Execute(retrieveOp);
 
             if (result.Result != null)
             {
-                return (ServerConfig)result.Result;
+                return (ServerSettingsEntity)result.Result;
             }
             return null;
-        }
-
-        /// <summary>
-        /// Log 
-        /// </summary>
-        /// <param name="funcName">Current function on the stack</param>
-        /// <param name="message">Message to log</param>
-        public void Log(String funcName, String message)
-        {
-            try
-            {
-                var msg = new LogMessage(DateTime.UtcNow, funcName, message);
-                var insertOp = TableOperation.Insert(msg);
-                LogTable.Execute(insertOp);
-            }
-            catch (Exception e)
-            {
-                // If we somehow reach this point, we have failed as software developers
-            }
         }
     }
 }

@@ -19,7 +19,6 @@ namespace core.Server
         // Directory of handlers for various message types.
         public Dictionary<string, MessageEventHandler> MessageEvents;
 
-
         public void Connect(string address, int port, string password)
         {
             RconProtocol = new Protocol(address, port, password);
@@ -35,7 +34,10 @@ namespace core.Server
 
         public void NotifyCommHandler(object sender, ChatEventArgs e)
         {
-            throw new NotImplementedException();
+            if (CommHandler != null)
+            {
+                CommHandler(this, e);
+            }
         }
 
         public void Disconnect()
@@ -76,7 +78,7 @@ namespace core.Server
             if (OnChat.IsOnChat(args))
             {
                 var chat = new OnChat(args);
-                var message = new ChatMessage
+                var message = new ChatMessageEntity
                     {
                         MessageTimeStamp = DateTime.UtcNow,
                         Text = chat.Text,
