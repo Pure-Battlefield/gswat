@@ -56,8 +56,15 @@
 		},
 
 		render_map_rotation: function(){
-			var map_rotation = PBG.get({view:{name:'map_rotation'}});
-			PBF.render(map_rotation);
+			var files = [
+				PBF.CDN + 'Scripts/models/model.server.js',
+				PBF.CDN + 'Scripts/models/model.map-rotation.js',
+				PBF.CDN + 'Scripts/views/view.map-rotation.js'
+			];
+			PBF.load(files,function(){
+				var map_rotation = PBF.get({view:{name:'map_rotation'},model:{name:'map_rotation'}});
+				PBF.render(map_rotation);
+			});
 		},
 
 		routes: {
