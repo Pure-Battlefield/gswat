@@ -186,11 +186,13 @@ namespace WebFrontend.Controllers
                 DateTime temp = new DateTime(dateTime.DateTimeUnix);
                 IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 JavaScriptSerializer json = new JavaScriptSerializer();
+                Response.StatusCode = 200; // HttpStatusCode.OK
                 return json.Serialize(q);
             }
             catch (Exception e)
             {
                 JavaScriptSerializer json = new JavaScriptSerializer();
+                Response.StatusCode = 500; // HttpStatusCode.Error
                 return json.Serialize(new List<ChatMessage>());
             }
         }
