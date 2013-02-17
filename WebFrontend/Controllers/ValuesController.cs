@@ -58,7 +58,7 @@ namespace WebFrontend.Controllers
         [ActionName("GetAllMessages")]
         public string GetAllMessages()
         {
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             JavaScriptSerializer json = new JavaScriptSerializer();
             return json.Serialize(q);
         }
@@ -88,7 +88,7 @@ namespace WebFrontend.Controllers
             try
             {
                 DateTime temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
                 MemoryStream stream = new MemoryStream();
                 StreamWriter writer = new StreamWriter(stream);
@@ -136,14 +136,14 @@ namespace WebFrontend.Controllers
             try
             {
                 DateTime temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 JavaScriptSerializer json = new JavaScriptSerializer();
                 return json.Serialize(q);
             }
             catch (Exception e)
             {
                 JavaScriptSerializer json = new JavaScriptSerializer();
-                return json.Serialize(new List<ChatMessage>());
+                return json.Serialize(new List<ChatMessageEntity>());
             }
         }
 
@@ -156,7 +156,7 @@ namespace WebFrontend.Controllers
             {
                 return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword));
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 return json.Serialize(e.Message);
             }

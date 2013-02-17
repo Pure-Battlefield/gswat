@@ -79,25 +79,33 @@ namespace core.Server.RConn
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 PacketFormat format = ValidRequestFormats[name];
 
-                // Is this a special packet, using variable length parameters?
-                if (packet.WordCount - 1 > format.Parameters.Count && format.Parameters.Count > 0)
-                {
-                    parameters[format.Parameters[0].Name] = "";
-                    foreach (Word word in packet.Words)
-                    {
-                        parameters[format.Parameters[0].Name] += new string(word.Content);
-                    }
-
-                    return parameters;
-                }
-                else if (packet.WordCount - 1 > format.Parameters.Count && format.Parameters.Count == 0)
+                if (packet.WordCount - 1 > format.Parameters.Count && format.Parameters.Count == 0)
                 {
                     throw new ArgumentException("Unknown variable packet format.");
                 }
 
-                for (int i = 1; i < packet.WordCount; i++)
+                Stack<string> keys = new Stack<string>(format.Parameters.Select(p => p.Name).Reverse());
+                Stack<string> words = new Stack<string>(packet.Words.Skip(1).Select(w => new String(w.Content)).Reverse());
+
+                while (keys.Count > 0 && words.Count > 0)
                 {
-                    parameters[format.Parameters[i - 1].Name] = new string(packet.Words[i].Content);
+                    string key = keys.Pop();
+                    string word = words.Pop();
+
+                    if (parameters.ContainsKey(key))
+                    {
+                        parameters[key] += word;
+                    }
+                    else
+                    {
+                        parameters[key] = word;
+                    }
+
+                    //Multi word final parameter
+                    if (keys.Count == 0 && words.Count > 0)
+                    {
+                        keys.Push(key);
+                    }
                 }
 
                 parameters["packet.Name"] = packet.FirstWord;
