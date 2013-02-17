@@ -3,7 +3,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace core.TableStoreEntities
 {
-    public class ServerConfig : TableEntity
+    public class ServerSettingsEntity : TableEntity
     {
         private String _address;
         private int _port;
@@ -28,16 +28,18 @@ namespace core.TableStoreEntities
 
         public string Password { get; set; }
 
-        public ServerConfig(String address, int port, String password)
+        public ServerSettingsEntity(String address, int port, String password)
         {
             Address = address;
             Port = port;
             Password = password;
         }
 
-        public ServerConfig()
+        public ServerSettingsEntity()
         {
-            
+            Address = "";
+            Port = 0;
+            Password = "";
         }
     }
 }
