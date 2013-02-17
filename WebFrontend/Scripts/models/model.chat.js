@@ -22,6 +22,7 @@
             this.on('change:auto_refresh', this.set_interval, this);
             this.on('change:interval', this.set_interval, this);
             this.on('change:server_set', this.set_interval, this);
+            this.on('change:intervalFetch', this.clear_interval, this);
         },
 
         get_msgs: function () {
@@ -46,21 +47,23 @@
 
         set_interval: function () {
             this.clear_interval();
+			var model = this;
             if(this.get('server_set')){
-                var _update = _.bind(function () {
-                    if (this.get('server_set') && this.get('auto_refresh')) {
-                        this.get_msgs();
-                        var interval = this.get('interval') * 1000;
-                        this._intervalFetch = window.setTimeout(_update, interval);
-                    }
-                }, this);
-                _update();
+				var interval = this.get('interval') * 1000;
+                var _update = function(){
+                    if (model.get('server_set') && model.get('auto_refresh')) {
+						model.get_msgs();
+                    } else {
+						model.clear_interval();
+					}
+                };
+				window.fetchChat = window.setInterval(_update, interval);
             }
         },
 
         clear_interval: function () {
-            window.clearTimeout(this._intervalFetch);
-            delete this._intervalFetch;
+            window.clearInterval(window.fetchChat);
+            delete window.fetchChat;
         },
 
         parse_msgs: function (data) {
