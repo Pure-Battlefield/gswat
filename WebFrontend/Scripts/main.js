@@ -106,27 +106,31 @@ _.extend(window, {
         create_view: function(view_data,model_data,collection_data){
             var name = view_data.name;
             var view = this.view_definitions[name];
-            if(view_data.options){
-                _.each(view_data.options,function(value,option){
-                    view[option] = value;
-                });
-            }
-            var model = model_data && !(model_data instanceof Backbone.Model) ? this.get_model(model_data) : model_data;
-            var collection = collection_data && !(collection_data instanceof Backbone.Collection) ? this.get_collection(collection_data) : collection_data;
-            view = view ? this.view_instances[name] = new view({model: model,collection: collection}) : '';
-			this.view_instances[name].listenTo(this.view_instances[name],'remove',_.bind(function(){
-				var model = this.view_instances[name].model;
-				var collection = this.view_instances[name].collection;
-				if(model){
-					model.destroy();
+			if(!_.isUndefined(view)){
+				if(view_data.options){
+					_.each(view_data.options,function(value,option){
+						view[option] = value;
+					});
 				}
-				if(collection){
-					collection.destroy();
-				}
-				delete this.view_instances[name]
-            },this));
-            view.name = name;
-            return view;
+				var model = model_data && !(model_data instanceof Backbone.Model) ? this.get_model(model_data) : model_data;
+				var collection = collection_data && !(collection_data instanceof Backbone.Collection) ? this.get_collection(collection_data) : collection_data;
+				view = view ? this.view_instances[name] = new view({model: model,collection: collection}) : '';
+				this.view_instances[name].listenTo(this.view_instances[name],'remove',_.bind(function(){
+					var model = this.view_instances[name].model;
+					var collection = this.view_instances[name].collection;
+					if(model){
+						model.destroy();
+					}
+					if(collection){
+						collection.destroy();
+					}
+					delete this.view_instances[name]
+				},this));
+				view.name = name;
+				return view;
+			} else {
+				throw new Error('Definition "' + name + '" of type "view" not found');
+			}
         },
 
         get: function(object){

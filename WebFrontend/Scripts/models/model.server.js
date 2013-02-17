@@ -5,15 +5,37 @@
             'Password'              : '',
             'ServerPort'            : '',
             'OldPassword'           : '',
-            'server_settings_url'   : '/api/values/setserverinfo',
-            'settings_success'      : 3
+            'server_settings_url'   : '/api/serverInfo'
         },
+
+		get_settings: function(){
+			var model = this;
+			$.ajax({
+				type: 'GET',
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Content-type', 'application/json')
+				},
+				contentType: 'application/json; charset=utf-8',
+				url: model.get('server_settings_url'),
+				dataType: 'json',
+				success: function (data) {
+					var settings = {};
+					_.each(data,function(value,key){
+						settings[key] = value;
+					});
+					model.set(settings);
+				},
+				error: function (error) {
+					PBF.alert({type:'error',title:'An error occurred',message:error});
+				}
+			});
+		},
 
         update_settings: function (data) {
             var model = this;
             var chat_settings = PBF.get({model:{name:'chat_model'}});
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Content-type', 'application/json')
 				},
@@ -22,12 +44,12 @@
                 data: JSON.stringify(data),
                 dataType: 'json',
                 success: function (success) {
-                    model.set({ 'settings_success': 1 });
-                    chat_settings.set({ 'server_set': true });
+					PBF.alert({type:'success',title:'Success!',message:'Settings saved!'});
+                    chat_settings.set({'server_set':true});
                 },
                 error: function (error) {
-                    model.set({ 'settings_success': 0 });
-                    chat_settings.set({ 'server_set': false });
+					PBF.alert({type:'error',title:'An error occurred',message:error});
+                    chat_settings.set({'server_set':false});
                 }
             });
         }
