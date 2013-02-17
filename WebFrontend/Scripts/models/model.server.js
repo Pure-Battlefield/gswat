@@ -41,7 +41,7 @@
 
         update_settings: function () {
             var model = this;
-			var data = this.model.getJSON();
+			var data = this.toJSON();
 			delete data.server_settings_url;
             var chat_settings = PBF.get({model:{name:'chat_model'}});
             $.ajax({
