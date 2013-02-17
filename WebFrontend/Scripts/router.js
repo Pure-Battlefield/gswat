@@ -4,7 +4,9 @@
 			var header = PBF.get({view:{name:'header'},model:{name:'header'}});
 			var footer = PBF.get({view:{name:'footer'},model:{name:'footer'}});
 
-			header.set_active(Backbone.History.prototype.getHash(window));
+			this.on('route',function(){
+				header.set_active(Backbone.History.prototype.getHash(window));
+			});
 		},
 
 		render_home: function(){
