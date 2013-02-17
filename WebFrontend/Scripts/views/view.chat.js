@@ -18,6 +18,8 @@
                 this.subviews = {};
                 this.subviews.chat_messages = PBF.get({view:{name:'chat_messages'},model:this.model});
                 this.subviews.chat_settings = PBF.get({view:{name:'chat_settings'},model:this.model});
+				this.server_model = PBF.get({model:{name:'server_model'}});
+				this.server_model.on('change:ServerIP',this.update_info,this);
             },
 
             quick_settings: function (event) {
@@ -30,6 +32,10 @@
                 event.preventDefault();
                 this.model.get_msgs();
             },
+
+			update_info: function(){
+				this.$el.find('#server-ip').text(this.server_model.get('ServerIP'));
+			},
 
             render_iframe: function () {
                 this.render();
@@ -50,7 +56,10 @@
             },
 
             render: function () {
-                this.$el.html(ich.tpl_chat(this.model.toJSON()));
+				var data = this.model.toJSON();
+				var server = this.server_model.toJSON();
+				_.extend(data,server);
+				this.$el.html(ich.tpl_chat(data));
                 this.delegateEvents(); // TODO: Properly fix this event issue
                 this.render_sub_views();
             },
