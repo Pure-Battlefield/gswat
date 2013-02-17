@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using System.Collections.Generic;
+using core.Logging;
 using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
@@ -85,6 +87,8 @@ namespace core.Server.RConn
             }
             catch (SocketException ex)
             {
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, ex.Message);
+
                 Packet serverDied = new Packet();
                 List<Word> words = new List<Word>();
                 words.Add(new Word("SocketException"));
