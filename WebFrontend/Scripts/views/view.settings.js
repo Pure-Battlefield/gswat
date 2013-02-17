@@ -69,7 +69,7 @@
                 _.each(form, function (input) {
                     values[input.name] = input.value;
                 });
-                this.model.update_settings(values);
+                this.model.set(values);
             },
 
             render: function () {
