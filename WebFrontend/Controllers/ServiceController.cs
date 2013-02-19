@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Script.Serialization;
+using ServiceStack.Common.Web;
+using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using WebFrontend.Models;
 using core.TableStoreEntities;
@@ -106,42 +108,40 @@ namespace WebFrontend.Controllers
             Squads.Add("SQUAD26", " ZULU");
         }
 
-        public object Post(DateTimeInfo timestamp)
+        public object Get(DateTimeInfo timestamp)
         {
+            timestamp.Action = timestamp.Action.ToLower();
             switch (timestamp.Action)
             {
-                case ("GetFromTime"):
+                case ("getfromtime"):
                     return GetAllMessagesFromTime(timestamp);
-                    break;
-                case ("Download"):
+                case ("downloadbyday"):
                     return DownloadByDay(timestamp);
-                    break;
-                case ("GetByDay"):
+                case ("getbyday"):
                     return GetByDay(timestamp);
-                    break;
-            }
+                default:
+                    return GetAllMessages();
 
-            return null;
+            }
         }
 
-        public object Get(DateTimeInfoGetAll timestamp)
+        # region MessageFunctions
+
+        public string GetAllMessages()
         {
             IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             var json = new JavaScriptSerializer();
             return json.Serialize(q);
         }
 
-        # region MessageFunctions
-
-        public string GetAllMessagesFromTime(DateTimeInfo timestamp)
+        public string GetAllMessagesFromTime(DateTimeInfo dateTime)
         {
             /*timestamp is a unix timestamp of milliseconds since the epoch.*/
             /*TODO: Note that this is still unsafe; while it is *highly unlikely* that two messages could be received in under a ms,
              * there still exists a race condition here, and a message may not be sent.  This should be fixed with sessions.  
             */
             IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
-            var constructedDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            constructedDateTime = constructedDateTime.AddMilliseconds(timestamp.DateTimeUnix);
+            var constructedDateTime = UnixTimeStampToDateTime(dateTime.DateTimeUnix);
 
             List<ChatMessageEntity> output =
                 q.Where(chatMessage => (chatMessage.MessageTimeStamp - constructedDateTime).TotalMilliseconds >= 1)
@@ -151,12 +151,12 @@ namespace WebFrontend.Controllers
             return json.Serialize(output);
         }
 
-        public HttpResponseMessage DownloadByDay(DateTimeInfo dateTime)
+        public IHttpResult DownloadByDay(DateTimeInfo dateTime)
         {
             try
             {
-                var temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                var timestamp = UnixTimeStampToDateTime(dateTime.DateTimeUnix);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(timestamp);
                 const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
                 var stream = new MemoryStream();
                 var writer = new StreamWriter(stream);
@@ -181,19 +181,17 @@ namespace WebFrontend.Controllers
                 writer.Flush();
                 stream.Position = 0;
 
-                var result = new HttpResponseMessage(HttpStatusCode.OK);
-                result.Content = new StreamContent(stream);
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-                var disposition = new ContentDispositionHeaderValue("attachment");
-                disposition.FileName = string.Format("{0}.txt", temp.ToString("yyyyMMdd"));
+                
+                var response = new HttpResult(stream, "text/plain");
+                response.Headers.Add("Content-Disposition", string.Format("attachment; filename={0}.txt", 
+                    timestamp.ToString("yyyyMMdd")));
 
-                result.Content.Headers.ContentDisposition = disposition;
-
-                return result;
+                return response;
             }
             catch (Exception e)
             {
-                return new HttpResponseMessage(HttpStatusCode.NoContent);
+                return new HttpResult(
+                    HttpStatusCode.NoContent, "Date not valid");
             }
         }
 
@@ -201,7 +199,7 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                var temp = new DateTime(dateTime.DateTimeUnix);
+                var temp = UnixTimeStampToDateTime(dateTime.DateTimeUnix);
                 IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 var json = new JavaScriptSerializer();
                 Response.StatusCode = 200; // HttpStatusCode.OK
@@ -213,6 +211,16 @@ namespace WebFrontend.Controllers
                 Response.StatusCode = 500; // HttpStatusCode.Error
                 return json.Serialize(new List<ChatMessageEntity>());
             }
+        }
+
+        #endregion
+
+        #region Service Functions
+
+        public static DateTime UnixTimeStampToDateTime(long unixTimeStamp)
+        {
+            var dtDateTime = new DateTime(1970,1,1,0,0,0,0);
+            return dtDateTime.AddMilliseconds( unixTimeStamp );
         }
 
         #endregion

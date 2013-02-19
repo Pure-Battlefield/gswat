@@ -6,16 +6,10 @@ using ServiceStack.ServiceHost;
 
 namespace WebFrontend.Models
 {
-    [Route("/messages/","POST")]
+    [Route("/messages/","GET")]
     public class DateTimeInfo
     {
         public long DateTimeUnix  { get; set; }
         public String Action { get; set; }
-    }
-
-    [Route("/messages/","GET")]
-    public class DateTimeInfoGetAll
-    {
-        
     }
 }
