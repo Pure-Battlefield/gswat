@@ -78,12 +78,14 @@
         get_old_msgs: function () {
             var model = this;
             var date = moment(this.get('archive_date'),'MM/DD/YYYY').valueOf();
-			var data = {DateTimeUnix:date,Action:'DownloadByDay'};
+			var data = {DateTimeUnix:date};
 			var url = this.get('url');
             if (date) {
                 if (model.get('save_archive')) {
-                    model.set({iframe_url:url + $.param(data)});
+					data.Action = 'DownloadByDay';
+					model.set({iframe_url:url + $.param(data)});
                 } else {
+					data.Action = 'GetByDay';
 					this.set({'update_msgs':false},{silent:true});
 					this.set({'auto_refresh':false});
                     this.clear_interval();
