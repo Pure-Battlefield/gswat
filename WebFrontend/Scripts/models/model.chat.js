@@ -32,12 +32,8 @@
 			this.set({'new_msgs':''}, { silent: true });
             $.ajax({
                 url:url,
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Content-type', 'application/json')
-				},
-				contentType: 'application/json; charset=utf-8',
-				type: 'POST',
-				data: JSON.stringify(data),
+				type: 'GET',
+				data: data,
 				dataType: 'json',
                 success: function(data){
                     model.parse_msgs(data);
