@@ -44,7 +44,8 @@ Once you've got it published, go to your [Windows Azure Storage](https://manage.
 * Windows Azure
  
 #####Backend Code
-* C# .NET4.5 MVC3 on the backend
+* C# .NET4.5 MVC4 on the backend
+* ServiceStack for RESTful API endpoints
 
 #####Frontend Code
 * Backbone
@@ -53,5 +54,6 @@ Once you've got it published, go to your [Windows Azure Storage](https://manage.
 * LESS
 * ICanHaz (modified)
 * Mustache
-* Metro UI CSS
+* Moment JS
+* Twitter Bootstrap
 * YepNope

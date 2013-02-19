@@ -34,11 +34,12 @@
 
             submit: function (event) {
                 event.preventDefault();
-                var val = parseInt(this.$el.find('#chat-interval-field input').val());
-                if (!isNaN(val)) {
-                    this.model.set({ 'interval': val });
+                var val = parseInt(this.$el.find('#chat-interval-field').val());
+                if (!isNaN(val) && val >= 1) {
+                    this.model.set({'interval':val});
+					PBF.alert({type:'success',title:'Success:',message:'Interval updated!'});
                 } else {
-                    // Not a number, do something
+					PBF.alert({type:'error',title:'Error:',message:'Please only enter a valid number bigger or equal to 1'});
                 }
             },
 
@@ -47,6 +48,7 @@
                 var val = {};
                 val[ele.attr('data-field')] = ele.is(':checked');
                 this.model.set(val);
+				PBF.alert({type:'success',title:'Success:',message:'Setting updated!'});
             },
 
             render: function () {
@@ -62,25 +64,26 @@
 
             id: 'server-settings',
 
-            initialize: function () {
-                this.model.bind('change:settings_success', this.update_confirm());
-            },
+			initialize: function(){
+				this.model.on('update_complete',this.toggle_submit,this);
+			},
 
             submit: function (event) {
                 event.preventDefault();
-                var form = this.$el.find('form').serializeArray();
-                var values = {};
-                _.each(form, function (input) {
-                    values[input.name] = input.value;
-                });
-                this.model.update_settings(values);
-                values.settings_success = 3;
-                this.model.set(values, { silent: true });
+				if(!$(event.currentTarget).hasClass('disabled')){
+					this.toggle_submit();
+					var form = this.$el.find('form').serializeArray();
+					var values = {};
+					_.each(form, function (input) {
+						values[input.name] = input.value;
+					});
+					this.model.set(values).trigger('submit');
+				}
             },
 
-            update_confirm: function () {
-                console.log('success',this.model.get('settings_success'));
-            },
+			toggle_submit: function(){
+				this.$el.find('button.submit').toggleClass('disabled');
+			},
 
             render: function () {
                 this.$el.html(ich.tpl_server_settings(this.model.toJSON()));

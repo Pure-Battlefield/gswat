@@ -121,7 +121,8 @@ namespace core.Server.RConn
             var result = new Packet
                 {
                     OrigininatesFromClient = (sequenceNumber & 0x80000000) > 0,
-                    IsResponse = (sequenceNumber & 0x40000000) > 0
+                    IsResponse = (sequenceNumber & 0x40000000) > 0,
+                    SequenceNumber = sequenceNumber
                 };
 
             int offset = 12;
@@ -130,6 +131,11 @@ namespace core.Server.RConn
                 Word word = bytes.BytesToWord(offset);
                 offset += (int) word.Size + 5; //Include the null terminator and the size int
                 result.Words.Add(word);
+            }
+
+            if (result.FirstWord == "OK" && result.IsRequest)
+            {
+                offset = 0;
             }
 
             return result;

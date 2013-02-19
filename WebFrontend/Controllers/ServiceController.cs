@@ -5,13 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
-using System.Web.Http;
 using System.Web.Script.Serialization;
 using ServiceStack.ServiceInterface;
 using WebFrontend.Models;
-using core.ChatMessageUtilities;
-using core.TableStore;
+using core.TableStoreEntities;
 
 namespace WebFrontend.Controllers
 {
@@ -24,9 +21,10 @@ namespace WebFrontend.Controllers
             try
             {
                 Response.StatusCode = 200; // HttpStatusCode.OK
-                return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password,
-                                                    connection.OldPassword));
-
+                return
+                    json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort,
+                                                                       connection.Password,
+                                                                       connection.OldPassword));
             }
             catch (ArgumentException e)
             {
@@ -41,18 +39,35 @@ namespace WebFrontend.Controllers
         public object Get(GetServerInfoModel getServerInfo)
         {
             // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
-            ServerConfig settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+            ServerSettingsEntity settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
 
-            JavaScriptSerializer json = new JavaScriptSerializer();
+            var json = new JavaScriptSerializer();
 
-            return json.Serialize(new string[] { settings.Address, settings.Port.ToString() });
+            if (settings != null)
+            {
+                return
+                    json.Serialize(new Dictionary<String, String>
+                        {
+                            {"ServerIP", settings.Address},
+                            {"ServerPort", settings.Port.ToString()}
+                        });
+            }
+            else
+            {
+                return
+                    json.Serialize(new Dictionary<String, String>
+                        {
+                            {"ServerIP", ""},
+                            {"ServerPort", ""}
+                        });
+            }
         }
     }
 
     public class MessagesService : Service
     {
         private static readonly Dictionary<string, string> Squads;
-        private static readonly Dictionary<string, string> Teams; 
+        private static readonly Dictionary<string, string> Teams;
 
         static MessagesService()
         {
@@ -89,8 +104,8 @@ namespace WebFrontend.Controllers
             Squads.Add("SQUAD24", " XRAY");
             Squads.Add("SQUAD25", " YANKEE");
             Squads.Add("SQUAD26", " ZULU");
-
         }
+
         public object Post(DateTimeInfo timestamp)
         {
             switch (timestamp.Action)
@@ -110,24 +125,27 @@ namespace WebFrontend.Controllers
         }
 
         public object Get(DateTimeInfoGetAll timestamp)
-        {   
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
-            JavaScriptSerializer json = new JavaScriptSerializer();
+        {
+            IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            var json = new JavaScriptSerializer();
             return json.Serialize(q);
         }
 
         # region MessageFunctions
+
         public string GetAllMessagesFromTime(DateTimeInfo timestamp)
         {
             /*timestamp is a unix timestamp of milliseconds since the epoch.*/
             /*TODO: Note that this is still unsafe; while it is *highly unlikely* that two messages could be received in under a ms,
              * there still exists a race condition here, and a message may not be sent.  This should be fixed with sessions.  
             */
-            var q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             var constructedDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             constructedDateTime = constructedDateTime.AddMilliseconds(timestamp.DateTimeUnix);
 
-            var output = q.Where(chatMessage => (chatMessage.MessageTimeStamp - constructedDateTime).TotalMilliseconds >= 1).ToList();
+            List<ChatMessageEntity> output =
+                q.Where(chatMessage => (chatMessage.MessageTimeStamp - constructedDateTime).TotalMilliseconds >= 1)
+                 .ToList();
 
             var json = new JavaScriptSerializer();
             return json.Serialize(output);
@@ -137,13 +155,13 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                DateTime temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                var temp = new DateTime(dateTime.DateTimeUnix);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
-                MemoryStream stream = new MemoryStream();
-                StreamWriter writer = new StreamWriter(stream);
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
 
-                foreach (var message in q)
+                foreach (ChatMessageEntity message in q)
                 {
                     message.MessageType = message.MessageType.ToUpperInvariant();
                     foreach (var teamPair in Teams)
@@ -163,7 +181,7 @@ namespace WebFrontend.Controllers
                 writer.Flush();
                 stream.Position = 0;
 
-                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new StreamContent(stream);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
                 var disposition = new ContentDispositionHeaderValue("attachment");
@@ -183,17 +201,17 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                DateTime temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
-                JavaScriptSerializer json = new JavaScriptSerializer();
+                var temp = new DateTime(dateTime.DateTimeUnix);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                var json = new JavaScriptSerializer();
                 Response.StatusCode = 200; // HttpStatusCode.OK
                 return json.Serialize(q);
             }
             catch (Exception e)
             {
-                JavaScriptSerializer json = new JavaScriptSerializer();
+                var json = new JavaScriptSerializer();
                 Response.StatusCode = 500; // HttpStatusCode.Error
-                return json.Serialize(new List<ChatMessage>());
+                return json.Serialize(new List<ChatMessageEntity>());
             }
         }
 
