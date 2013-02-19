@@ -2,7 +2,7 @@
     var chat_model = Backbone.Model.extend({
         defaults : {
             'auto_refresh'      : true,
-            'url'               : '/api/messages',
+            'url'               : '/api/messages/',
             'interval'          : 1,
             'fetch_interval'    : {},
             'show_server_msgs'  : true,
@@ -77,30 +77,22 @@
 
         get_old_msgs: function () {
             var model = this;
-            var date = this.get('archive_date').split('/');
+            var date = moment(this.get('archive_date'),'MM/DD/YYYY').valueOf();
+			var data = {DateTimeUnix:date,Action:'DownloadByDay'};
 			var url = this.get('url');
-            if (date.length === 3) {
-                date = {
-                    Day: date[1],
-                    Month: date[0],
-                    Year: date[2]
-                };
+            if (date) {
                 if (model.get('save_archive')) {
-                    model.set({iframe_url:url + $.param(date)});
+                    model.set({iframe_url:url + $.param(data)});
                 } else {
-                    model.clear_interval();
+					this.set({'update_msgs':false},{silent:true});
+					this.set({'auto_refresh':false});
+                    this.clear_interval();
                     $.ajax({
-                        type: 'POST',
-						beforeSend: function (xhr) {
-							xhr.setRequestHeader('Content-type', 'application/json')
-						},
-						contentType: 'application/json; charset=utf-8',
+                        type: 'GET',
                         url: url,
                         dataType: 'json',
-                        data: JSON.stringify(date),
+                        data: data,
                         success: function (data) {
-							model.set({'update_msgs':false},{silent:true});
-                            model.set({'auto_refresh':false});
                             model.parse_msgs(data);
                         }
                     });

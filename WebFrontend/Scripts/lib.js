@@ -27,10 +27,15 @@ _.extend(window,{
                         var p = new RegExp(re1 + re2 + re3, ["i"]);
                         var m = p.exec(message.MessageType);
                         if (m != null) {
-                            squad_name=m[1].toUpperCase()+m[2];
+                            var squad_name=m[1].toUpperCase()+m[2];
                             message.SquadName = _.find(squads, function (squad) {
                                 return squad[0] == squad_name;
-                            })[1];
+                            });
+							if(message.SquadName == undefined){
+								message.SquadName = squad_name;
+							} else {
+								message.SquadName = message.SquadName[1];
+							}
                         }
 
                         // Match on Team
