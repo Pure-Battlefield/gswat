@@ -26,6 +26,7 @@
                 event.preventDefault();
 				$(event.currentTarget).parent('li').toggleClass('active');
                 this.$el.find('#chat-quick-settings').toggle();
+				this.$el.find('#chat-date-input').datepicker();
             },
 
             force_refresh: function (event) {
@@ -38,7 +39,7 @@
 			},
 
             render_iframe: function () {
-                this.render();
+                this.$el.find('#download-chat-iframe').prop('src',this.model.get('iframe_url'));
                 this.model.set({iframe_url:''},{silent:true});
             },
 
@@ -52,6 +53,9 @@
                 var date = { archive_date: this.$el.find('#chat-date-input').val(), save_archive: save };
                 if (date.archive_date != '') {
                     this.model.set(date);
+					if(!save){
+						this.subviews.chat_messages.$el.empty();
+					}
                 }
             },
 
@@ -81,6 +85,10 @@
             initialize: function () {
                 this.model.on("change:new_msgs", this.render, this);
             },
+
+			empty: function(){
+				this.$el.empty();
+			},
 
             render: function () {
 				var ele = $("#chat-contents");
