@@ -56,7 +56,9 @@
 					if(!save){
 						this.subviews.chat_messages.$el.empty();
 					}
-                }
+                } else {
+					PBF.alert({type:'error',title:'Error:',message:'You must enter a valid date (MM/DD/YYYY)'});
+				}
             },
 
             render: function () {
