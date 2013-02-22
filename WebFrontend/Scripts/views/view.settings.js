@@ -6,20 +6,21 @@
             initialize: function () {
                 this.subviews = {};
                 this.subviews.server_settings_view = PBF.get({view:{name:'server_settings'},model:{name:'server_model'}});
-                this.subviews.chat_settings = PBF.get({view:{name:'chat_settings'},model:{name:'chat_model'}});
+				var chat_model = PBF.get({model:{name:'chat_model'}});
+                this.subviews.chat_settings = PBF.get({view:{name:'chat_settings'},model:chat_model});
             },
 
             render: function () {
                 this.$el.html(ich.tpl_settings());
                 this.render_sub_views();
-                this.delegateEvents(); // TODO: Properly fix this event issue
+                this.delegateEvents();
             },
 
             render_sub_views: function () {
                 var view = this;
                 _.each(view.subviews, function (sub_view) {
                     view.$el.find('#' + sub_view.id).replaceWith(sub_view.render().el);
-                    sub_view.delegateEvents(); // TODO: Properly fix this event issue
+                    sub_view.delegateEvents();
                 });
             }
         }),
@@ -31,6 +32,10 @@
             },
 
             id: 'chat-settings',
+
+			initialize: function(){
+				this.model.on("change:auto_refresh", this.render, this);
+			},
 
             submit: function (event) {
                 event.preventDefault();
@@ -66,6 +71,7 @@
 
 			initialize: function(){
 				this.model.on('update_complete',this.toggle_submit,this);
+				this.model.on('change:ServerIP',this.render,this);
 			},
 
             submit: function (event) {

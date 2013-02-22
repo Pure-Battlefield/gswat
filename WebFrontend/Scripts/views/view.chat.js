@@ -66,7 +66,7 @@
 				var server = this.server_model.toJSON();
 				_.extend(data,server);
 				this.$el.html(ich.tpl_chat(data));
-                this.delegateEvents(); // TODO: Properly fix this event issue
+                this.delegateEvents();
                 this.render_sub_views();
             },
 
@@ -74,7 +74,7 @@
                 var view = this;
                 _.each(view.subviews, function (sub_view) {
                     view.$el.find('#' + sub_view.id).replaceWith(sub_view.render().el);
-                    sub_view.delegateEvents(); // TODO: Properly fix this event issue
+                    sub_view.delegateEvents();
                 });
             }
         }),
