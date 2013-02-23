@@ -144,7 +144,7 @@
         </div>
     </div>
     <div class="row-fluid">
-        <div id="chat-contents" class="{{^show_server_msgs}}hide-server-msgs{{/show_server_msgs}}">
+        <div id="chat-contents" class="{{^message_filters.show_server_msgs}}hide-server-msgs{{/message_filters.show_server_msgs}} {{^message_filters.show_global_msgs}}hide-global-msgs{{/message_filters.show_global_msgs}} {{^message_filters.show_us_msgs}}hide-us-msgs{{/message_filters.show_us_msgs}} {{^message_filters.show_ru_msgs}}hide-ru-msgs{{/message_filters.show_ru_msgs}} {{^message_filters.show_squad_msgs}}hide-squad-msgs{{/message_filters.show_squad_msgs}}">
             <ul id="chat-contents-ul"></ul>
         </div>
     </div>
@@ -152,7 +152,7 @@
 
 <script id="tpl_chat_messages" type="text/html">
     {{#.}}
-        <li {{#Server}}class="server-message"{{/Server}}>
+        <li class="{{#Server}}server-message{{/Server}} team-{{MessageType}} {{#SquadName}}squad{{/SquadName}}">
             [<span class="timestamp">{{MessageTimeStamp}}</span>]
             [<span class="team team-{{MessageType}}">{{MessageType}}</span>{{#SquadName}} <span class="team squad">{{SquadName}}</span>{{/SquadName}}]
             <span class="player-name">{{Speaker}}</span>:
@@ -183,9 +183,23 @@
             <label id="chat-auto-refresh-field" class="checkbox">
                 <input data-field="auto_refresh" type="checkbox" {{#auto_refresh}}checked{{/auto_refresh}}> Auto-refresh
             </label>
-            <label id="chat-servers-msgs-field" class="checkbox">
-                <input data-field="show_server_msgs" type="checkbox" {{#show_server_msgs}}checked{{/show_server_msgs}}> Show Server MSGs
-            </label>
+            <div id="toggle-message-types">
+                <label id="chat-servers-msgs-field" class="checkbox">
+                    <input data-field="show_server_msgs" type="checkbox" {{#message_filters.show_server_msgs}}checked{{/message_filters.show_server_msgs}}> Show Server MSGs
+                </label>
+                <label id="chat-global-msgs-field" class="checkbox">
+                    <input data-field="show_global_msgs" type="checkbox" {{#message_filters.show_global_msgs}}checked{{/message_filters.show_global_msgs}}> Show Global MSGs
+                </label>
+                <label id="chat-ru-msgs-field" class="checkbox">
+                    <input data-field="show_ru_msgs" type="checkbox" {{#message_filters.show_ru_msgs}}checked{{/message_filters.show_ru_msgs}}> Show RU MSGs
+                </label>
+                <label id="chat-us-msgs-field" class="checkbox">
+                    <input data-field="show_us_msgs" type="checkbox" {{#message_filters.show_us_msgs}}checked{{/message_filters.show_us_msgs}}> Show US MSGs
+                </label>
+                <label id="chat-squad-msgs-field" class="checkbox">
+                    <input data-field="show_squad_msgs" type="checkbox" {{#message_filters.show_squad_msgs}}checked{{/message_filters.show_squad_msgs}}> Show Squad MSGs
+                </label>
+            </div>
             <div class="control-group input-append">
                 <label for="chat-interval">Refresh Interval in Seconds</label>
                 <input id="chat-interval-field" name="chat-interval" data-field="interval" type="text" value="{{interval}}" class="input-block-level"/>

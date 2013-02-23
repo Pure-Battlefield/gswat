@@ -1,18 +1,24 @@
 (function(window, $, _, moment) {
     var chat_model = Backbone.Model.extend({
         defaults : {
-            'auto_refresh'      : true,
-            'url'               : '/api/messages/',
-            'interval'          : 1,
-            'fetch_interval'    : {},
-            'show_server_msgs'  : true,
-            'all_msgs'          : [],
-            'server_set'        : true,
-            'new_msgs'       	: {},
-            'archive_date'      : '',
-            'save_archive'      : false,
-            'iframe_url'        : '',
-            'last_fetch'        : 0
+            auto_refresh      	: true,
+            url              	: '/api/messages/',
+            interval         	: 1,
+            fetch_interval		: {},
+			message_filters		: {
+				show_server_msgs: true,
+				show_global_msgs: true,
+				show_ru_msgs	: true,
+				show_us_msgs	: true,
+				show_squad_msgs	: true
+			},
+            all_msgs	        : [],
+            server_set  	    : true,
+            new_msgs       		: {},
+            archive_date      	: '',
+            save_archive      	: false,
+            iframe_url        	: '',
+            last_fetch        	: 0
         },
 
         initialize: function () {

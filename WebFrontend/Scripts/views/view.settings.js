@@ -27,8 +27,9 @@
 
         chat_settings: Backbone.View.extend({
             events: {
-                'click button.submit'		: 'submit',
-                'change .checkbox input'	: 'change_switch'
+                'click button.submit'					: 'submit',
+                'change #chat-auto-refresh-field input'	: 'change_switch',
+                'change #toggle-message-types input'	: 'change_filters'
             },
 
             id: 'chat-settings',
@@ -47,6 +48,17 @@
 					PBF.alert({type:'error',title:'Error:',message:'Please only enter a valid number bigger or equal to 1'});
                 }
             },
+
+			change_filters: function(event){
+				var inputs = this.$el.find('#toggle-message-types').find('input');
+				var filters = {};
+				_.each(inputs,function(input){
+					input = $(input);
+					filters[input.attr('data-field')] = input.is(':checked');
+				});
+				this.model.set({message_filters:filters});
+				PBF.alert({type:'success',title:'Success:',message:'Filter updated!'});
+			},
 
             change_switch: function (event) {
                 var ele = $(event.currentTarget);
