@@ -41,9 +41,9 @@
         <text>Page%20Content</text>
       </controlProperties>
     </control>
-    <control controlID="56" controlTypeID="com.balsamiq.mockups::DataGrid" x="393" y="193" w="1142" h="141" measuredW="314" measuredH="141" zOrder="8" locked="false" isInGroup="-1">
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::DataGrid" x="393" y="193" w="1142" h="141" measuredW="436" measuredH="141" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>List%20Name%20%5Ev%2C%20Map%20Count%20%5Ev%2C%20Status%20%5Ev%2C%20Actions%0AConquest%20List%201%2C%206%2C%20%5Bx%5D%0ARush%20List%201%2C%2014%2C%20%5B%5D%0ARush%20List%202%2C%202%2C%20%5B%5D%0ATDM%20List%201%2C%205%2C%20%5B%5D%0A%7B65L%2C%205C%2C%200C%2C%2020%7D</text>
+        <text>List%20Name%20%5Ev%2C%20Map%20Count%20%5Ev%2C%20Activated%20%5Ev%2C%20Scheduled%20for%20%5Ev%2C%20Actions%0AConquest%20List%201%2C%206%2C%20%5Bx%5D%2C%20N/A%0ARush%20List%201%2C%2014%2C%20%5B%5D%2C%209%3A00pm%0ARush%20List%202%2C%202%2C%20%5B%5D%2C%20N/A%0ATDM%20List%201%2C%205%2C%20%5B%5D%2C%20N/A%0A%7B50L%2C%205C%2C%200C%2C%200C%2C%2020%7D</text>
       </controlProperties>
     </control>
     <control controlID="57" controlTypeID="com.balsamiq.mockups::Button" x="1344" y="213" w="46" h="24" measuredW="46" measuredH="27" zOrder="9" locked="false" isInGroup="-1">
@@ -119,9 +119,9 @@
         <text>Delete</text>
       </controlProperties>
     </control>
-    <control controlID="69" controlTypeID="com.balsamiq.mockups::Button" x="1471" y="143" w="-1" h="-1" measuredW="45" measuredH="27" zOrder="21" locked="false" isInGroup="-1">
+    <control controlID="69" controlTypeID="com.balsamiq.mockups::Button" x="1427" y="140" w="-1" h="-1" measuredW="108" measuredH="27" zOrder="21" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Add</text>
+        <text>Create%20Playlist</text>
       </controlProperties>
     </control>
     <control controlID="71" controlTypeID="com.balsamiq.mockups::Button" x="1290" y="213" w="53" h="24" measuredW="50" measuredH="27" zOrder="22" locked="false" isInGroup="-1">
