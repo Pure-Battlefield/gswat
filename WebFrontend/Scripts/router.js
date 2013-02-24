@@ -66,7 +66,53 @@
 				PBF.CDN + 'Scripts/views/view.map-rotation.js'
 			];
 			PBF.load(files,function(){
-				var map_rotation = PBF.get({view:{name:'map_rotation'},model:{name:'map_rotation'}});
+				var server = PBF.get({model:{name:'server_model'}});
+				var map_list_collection = PBF.get({collection:{name:'map_list_collection'}});
+				var maps = [
+					{
+						name			: 'Conquest Large 1',
+						min_players		: 40,
+						max_players		: 50,
+						activated		: true
+					},
+					{
+						name			: 'Conquest Large 2',
+						min_players		: 10,
+						max_players		: 50,
+						activated		: false
+					},
+					{
+						name			: 'Conquest Large 3',
+						min_players		: 15,
+						max_players		: 64,
+						activated		: false
+					},
+					{
+						name			: 'Conquest Large 4',
+						min_players		: 20,
+						max_players		: 50,
+						activated		: false
+					},
+					{
+						name			: 'Conquest Large 5',
+						server_name		: 'Server Name',
+						min_players		: 20,
+						max_players		: 64,
+						activated		: false
+					},
+					{
+						name			: 'Conquest Large 6',
+						server_name		: 'Testing',
+						min_players		: 0,
+						max_players		: 10,
+						activated		: false
+					}
+				];
+				_.each(maps,function(map){
+					map.slugged_name = PBF.slugify(map.name);
+				});
+				map_list_collection.add(maps);
+				var map_rotation = PBF.get({view:{name:'map_rotation'},model:{name:'map_rotation'},collection:map_list_collection});
 				PBF.render(map_rotation);
 			});
 		},

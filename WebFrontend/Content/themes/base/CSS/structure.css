@@ -9,6 +9,23 @@ body {
     }
 }
 
+table .table-status-icons {
+	font-size:20px;
+	text-align:center;
+}
+
+table .table-actions {
+	text-align:center;
+}
+
+.table-status-icons .icon-ok-sign {
+	color:#006400;
+}
+
+.table-status-icons .icon-remove-sign {
+	color:#ff0000;
+}
+
 #header-alert .container {
 	padding:20px 0 0;
 	width:25%;
@@ -103,4 +120,10 @@ body {
 
 .player-name {
     font-weight: bold;
+}
+
+/* Map Rotation */
+table .map-list-player-criterias,
+table .map-list-count {
+	text-align:center;
 }

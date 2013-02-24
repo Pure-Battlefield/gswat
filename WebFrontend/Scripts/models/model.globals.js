@@ -26,7 +26,7 @@
 	var footer = Backbone.Model.extend({
 		defaults: {
 			year		: '0',
-			copyright	: 'PureBattlefield',
+			copyright	: 'GSWAT',
 			github		: 'https://github.com/Pure-Battlefield/gswat'
 		},
 

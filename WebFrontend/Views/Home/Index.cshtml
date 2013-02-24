@@ -235,9 +235,37 @@
 
 <script id="tpl_map_rotation" type="text/html">
     <div class="page-header">
-        <h1>Map Rotation</h1>
+        <h1>Map Rotation<small class="pull-right"><button class="btn btn-primary">Create Playlist</button></small></h1>
     </div>
     <div class="page-content">
-        Map rotation page is here.. but empty! Whoops
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width:29%">Name</th>
+                    <th>Server Name</th>
+                    <th>Map Count</th>
+                    <th>Min/Max Players</th>
+                    <th>Activated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#.}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{server_name}}</td>
+                    <td class="map-list-count">{{map_count}}</td>
+                    <td class="map-list-player-criterias">{{min_players}} / {{max_players}}</td>
+                    <td class="table-status-icons"><i class="icon-{{#activated}}ok-sign{{/activated}}{{^activated}}remove-sign{{/activated}}"></i></td>
+                    <td class="table-actions">
+                        <a href="#map-rotation/view/{{slugged_name}}" class="btn"><i class="icon-external-link"></i> View</a>
+                        <a href="#map-rotation/edit/{{slugged_name}}" class="btn"><i class="icon-pencil"></i> Edit</a>
+                        <button data-id="{{slugged_name}}" data-action="activate" class="btn{{#activated}} disabled{{/activated}}"><i class="icon-play-circle"></i> Activate</button>
+                        <button data-id="{{slugged_name}}" data-action="delete" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
+                    </td>
+                </tr>
+                {{/.}}
+            </tbody>
+        </table>
     </div>
 </script>
