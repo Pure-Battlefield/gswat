@@ -11,7 +11,7 @@
             },
 
 			trigger_alert: function(data){
-				var alert = PBF.get({view:{name:'alert'},model:{name:'alert',data:data}});
+				var alert = PBF.get({view:{name:'alert',reset:true},model:{name:'alert',data:data}});
 				this.$el.find('.navbar').append(alert.render().el);
 			},
 

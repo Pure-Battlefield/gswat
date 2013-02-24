@@ -13,7 +13,7 @@
 
             initialize: function () {
                 this.model.on("change:iframe_url", this.render_iframe, this);
-                this.model.on("change:show_server_msgs", this.toggle_server_msgs, this);
+                this.model.on("change:message_filters", this.toggle_filters, this);
                 this.view = {};
                 this.subviews = {};
                 this.subviews.chat_messages = PBF.get({view:{name:'chat_messages'},model:this.model});
@@ -43,8 +43,22 @@
                 this.model.set({iframe_url:''},{silent:true});
             },
 
-            toggle_server_msgs: function () {
-                this.$el.find('#chat-contents').toggleClass('hide-server-msgs');
+			toggle_filters: function () {
+				var filters = this.model.get('message_filters');
+                var chat = this.$el.find('#chat-contents');
+				var scroll = false;
+				if(chat.prop('offsetHeight') + chat.prop('scrollTop') == chat.prop('scrollHeight')){
+					scroll = true;
+				}
+				//TODO: Optimize this more
+				chat.toggleClass('hide-server-msgs',!filters.show_server_msgs);
+				chat.toggleClass('hide-global-msgs',!filters.show_global_msgs);
+				chat.toggleClass('hide-ru-msgs',!filters.show_ru_msgs);
+				chat.toggleClass('hide-us-msgs',!filters.show_us_msgs);
+				chat.toggleClass('hide-squad-msgs',!filters.show_squad_msgs);
+				if(scroll){
+					chat.scrollTop(chat.prop('scrollHeight'));
+				}
             },
 
             fetch_archive: function (event) {
@@ -66,7 +80,7 @@
 				var server = this.server_model.toJSON();
 				_.extend(data,server);
 				this.$el.html(ich.tpl_chat(data));
-                this.delegateEvents(); // TODO: Properly fix this event issue
+                this.delegateEvents();
                 this.render_sub_views();
             },
 
@@ -74,7 +88,7 @@
                 var view = this;
                 _.each(view.subviews, function (sub_view) {
                     view.$el.find('#' + sub_view.id).replaceWith(sub_view.render().el);
-                    sub_view.delegateEvents(); // TODO: Properly fix this event issue
+                    sub_view.delegateEvents();
                 });
             }
         }),

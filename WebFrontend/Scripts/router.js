@@ -16,7 +16,8 @@
 				PBF.CDN + 'Scripts/views/view.home.js'
 			];
 			PBF.load(files,function(){
-				var home = PBF.get({view:{name:'home'},model:{name:'server_model'}});
+				var server = PBF.get({model:{name:'server_model'}});
+				var home = PBF.get({view:{name:'home'},model:server});
 				PBF.render(home);
 			});
 		},
@@ -30,7 +31,8 @@
 			];
 			PBF.load(files,function(){
 				var server = PBF.get({model:{name:'server_model'}});
-				var chat = PBF.get({view:{name:'chat'},model:{name:'chat_model'}});
+				var chat_model = PBF.get({model:{name:'chat_model'}});
+				var chat = PBF.get({view:{name:'chat'},model:chat_model});
 				PBF.render(chat);
 			});
 		},

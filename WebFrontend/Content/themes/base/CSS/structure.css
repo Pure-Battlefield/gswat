@@ -48,6 +48,22 @@ body {
     display: none;
 }
 
+#server-chat-page .hide-us-msgs .team-US {
+	display: none;
+}
+
+#server-chat-page .hide-ru-msgs .team-RU {
+	display: none;
+}
+
+#server-chat-page .hide-global-msgs .team-all {
+	display: none;
+}
+
+#server-chat-page .hide-squad-msgs .squad {
+	display: none;
+}
+
 #server-chat-page .grid.page-region {
     margin: 0;
 }
