@@ -18,14 +18,14 @@ _.extend(window, {
 (function(window, document, $, _, yepnope, undefined) {
 	GSWAT = function () {
 		// Object Variables
-		this.view_instances         = {};
-		this.model_instances        = {};
-		this.collection_instances   = {};
-		this.main_ele               = '#content';
-		this.default_route          = 'home';
-		this.CDN                    = '';
-		this.files_loaded           = [];
-		this.timers                 = {};
+		this.view_instances			= {};
+		this.model_instances		= {};
+		this.collection_instances	= {};
+		this.main_ele				= '#content';
+		this.default_route			= 'home';
+		this.CDN					= '';
+		this.files_loaded			= [];
+		this.timers					= {};
 		this.Lib					= Lib || undefined;
 	};
 
