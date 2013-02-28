@@ -127,3 +127,8 @@ table .map-list-player-criterias,
 table .map-list-count {
 	text-align:center;
 }
+
+#map-rotation th,
+#map-rotation td {
+	vertical-align:middle;
+}

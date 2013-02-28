@@ -42,7 +42,7 @@ _.extend(window, {
 			var defined = !_.isUndefined(instances[name]);
 			var instance;
 			if(data.reset && defined){
-				if(item !== 'view'){
+				if(item == 'model'){
 					instances[name].destroy();
 				}
 				delete instances[name];
@@ -119,10 +119,12 @@ _.extend(window, {
 					var model = this.view_instances[name].model;
 					var collection = this.view_instances[name].collection;
 					if(model){
-						model.destroy();
+						//TODO: Fix this too
+						//model.destroy();
 					}
 					if(collection){
-						collection.destroy();
+						//TODO: Fix this since collections can't be destroyed
+						//collection.destroy();
 					}
 					delete this.view_instances[name]
 				},this));
