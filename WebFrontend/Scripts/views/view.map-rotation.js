@@ -11,7 +11,7 @@
 				this.model.on('change', this.render, this);
 				this.collection.on('add', this.render, this);
 				this.collection.on('change', this.render, this);
-				this.collection.on('remove', this.test, this);
+				this.collection.on('remove', this.render, this);
 				this.model.on('render',this.render,this);
 			},
 
@@ -32,11 +32,6 @@
 						});
 						break;
 				}
-			},
-
-			test: function(){
-				console.log('hi');
-				this.render();
 			},
 
 			render: function () {
