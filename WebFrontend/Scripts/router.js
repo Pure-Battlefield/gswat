@@ -80,7 +80,7 @@
 				PBF.CDN + 'Scripts/views/view.map-rotation.js'
 			];
 			PBF.load(files,function(){
-				var map_model = PBF.get({model:{name:'map_list_model'}});
+				var map_model = PBF.get({model:{name:'map_list_model',data:{create_new:true}}});
 				if(id){
 					var map_list_collection = PBF.get({collection:{name:'map_list_collection'}});
 					map_model = map_list_collection.get(id);

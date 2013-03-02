@@ -46,6 +46,7 @@
 
 			initialize: function(){
 				this.model.on('invalid',this.form_error,this);
+				this.model.on('change',this.list_view,this);
 			},
 
 			button: function(event){
@@ -55,12 +56,33 @@
 				_.each(form, function (input) {
 					values[input.name] = input.value;
 				});
-				this.model.set(values);
+				this.model.set(values,{validate:true});
 			},
 
-			form_error: function(value){
-				PBF.alert({type:'error',message:'There were one or more errors on the form'});
-				console.log(value);
+			list_view: function(){
+				window.location.hash = '#map-rotation';
+				PBF.alert({type:'success',message:'Map list saved successfully'});
+			},
+
+			form_error: function(model,errors){
+				var error_count = _.keys(errors).length;
+				var message = (error_count > 1)? 'There were ' + error_count + ' errors on the form' : 'There was an error on the form';
+				var view = this;
+				PBF.alert({type:'error',message:message});
+				_.each(errors,function(error,input){
+					var element = view.$el.find('input[name=' + input + ']').parents('.control-group');
+					_.each(error,function(err){
+						switch(err){
+							case 'min':
+							case 'max':
+								element.addClass('error number');
+								break;
+							case 'required':
+								element.addClass('error required');
+								break;
+						}
+					});
+				});
 			},
 
 			render: function(){

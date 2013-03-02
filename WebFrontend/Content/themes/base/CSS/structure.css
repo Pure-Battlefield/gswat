@@ -132,3 +132,13 @@ table .map-list-count {
 #map-rotation td {
 	vertical-align:middle;
 }
+
+/* Forms */
+.help-inline {
+	display:none;
+}
+
+.error.number .error-number,
+.error.required .error-required {
+	display:block;
+}

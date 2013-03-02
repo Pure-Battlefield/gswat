@@ -5,19 +5,36 @@
 
 	var map_list_model = Backbone.Model.extend({
 		defaults: {
-			maps	: [],
+			Maps	: [],
 			active	: false
 		},
 
 		idAttribute: "slugged_name",
 
 		initialize: function(){
-			this.on('change:maps',this.update_count,this);
+			console.log(this.toJSON());
+			this.on('change:Maps',this.update_count,this);
 			this.update_count();
 		},
 
+		validate: {
+			Name: {
+				required: true
+			},
+			MaxPlayers : {
+				type	: "number",
+				min		: 0,
+				max		: 64
+			},
+			MinPlayers : {
+				type	: "number",
+				min		: 0,
+				max		: 64
+			}
+		},
+
 		update_count: function(){
-			this.set({map_count:this.get('maps').length});
+			this.set({MapCount:this.get('Maps').length});
 		}
 	});
 
@@ -29,73 +46,73 @@
 				//TODO: Remove this once API exists
 				var list = [
 					{
-						name	: 'Caspian Border',
-						gamemode: 'Conquest Large',
-						rounds	: 2
+						Name	: 'Caspian Border',
+						Gamemode: 'Conquest Large',
+						Rounds	: 2
 					},
 					{
-						name	: 'Operation Firestorm',
-						gamemode: 'Conquest Large',
-						rounds	: 2
+						Name	: 'Operation Firestorm',
+						Gamemode: 'Conquest Large',
+						Rounds	: 2
 					},
 					{
-						name	: 'Kharg Island',
-						gamemode: 'Conquest Large',
-						rounds	: 2
+						Name	: 'Kharg Island',
+						Gamemode: 'Conquest Large',
+						Rounds	: 2
 					}
 				];
 				var maps = [
 					{
-						name			: 'Conquest Large 1',
-						server_name		: 'Testes',
-						min_players		: 40,
-						max_players		: 50,
-						maps			: list,
+						Name			: 'Conquest Large 1',
+						ServerName		: 'Testes',
+						MinPlayers		: 40,
+						MaxPlayers		: 50,
+						Maps			: list,
 						active			: true
 					},
 					{
-						name			: 'Conquest Large 2',
-						server_name		: 'Server for Cats',
-						min_players		: 10,
-						max_players		: 50,
-						maps			: list,
+						Name			: 'Conquest Large 2',
+						ServerName		: 'Server for Cats',
+						MinPlayers		: 10,
+						MaxPlayers		: 50,
+						Maps			: list,
 						active			: false
 					},
 					{
-						name			: 'Conquest Large 3',
-						server_name		: 'habababab',
-						min_players		: 15,
-						max_players		: 64,
-						maps			: list,
+						Name			: 'Conquest Large 3',
+						ServerName		: 'habababab',
+						MinPlayers		: 15,
+						MaxPlayers		: 64,
+						Maps			: list,
 						active			: false
 					},
 					{
-						name			: 'Conquest Large 4',
-						server_name		: 'Serverrrr',
-						min_players		: 20,
-						max_players		: 50,
-						maps			: list,
+						Name			: 'Conquest Large 4',
+						ServerName		: 'Serverrrr',
+						MinPlayers		: 20,
+						MaxPlayers		: 50,
+						Maps			: list,
 						active			: false
 					},
 					{
-						name			: 'Conquest Large 5',
-						server_name		: 'Server Name',
-						min_players		: 20,
-						max_players		: 64,
-						maps			: list,
+						Name			: 'Conquest Large 5',
+						ServerName		: 'Server Name',
+						MinPlayers		: 20,
+						MaxPlayers		: 64,
+						Maps			: list,
 						active			: false
 					},
 					{
-						name			: 'Conquest Large 6',
-						server_name		: 'Testing',
-						min_players		: 0,
-						max_players		: 10,
-						maps			: list,
+						Name			: 'Conquest Large 6',
+						ServerName		: 'Testing',
+						MinPlayers		: 0,
+						MaxPlayers		: 10,
+						Maps			: list,
 						active			: false
 					}
 				];
 				_.each(maps,function(map){
-					map.slugged_name = PBF.slugify(map.name);
+					map.slugged_name = PBF.slugify(map.Name);
 				});
 				this.add(maps);
 			},
