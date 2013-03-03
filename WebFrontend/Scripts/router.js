@@ -28,9 +28,45 @@
 				PBF.CDN + 'Scripts/views/view.account.js'
 			];
 			PBF.load(files,function(){
-				var account = PBF.get({model:{name:'account_model'}});
-				var login = PBF.get({view:{name:'login'},model:account});
+				var account_model = PBF.get({model:{name:'account_model'}});
+				var login = PBF.get({view:{name:'login'},model:account_model});
 				PBF.render(login);
+			});
+		},
+
+		render_logout : function(){
+			var files = [
+				PBF.CDN + 'Scripts/models/model.account.js',
+				PBF.CDN + 'Scripts/views/view.account.js'
+			];
+			PBF.load(files,function(){
+				var account_model = PBF.get({model:{name:'account_model'}});
+				var logout = PBF.get({view:{name:'logout'},model:account_model});
+				PBF.render(logout);
+			});
+		},
+
+		render_register : function(){
+			var files = [
+				PBF.CDN + 'Scripts/models/model.account.js',
+				PBF.CDN + 'Scripts/views/view.account.js'
+			];
+			PBF.load(files,function(){
+				var account_model = PBF.get({model:{name:'account_model'}});
+				var register = PBF.get({view:{name:'register'},model:account_model});
+				PBF.render(register);
+			});
+		},
+
+		render_account : function(){
+			var files = [
+				PBF.CDN + 'Scripts/models/model.account.js',
+				PBF.CDN + 'Scripts/views/view.account.js'
+			];
+			PBF.load(files,function(){
+				var account_model = PBF.get({model:{name:'account_model'}});
+				var account = PBF.get({view:{name:'account'},model:account_model});
+				PBF.render(account);
 			});
 		},
 
@@ -117,6 +153,9 @@
 		routes:{
 			'home'                 :'render_home',
 			'login'                :'render_login',
+			'logout'               :'render_logout',
+			'register'             :'render_register',
+			'account'              :'render_account',
 			'chat'                 :'render_chat',
 			'settings'             :'render_settings',
 			'loading'              :'render_loading',

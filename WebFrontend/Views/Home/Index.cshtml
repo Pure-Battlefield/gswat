@@ -21,9 +21,10 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> Account <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="#login"><i class="icon-signin"></i> Login</a></li>
-								<li><a href="#coming-soon"><i class="icon-signout"></i> Logout</a></li>
+								<li><a href="#logout"><i class="icon-signout"></i> Logout</a></li>
+								<li><a href="#register"><i class="icon-plus-sign"></i> Register</a></li>
 								<li class="divider"></li>
-								<li><a href="#coming-soon"><i class="icon-wrench"></i> My Account</a></li>
+								<li><a href="#account"><i class="icon-wrench"></i> My Account</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -105,26 +106,59 @@
 		</div>
 		<div class="page-content">
 			<form id="login-form">
-			<fieldset>
-				<legend>Sign in or create an account</legend>
-				<div class="row-fluid">
-					<div class="control-group">
-						<label class="control-label" for="Username">Username</label>
-						<div class="control">
-							<input name="Username" type="text" placeholder="Username"/>
-							{{>tpl_error_required}}
+				<fieldset>
+					<legend>Sign in or create an account</legend>
+					<div class="row-fluid">
+						<div class="control-group">
+							<label class="control-label" for="Username">Username</label>
+							<div class="control">
+								<input name="Username" type="text" placeholder="Username"/>
+								{{>tpl_error_required}}
+							</div>
 						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="Password">Password</label>
-						<div class="control">
-							<input name="Password" type="password"/>
+						<div class="control-group">
+							<label class="control-label" for="Password">Password</label>
+							<div class="control">
+								<input name="Password" type="password"/>
+							</div>
 						</div>
+						<button type="submit" class="btn btn-primary submit">Submit</button>
 					</div>
-					<button type="submit" class="btn btn-primary submit">Submit</button>
-				</div>
-			</fieldset>
-		</form>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+
+<script id="tpl_logout" type="text/html">
+	<div class="row-fluid">
+		<div class="page-header">
+			<h1>Signed out</h1>
+		</div>
+		<div class="page-content">
+			<p>You've been signed out</p>
+		</div>
+	</div>
+</script>
+
+<script id="tpl_register" type="text/html">
+	<div class="row-fluid">
+		<div class="page-header">
+			<h1>Register</h1>
+		</div>
+		<div class="page-content">
+			<p>Registration form</p>
+		</div>
+	</div>
+</script>
+
+<script id="tpl_account" type="text/html">
+	<div class="row-fluid">
+		<div class="page-header">
+			<h1>Your Account</h1>
+		</div>
+		<div class="page-content">
+			<p>Stuff about you</p>
 		</div>
 	</div>
 </script>
