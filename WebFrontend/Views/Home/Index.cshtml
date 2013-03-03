@@ -272,58 +272,58 @@
 
 <script id="tpl_map_form" type="text/html">
 	<div class="page-header">
-        <h1>{{^Name}}Create New Maplist{{/Name}}{{Name}}</h1>
+		<h1>{{^Name}}Create New Maplist{{/Name}}{{Name}}</h1>
 	</div>
 	<div class="page-content">
 		<form id="maplist-form">
-            <fieldset>
-                <legend>{{^Name}}Create a new maplist{{/Name}}{{#Name}}Edit the {{Name}} maplist{{/Name}}</legend>
-                <div class="row-fluid">
-                    <div class="control-group">
-                        <label class="control-label" for="MaplistName">Maplist Name</label>
-                        <div class="control">
-                            <input name="Name" type="text" placeholder="Name of the maplist" value="{{Name}}"/>
-                            {{>tpl_error_required}}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="ServerName">Server Name</label>
-                        <div class="control">
-                            <input name="ServerName" type="text" placeholder="Name of the server" value="{{ServerName}}"/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="MinPlayers">Minimum players supported</label>
-                        <div class="control">
-                            <input name="MinPlayers" type="text" value="{{MinPlayers}}"/>
-                            <div class="help-inline error-number">Please enter a number between 0 and 64</div>
-                            {{>tpl_error_minimum_maximum}}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="MaxPlayers">Maximum players supported</label>
-                        <div class="control">
-                            <input name="MaxPlayers" type="text" value="{{MaxPlayers}}"/>
-                            <div class="help-inline error-number">Please enter a number between 0 and 64</div>
-                            {{>tpl_error_maximum_minimum}}
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary submit">Submit</button>
-                    <a href="#map-rotation" class="btn">Cancel</a>
-                </div>
-            </fieldset>
+			<fieldset>
+				<legend>{{^Name}}Create a new maplist{{/Name}}{{#Name}}Edit the {{Name}} maplist{{/Name}}</legend>
+				<div class="row-fluid">
+					<div class="control-group">
+						<label class="control-label" for="MaplistName">Maplist Name</label>
+						<div class="control">
+							<input name="Name" type="text" placeholder="Name of the maplist" value="{{Name}}"/>
+							{{>tpl_error_required}}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="ServerName">Server Name</label>
+						<div class="control">
+							<input name="ServerName" type="text" placeholder="Name of the server" value="{{ServerName}}"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="MinPlayers">Minimum players supported</label>
+						<div class="control">
+							<input name="MinPlayers" type="text" value="{{MinPlayers}}"/>
+							<div class="help-inline error-number">Please enter a number between 0 and 64</div>
+							{{>tpl_error_minimum_maximum}}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="MaxPlayers">Maximum players supported</label>
+						<div class="control">
+							<input name="MaxPlayers" type="text" value="{{MaxPlayers}}"/>
+							<div class="help-inline error-number">Please enter a number between 0 and 64</div>
+							{{>tpl_error_maximum_minimum}}
+						</div>
+					</div>
+					<button type="submit" class="btn btn-primary submit">Submit</button>
+					<a href="#map-rotation" class="btn">Cancel</a>
+				</div>
+			</fieldset>
 		</form>
 	</div>
 </script>
 
 <script id="tpl_error_required" type="text/html">
-    <div class="help-inline error-required">This field is required</div>
+	<div class="help-inline error-required">This field is required</div>
 </script>
 
 <script id="tpl_error_maximum_minimum" type="text/html">
-    <div class="help-inline error-amount">Maximum can't be lower than Minimum</div>
+	<div class="help-inline error-amount">Maximum can't be lower than Minimum</div>
 </script>
 
 <script id="tpl_error_minimum_maximum" type="text/html">
-    <div class="help-inline error-amount">Minimum can't be higher than Maximum</div>
+	<div class="help-inline error-amount">Minimum can't be higher than Maximum</div>
 </script>
