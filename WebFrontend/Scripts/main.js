@@ -1,32 +1,32 @@
 // requestAnimationFrame() shim by Paul Irish
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-window.requestAnimFrame = (function() {
-	return  window.requestAnimationFrame   ||
+window.requestAnimFrame = (function(){
+	return  window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame    ||
-		window.oRequestAnimationFrame      ||
-		window.msRequestAnimationFrame     ||
-		function(callback) {
-			window.setTimeout(callback, 1000 / 60);
+		window.mozRequestAnimationFrame ||
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		function(callback){
+			window.setTimeout(callback,1000 / 60);
 		};
 }());
 
-_.extend(window, {
+_.extend(window,{
 	GSWAT: null
 });
 
-(function(window, document, $, _, yepnope, undefined) {
-	GSWAT = function () {
+(function(window,document,$,_,yepnope,undefined){
+	GSWAT = function(){
 		// Object Variables
-		this.view_instances			= {};
-		this.model_instances		= {};
-		this.collection_instances	= {};
-		this.main_ele				= '#content';
-		this.default_route			= 'home';
-		this.CDN					= '';
-		this.files_loaded			= [];
-		this.timers					= {};
-		this.Lib					= Lib || undefined;
+		this.view_instances = {};
+		this.model_instances = {};
+		this.collection_instances = {};
+		this.main_ele = '#content';
+		this.default_route = 'home';
+		this.CDN = '';
+		this.files_loaded = [];
+		this.timers = {};
+		this.Lib = Lib || undefined;
 	};
 
 	/**
@@ -36,20 +36,20 @@ _.extend(window, {
 	 * @param  {object} data
 	 * @return {instance}
 	 */
-		var get_item = function(item,data){
-			var instances = this[item + '_instances'];
-			var name = data.name;
-			var defined = !_.isUndefined(instances[name]);
-			var instance;
-			if(data.reset && defined){
-				if(item == 'model'){
-					instances[name].destroy();
-				}
-				delete instances[name];
+	var get_item = function(item,data){
+		var instances = this[item + '_instances'];
+		var name = data.name;
+		var defined = !_.isUndefined(instances[name]);
+		var instance;
+		if(data.reset && defined){
+			if(item == 'model'){
+				instances[name].destroy();
 			}
-			instance = defined ? instances[name] : create_item.call(this,item,data);
-			return instance;
-		};
+			delete instances[name];
+		}
+		instance = defined ? instances[name] : create_item.call(this,item,data);
+		return instance;
+	};
 
 	/**
 	 * Generic method for creating an object
@@ -185,18 +185,18 @@ _.extend(window, {
 			this.$el = $(this.main_ele);
 		},
 
-		init: function (options) {
-			if (!_.isUndefined(this.Lib)) {
-				_.extend(this, new this.Lib());
+		init: function(options){
+			if(!_.isUndefined(this.Lib)){
+				_.extend(this,new this.Lib());
 			}
 			var _super = Backbone.View.prototype.remove;
-			Backbone.View.prototype.remove = function () {
+			Backbone.View.prototype.remove = function(){
 				this.trigger('remove');
-				return _super.apply(this, arguments);
+				return _super.apply(this,arguments);
 			};
 
 			this.set_options(options);
-			if (window.location.hash == undefined || window.location.hash == ''){
+			if(window.location.hash == undefined || window.location.hash == ''){
 				window.location.hash = this.default_route;
 			}
 			this.active_router = new this.router();
@@ -205,9 +205,9 @@ _.extend(window, {
 	};
 
 	// Global objects for our views/models/collections/events
-	_.extend(GSWAT.prototype, {
-		view_definitions : {},
-		model_definitions : {},
-		collection_definitions : {}
+	_.extend(GSWAT.prototype,{
+		view_definitions      : {},
+		model_definitions     : {},
+		collection_definitions: {}
 	});
-}(window, document, jQuery, _, yepnope));
+}(window,document,jQuery,_,yepnope));

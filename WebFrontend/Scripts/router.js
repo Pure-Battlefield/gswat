@@ -86,7 +86,7 @@
 					map_model = map_list_collection.get(id);
 					if(_.isUndefined(map_model)){
 						window.location.hash = '#map-rotation';
-						PBF.alert({type: 'error',message: 'Could not edit the selected playlist'})
+						PBF.alert({type:'error',message:'Could not edit the selected playlist'})
 					} else {
 						map_model = map_list_collection.get(id);
 						render_form();
@@ -102,15 +102,15 @@
 			});
 		},
 
-		routes: {
-			'home'					: 'render_home',
-			'chat'					: 'render_chat',
-			'settings'				: 'render_settings',
-			'loading'				: 'render_loading',
-			'coming-soon'			: 'render_coming_soon',
-			'map-rotation'			: 'render_map_rotation',
-			'map-rotation/new'		: 'render_map_rotation_form',
-			'map-rotation/edit/:id'	: 'render_map_rotation_form'
+		routes:{
+			'home'                 :'render_home',
+			'chat'                 :'render_chat',
+			'settings'             :'render_settings',
+			'loading'              :'render_loading',
+			'coming-soon'          :'render_coming_soon',
+			'map-rotation'         :'render_map_rotation',
+			'map-rotation/new'     :'render_map_rotation_form',
+			'map-rotation/edit/:id':'render_map_rotation_form'
 		}
 	});
 }(window,jQuery));
