@@ -209,14 +209,14 @@
     <Content Include="Content\themes\base\font\fontawesome-webfont.svg" />
     <Content Include="Content\themes\base\img\glyphicons-halflings-white.png" />
     <Content Include="Content\themes\base\img\glyphicons-halflings.png" />
-    <Content Include="Content\themes\base\jquery-ui-1.10.0.custom.min.css" />
+    <Content Include="Content\themes\base\jquery-ui-1.10.1.custom.min.css" />
     <Content Include="default.htm" />
     <Content Include="jqunback-1.51.min.js" />
     <Content Include="README.txt" />
     <Content Include="Scripts\libraries\backbone-0.9.10.min.js" />
     <Content Include="Scripts\libraries\bootstrap-2.3.0.min.js" />
     <Content Include="Scripts\libraries\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\libraries\jquery-ui-1.10.0.custom.min.js" />
+    <Content Include="Scripts\libraries\jquery-ui-1.10.1.custom.min.js" />
     <Content Include="Scripts\libraries\keyboard-0.4.1.min.js" />
     <Content Include="Scripts\libraries\moment-2.0.0.min.js" />
     <Content Include="Scripts\libraries\mustache-0.7.3.js" />

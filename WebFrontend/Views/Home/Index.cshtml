@@ -20,7 +20,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> Account <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="#coming-soon"><i class="icon-signin"></i> Login</a></li>
+								<li><a href="#login"><i class="icon-signin"></i> Login</a></li>
 								<li><a href="#coming-soon"><i class="icon-signout"></i> Logout</a></li>
 								<li class="divider"></li>
 								<li><a href="#coming-soon"><i class="icon-wrench"></i> My Account</a></li>
@@ -87,13 +87,44 @@
 	</div>
 </script>
 
-<script id="tpl_body" type="text/html">
+<script id="tpl_home" type="text/html">
 	<div class="row-fluid">
 		<div class="page-header">
 			<h1>Welcome!</h1>
 		</div>
 		<div class="page-content">
 			<p>This is the Pure Game Server Web Administration Tool, or GSWAT for short. It's purpose is to try and simplify the task of administering servers from any platform that has a modern browser. We hope you enjoy it!</p>
+		</div>
+	</div>
+</script>
+
+<script id="tpl_login" type="text/html">
+	<div class="row-fluid">
+		<div class="page-header">
+			<h1>Sign in <small class="pull-right"><a href="#register" class="btn">Register</a></small></h1>
+		</div>
+		<div class="page-content">
+			<form id="login-form">
+			<fieldset>
+				<legend>Sign in or create an account</legend>
+				<div class="row-fluid">
+					<div class="control-group">
+						<label class="control-label" for="Username">Username</label>
+						<div class="control">
+							<input name="Username" type="text" placeholder="Username"/>
+							{{>tpl_error_required}}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="Password">Password</label>
+						<div class="control">
+							<input name="Password" type="password"/>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-primary submit">Submit</button>
+				</div>
+			</fieldset>
+		</form>
 		</div>
 	</div>
 </script>

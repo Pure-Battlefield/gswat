@@ -22,6 +22,18 @@
 			});
 		},
 
+		render_login: function(){
+			var files = [
+				PBF.CDN + 'Scripts/models/model.account.js',
+				PBF.CDN + 'Scripts/views/view.account.js'
+			];
+			PBF.load(files,function(){
+				var account = PBF.get({model:{name:'account_model'}});
+				var login = PBF.get({view:{name:'login'},model:account});
+				PBF.render(login);
+			});
+		},
+
 		render_chat: function(){
 			var files = [
 				PBF.CDN + 'Scripts/models/model.server.js',
@@ -104,6 +116,7 @@
 
 		routes:{
 			'home'                 :'render_home',
+			'login'                :'render_login',
 			'chat'                 :'render_chat',
 			'settings'             :'render_settings',
 			'loading'              :'render_loading',
