@@ -15,7 +15,7 @@
 			gapi.client.load('plus','v1', function(){
 				if (authResult['access_token']) {
 					//Woot logged in
-					model.set({logged_in:true});
+					model.set({logged_in:true,auth_result:authResult});
 					model.profile();
 					model.people();
 				} else if (authResult['error']) {
