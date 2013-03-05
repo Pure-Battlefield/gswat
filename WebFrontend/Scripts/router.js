@@ -7,6 +7,10 @@
 			this.on('route',function(){
 				header.set_active(Backbone.History.prototype.getHash(window));
 			});
+
+			//Google+ Signin
+			var files = ['https://apis.google.com/js/client:plusone.js'];
+			PBF.load(files);
 		},
 
 		render_home: function(){

@@ -134,12 +134,16 @@ _.extend(window,{
 					},
 					complete: function(){
 						window.setTimeout(function(){
-							return callback();
+							if(callback){
+								return callback();
+							}
 						},250);
 					}
 				});
 			} else {
-				return callback();
+				if(callback){
+					return callback();
+				}
 			}
 		},
 

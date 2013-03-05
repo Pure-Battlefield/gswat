@@ -1,12 +1,18 @@
 (function(window,$,_,ich){
 	_.extend(window.GSWAT.prototype.view_definitions,{
 		header: Backbone.View.extend({
-			events: {},
+			events: {
+				'click #logout'		: 'logout',
+				'click #login'		: 'login'
+			},
 
 			el: '#header',
 
 			initialize: function(){
+				this.body = $('body');
 				this.on('alert',this.trigger_alert,this);
+				this.account = PBF.get({model:{name:'account_model'}});
+				this.account.on('change:logged_in',this.update_login,this);
 				this.render();
 			},
 
@@ -15,10 +21,23 @@
 				this.$el.find('.navbar').append(alert.render().el);
 			},
 
-			set_active: function(e){
-				var path = (typeof e === 'object') ? $(e.currentTarget).attr('href') : '#' + e.split('/')[0];
+			set_active: function(event){
+				var path = (typeof event === 'object') ? $(event.currentTarget).attr('href') : '#' + event.split('/')[0];
 				this.$el.find('li').removeClass('active');
 				this.$el.find('a[href=' + path + ']').parent('li').addClass('active');
+			},
+
+			logout: function(event){
+				event.preventDefault();
+				this.account.disconnect();
+			},
+
+			login: function(event){
+				event.preventDefault();
+			},
+
+			update_login: function(){
+				this.body.toggleClass('logged-in',this.account.get('logged_in'));
 			},
 
 			render: function(){

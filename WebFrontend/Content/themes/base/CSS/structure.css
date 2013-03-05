@@ -9,6 +9,16 @@ body {
     }
 }
 
+body #logout,
+body.logged-in #login {
+	display:none;
+}
+
+body.logged-in #logout,
+body #login {
+	display:block;
+}
+
 table .table-status-icons {
 	font-size:20px;
 	text-align:center;
