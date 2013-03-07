@@ -214,6 +214,7 @@
     <Content Include="jqunback-1.51.min.js" />
     <Content Include="README.txt" />
     <Content Include="Scripts\libraries\backbone-0.9.10.min.js" />
+    <Content Include="Scripts\libraries\backbone.validate.js" />
     <Content Include="Scripts\libraries\bootstrap-2.3.0.min.js" />
     <Content Include="Scripts\libraries\jquery-1.9.1.min.js" />
     <Content Include="Scripts\libraries\jquery-ui-1.10.1.custom.min.js" />
@@ -263,6 +264,7 @@
     <Content Include="Content\themes\base\LESS\structure.less" />
     <Content Include="Scripts\libraries\yepnope-1.5.4.min.js" />
     <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\models\model.account.js" />
     <Content Include="Scripts\models\model.chat.js" />
     <Content Include="Scripts\models\model.globals.js" />
     <Content Include="Scripts\models\model.map-rotation.js" />
@@ -270,6 +272,7 @@
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
     <Content Include="Scripts\router.js" />
+    <Content Include="Scripts\views\view.account.js" />
     <Content Include="Scripts\views\view.map-rotation.js" />
     <Content Include="Scripts\views\view.settings.js" />
     <Content Include="Scripts\views\view.chat.js" />
