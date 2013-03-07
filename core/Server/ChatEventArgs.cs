@@ -9,12 +9,12 @@ namespace core.Server
         ///     Constructs a new ChatEventArgs object with a predefined ChatMessage
         /// </summary>
         /// <param name="msg">ChatMessage to pass along</param>
-        public ChatEventArgs(ChatMessage msg)
+        public ChatEventArgs(ChatMessageEntity msg)
         {
             ServerMessage = msg;
         }
 
         // ChatMessage contained in this ChatEventArgs object
-        public ChatMessage ServerMessage { get; private set; }
+        public ChatMessageEntity ServerMessage { get; private set; }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
+using System.Collections.Generic;
+using core.Logging;
 using core.Server.RConn.Commands;
 
 namespace core.Server.RConn
@@ -63,34 +66,59 @@ namespace core.Server.RConn
 
         private void ReceivePackets()
         {
-            while (Sock.Connected)
+            try
             {
-                Packet packet = ReceivePacket();
-
-                if (packet != null)
+                while (Sock.Connected)
                 {
-                    if (packet.IsRequest)
+                    Packet packet = ReceivePacket();
+                    
+                    if (packet != null)
                     {
-                        HandleRequest(packet);
-                    }
-                    else
-                    {
-                        HandleResponse(packet);
+                        if (packet.IsRequest)
+                        {
+                            HandleRequest(packet);
+                        }
+                        else if (packet.IsResponse)
+                        {
+                            HandleResponse(packet);
+                        }
                     }
                 }
+            }
+            catch (SocketException ex)
+            {
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, ex.Message);
+
+                Packet serverDied = new Packet();
+                List<Word> words = new List<Word>();
+                words.Add(new Word("SocketException"));
+                words.Add(new Word(ex.Message));
+                serverDied.Words = words;
+
+                if (PacketEvent != null)
+                {
+                    PacketEvent(serverDied);
+                }
+                return;
             }
         }
 
         private void HandleResponse(Packet packet)
         {
-            PacketEvent(packet);
+            if (PacketEvent != null) 
+            {
+                PacketEvent(packet);
+            }
         }
 
         private void HandleRequest(Packet packet)
         {
             //All requests we'll be getting for version .1 will be events.
             SendOkResponse(packet);
-            PacketEvent(packet);
+            if (PacketEvent != null)
+            {
+                PacketEvent(packet);
+            }
         }
 
         private Packet ReceivePacket()
@@ -120,7 +148,7 @@ namespace core.Server.RConn
         {
             packet.OrigininatesFromClient = true;
             packet.IsRequest = true;
-            packet.SequenceNumber = SequenceCounter++;
+            packet.SequenceNumber = ++SequenceCounter;
             Sock.Send(packet.Emit());
 
             return packet;
@@ -128,10 +156,7 @@ namespace core.Server.RConn
 
         private void SendOkResponse(Packet packet)
         {
-            packet.OrigininatesFromClient = packet.OrigininatesFromClient;
-            packet.IsRequest = false;
-            packet.SequenceNumber = packet.SequenceNumber;
-            Sock.Send(packet.Emit());
+            Sock.Send(new ResponseOk(packet).Emit());
         }
 
         public void Disconnect()

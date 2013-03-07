@@ -12,4 +12,8 @@ namespace WebFrontend.Models
         public string Password { get; set; }
         public string OldPassword { get; set; }
     }
+
+    public class GetServerInfoModel
+    {
+    }
 }
