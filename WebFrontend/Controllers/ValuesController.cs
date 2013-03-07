@@ -87,11 +87,11 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                DateTime temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                var temp = new DateTime(dateTime.DateTimeUnix);
+                var q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
-                MemoryStream stream = new MemoryStream();
-                StreamWriter writer = new StreamWriter(stream);
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
 
                 foreach (var message in q)
                 {
@@ -113,11 +113,15 @@ namespace WebFrontend.Controllers
                 writer.Flush();
                 stream.Position = 0;
 
-                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-                result.Content = new StreamContent(stream);
+                var result = new HttpResponseMessage(HttpStatusCode.OK) {Content = new StreamContent(stream)};
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-                var disposition = new ContentDispositionHeaderValue("attachment");
-                disposition.FileName = string.Format("{0}.txt", temp.ToString("yyyyMMdd"));
+                var disposition = new ContentDispositionHeaderValue("attachment")
+                                      {
+                                          FileName =
+                                              string.Format("{0}.txt",
+                                                            temp.ToString(
+                                                                "yyyyMMdd"))
+                                      };
 
                 result.Content.Headers.ContentDisposition = disposition;
 
@@ -131,34 +135,17 @@ namespace WebFrontend.Controllers
 
         [HttpGet]
         [ActionName("GetByDay")]
-        public string GetByDay([FromUri]DateTimeInfo dateTime)
+        public IEnumerable<ChatMessageEntity> GetByDay([FromUri]DateTimeInfo dateTime)
         {
             try
             {
-                DateTime temp = new DateTime(dateTime.DateTimeUnix);
-                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
-                JavaScriptSerializer json = new JavaScriptSerializer();
-                return json.Serialize(q);
+                var temp = new DateTime(dateTime.DateTimeUnix);
+                var q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                return q;
             }
             catch (Exception e)
             {
-                JavaScriptSerializer json = new JavaScriptSerializer();
-                return json.Serialize(new List<ChatMessageEntity>());
-            }
-        }
-
-        [HttpPost]
-        [ActionName("SetServerInfo")]
-        public String SetServerInfo([FromBody]ConnectionInfo connection)
-        {
-            JavaScriptSerializer json = new JavaScriptSerializer();
-            try
-            {
-                return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword));
-            }
-            catch (Exception e)
-            {
-                return json.Serialize(e.Message);
+                return new List<ChatMessageEntity>();
             }
         }
 
@@ -166,13 +153,28 @@ namespace WebFrontend.Controllers
          *  using the Core.LoadServerSettings() method. <Auth> */
 
        [HttpGet]
-       [ActionName("GetServerSettings")]
-       public String GetServerSettings()
+       [ActionName("serverInfo")]
+       public String GetServerInfo()
        {
            // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
            var settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
            JavaScriptSerializer json = new JavaScriptSerializer();
-           return json.Serialize(new string[]{settings.Address,settings.Port.ToString()});
+
+           if (settings != null)
+           {
+               return json.Serialize(new Dictionary<String, String>
+                                         {
+                                             {"ServerIP", settings.Address},
+                                             {"ServerPort", settings.Port.ToString()}
+
+                                         });
+           }
+           return
+               json.Serialize(new Dictionary<String, String>
+                                  {
+                                      {"ServerIP", ""},
+                                      {"ServerPort", ""}
+                                  });
        }
     }
 }

@@ -10,9 +10,4 @@ namespace WebFrontend.Models
         public long DateTimeUnix  { get; set; }
         public String Action { get; set; }
     }
-
-    public class DateTimeInfoGetAll
-    {
-        
-    }
 }
