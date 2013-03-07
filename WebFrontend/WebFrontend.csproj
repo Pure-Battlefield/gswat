@@ -155,8 +155,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\ServerInfoController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -169,6 +169,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\SquadNameConverter.cs" />
+    <Compile Include="Utilities\TeamNameConverter.cs" />
     <Content Include="Content\themes\base\CSS\bootstrap-responsive.min.css" />
     <Content Include="Content\themes\base\CSS\bootstrap.min.css" />
     <Content Include="Content\themes\base\CSS\font-awesome.min.css" />

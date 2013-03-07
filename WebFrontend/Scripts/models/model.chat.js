@@ -85,7 +85,7 @@
 				PBF.alert({type: 'info',title: 'Fetching:',message: 'Please wait'});
 				if(model.get('save_archive')){
 					data.Action = 'DownloadByDay';
-					model.set({iframe_url: url + $.param(data)});
+					model.set({ iframe_url: url + '?' + $.param(data) });
 				} else {
 					data.Action = 'GetByDay';
 					this.set({update_msgs: false,new_msgs: '',all_msgs: []},{silent: true});

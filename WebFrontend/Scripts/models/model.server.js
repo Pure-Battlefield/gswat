@@ -5,7 +5,7 @@
 			'Password'           : '',
 			'ServerPort'         : '',
 			'OldPassword'        : '',
-			'server_settings_url': '/api/serverInfo'
+			'server_settings_url': '/api/serverinfo'
 		},
 
 		initialize: function(){
