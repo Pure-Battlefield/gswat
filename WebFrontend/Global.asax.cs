@@ -4,7 +4,6 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using core;
 using core.Server;
-using core.ServerInterface;
 
 namespace WebFrontend
 {

@@ -58,14 +58,14 @@ namespace WebFrontend.Controllers
         [ActionName("GetAllMessages")]
         public string GetAllMessages()
         {
-            IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessageQueue();
             JavaScriptSerializer json = new JavaScriptSerializer();
             return json.Serialize(q);
         }
 
         [HttpGet]
         [ActionName("GetAllMessagesFromTime")]
-        public string GetAllMessagesFromTime([FromUri] double timestamp)
+        public string GetAllMessagesFromTime([FromUri] DateTimeInfo timestamp)
         {
             /*timestamp is a unix timestamp of milliseconds since the epoch.*/
             /*TODO: Note that this is still unsafe; while it is *highly unlikely* that two messages could be received in under a ms,
@@ -73,7 +73,7 @@ namespace WebFrontend.Controllers
             */
             var q = GlobalStaticVars.StaticCore.GetMessageQueue();
             var constructedDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            constructedDateTime = constructedDateTime.AddMilliseconds(timestamp);
+            constructedDateTime = constructedDateTime.AddMilliseconds(timestamp.DateTimeUnix);
 
             var output = q.Where(chatMessage => (chatMessage.MessageTimeStamp - constructedDateTime).TotalMilliseconds >= 1).ToList();
 
@@ -87,8 +87,8 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                DateTime temp = new DateTime(dateTime.DateTimeUnix);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
                 MemoryStream stream = new MemoryStream();
                 StreamWriter writer = new StreamWriter(stream);
@@ -135,15 +135,15 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                DateTime temp = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day);
-                IEnumerable<ChatMessage> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                DateTime temp = new DateTime(dateTime.DateTimeUnix);
+                IEnumerable<ChatMessageEntity> q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
                 JavaScriptSerializer json = new JavaScriptSerializer();
                 return json.Serialize(q);
             }
             catch (Exception e)
             {
                 JavaScriptSerializer json = new JavaScriptSerializer();
-                return json.Serialize(new List<ChatMessage>());
+                return json.Serialize(new List<ChatMessageEntity>());
             }
         }
 
@@ -156,7 +156,7 @@ namespace WebFrontend.Controllers
             {
                 return json.Serialize(GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort, connection.Password, connection.OldPassword));
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 return json.Serialize(e.Message);
             }

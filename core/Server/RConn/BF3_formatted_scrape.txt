@@ -1,3 +1,5 @@
+Request:       admin.eventsEnabled [enabled: boolean] 
+Response:      OK 
 Request:        player.onAuthenticated <soldier name: string> 
 Response:       OK 
 Request:       player.onJoin <soldier name: string> <id: GUID> 
@@ -51,9 +53,7 @@ Response:      OK BF3 <version>
 Response:      InvalidArguments 
 Request:       listPlayers <players: player subset> 
 Response:      OK <player info> 
-Response:      InvalidArguments 
-Request:       admin.eventsEnabled [enabled: boolean] 
-Response:      OK                            
+Response:      InvalidArguments                            
 Response:      OK <enabled: boolean>         
 Response:      InvalidArguments 
 Request:       admin.password [password: password] 
