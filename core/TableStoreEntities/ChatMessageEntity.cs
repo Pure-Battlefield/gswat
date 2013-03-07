@@ -4,13 +4,12 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace core.TableStoreEntities
 {
-    public class LogMessage : TableEntity
+    public class ChatMessageEntity : TableEntity
     {
         private DateTime _messageTimeStamp;
+        private String _speaker;
         private String _text;
-        
-        // Function Name of the logMessage
-        public String FuncName { get; set; }
+        private String _messageType;
 
         // TimeStamp for the message
         public DateTime MessageTimeStamp
@@ -24,6 +23,13 @@ namespace core.TableStoreEntities
             }
         }
 
+        // Speaker name for the message
+        public String Speaker
+        {
+            get { return _speaker; }
+            set { _speaker = value.Trim(); }
+        }
+
         // Full message text
         public String Text
         {
@@ -31,16 +37,23 @@ namespace core.TableStoreEntities
             set { _text = value.Trim(); }
         }
 
+        // MessageType of the ChatMessage
+        public String MessageType
+        {
+            get { return _messageType; }
+            set { _messageType = value.Trim(); }
+        }
+
         /// <summary>
-        ///     Construct an empty LogMessage object
+        ///     Construct an empty ChatMessage object
         ///     MessageTimeStamp will be initiated to a default DateTime()
         ///     Speaker and text will be empty strings
         /// </summary>
-        public LogMessage()
+        public ChatMessageEntity()
         {
             MessageTimeStamp = new DateTime();
+            Speaker = "";
             Text = "";
-            FuncName = "";
             PartitionKey = "";
             RowKey = "";
         }
@@ -49,13 +62,16 @@ namespace core.TableStoreEntities
         ///     Construct a ChatMessage object with predefined fields
         ///     Any null parameters will be initialized to empty strings or a default DateTime() object
         /// </summary>
-        /// <param name="time">Timestamp of the LogMessage</param>
-        /// <param name="text">Full text of the LogMessage</param>
-        public LogMessage(DateTime time, String funcName, String text)
+        /// <param name="time">MessageTimeStamp of the ChatMessage</param>
+        /// <param name="speaker">Speaker of the ChatMessage</param>
+        /// <param name="text">Full text of the ChatMessage</param>
+        /// <param name="messageType">MessageType of the ChatMessage</param>
+        public ChatMessageEntity(DateTime time, String speaker, String text, String messageType)
         {
             MessageTimeStamp = time;
-            Text = (text.Trim() ?? "");
-            FuncName = funcName;
+            Speaker = (speaker == null ? "" : speaker.Trim());
+            Text = (text == null ? "" : text.Trim());
+            MessageType = (messageType == null ? "all" : messageType.Trim());
             PartitionKey = time.Date.ToString("yyyyMMdd");
             RowKey = (DateTime.MaxValue.Ticks - time.Ticks).ToString(CultureInfo.InvariantCulture);
         }
@@ -66,7 +82,7 @@ namespace core.TableStoreEntities
         /// <returns>Formatted output string</returns>
         public override String ToString()
         {
-            return "[" + MessageTimeStamp + "] at {" + FuncName + "}: " + Text;
+            return "[" + MessageTimeStamp + "] [" + MessageType + "] " + Speaker + ": " + Text;
         }
     }
 }

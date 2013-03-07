@@ -59,7 +59,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ServerInterface\CommHandlerTest.cs" />
     <Compile Include="Server\CommLayerTest.cs" />
     <Compile Include="CoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

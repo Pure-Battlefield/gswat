@@ -60,9 +60,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthHandler\AuthHandler.cs" />
-    <Compile Include="AuthHandler\IAuthHandler.cs" />
-    <Compile Include="TableStoreEntities\ChatMessage.cs" />
+    <Compile Include="Logging\LogUtility.cs" />
+    <Compile Include="Roles\IRoleTableStoreUtility.cs" />
+    <Compile Include="Roles\PermissionSetEntity.cs" />
+    <Compile Include="Roles\CoreRoleManager\CoreRoleManager.cs" />
+    <Compile Include="Roles\RoleTableStoreUtility.cs" />
+    <Compile Include="TableStoreEntities\ChatMessageEntity.cs" />
     <Compile Include="ICore.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -74,16 +77,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServerInterface\CommHandler.cs" />
-    <Compile Include="ServerInterface\ICommHandler.cs" />
     <Compile Include="Server\RConn\PacketFormat.cs" />
     <Compile Include="Server\RConn\Parameter.cs" />
     <Compile Include="Server\RConn\RecognizedPacket.cs" />
-    <Compile Include="TableStoreEntities\LogMessage.cs" />
-    <Compile Include="TableStoreEntities\ServerConfig.cs" />
+    <Compile Include="TableStoreEntities\LogMessageEntity.cs" />
+    <Compile Include="TableStoreEntities\ServerSettingsEntity.cs" />
     <Compile Include="Server\ICommLayer.cs" />
     <Compile Include="Server\IServerMock.cs" />
-    <Compile Include="Server\CommLayerMock.cs" />
     <Compile Include="Server\ChatEventArgs.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,6 +101,7 @@
     <Compile Include="Server\RConn\PlayerSubset.cs" />
     <Compile Include="Server\RConn\Protocol.cs" />
     <Compile Include="Server\RConn\Word.cs" />
+    <Compile Include="Roles\UserEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -121,9 +122,7 @@
   <ItemGroup>
     <Content Include="Server\RConn\BF3_formatted_scrape.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ChatMessageUtilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

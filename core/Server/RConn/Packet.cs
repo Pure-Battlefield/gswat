@@ -56,7 +56,11 @@ namespace core.Server.RConn
         /// <summary>
         ///     Is the packet a request in a request - response pair?
         /// </summary>
-        public bool IsRequest { get; set; }
+        public bool IsRequest
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         ///     Is the packet a response to a request?
@@ -75,7 +79,7 @@ namespace core.Server.RConn
         {
             get { return _sequenceNumber & 0x3fffffff; }
 
-            set { _sequenceNumber = value; }
+            set { _sequenceNumber = value & 0x3fffffff; }
         }
 
         /// <summary>
