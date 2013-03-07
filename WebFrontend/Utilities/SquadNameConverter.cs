@@ -41,12 +41,12 @@ namespace WebFrontend.Utilities
             Squads.Add("SQUAD24", " XRAY");
             Squads.Add("SQUAD25", " YANKEE");
             Squads.Add("SQUAD26", " ZULU");
-            Squads.Add("SQUAD27","HAGGARD");
-            Squads.Add("SQUAD28","SWEETWATER");
-            Squads.Add("SQUAD29","PRESTON");
-            Squads.Add("SQUAD30","REDFORD");
-            Squads.Add("SQUAD31","FAITH");
-            Squads.Add("SQUAD32","CELESTE");
+            Squads.Add("SQUAD27", " HAGGARD");
+            Squads.Add("SQUAD28", " SWEETWATER");
+            Squads.Add("SQUAD29", " PRESTON");
+            Squads.Add("SQUAD30", " REDFORD");
+            Squads.Add("SQUAD31", " FAITH");
+            Squads.Add("SQUAD32", " CELESTE");
         }
     }
 }
