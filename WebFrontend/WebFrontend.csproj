@@ -255,7 +255,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\libraries\icanhaz-0.10.5.js" />
-    <Content Include="Scripts\libraries\lib.js" />
+    <Content Include="Scripts\lib.js" />
     <Content Include="Content\themes\base\fonts\iconFont.eot" />
     <Content Include="Content\themes\base\fonts\iconFont.ttf" />
     <Content Include="Content\themes\base\fonts\iconFont.woff" />
@@ -264,10 +264,12 @@
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\models\model.chat.js" />
     <Content Include="Scripts\models\model.globals.js" />
+    <Content Include="Scripts\models\model.map-rotation.js" />
     <Content Include="Scripts\models\model.server.js" />
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
     <Content Include="Scripts\router.js" />
+    <Content Include="Scripts\views\view.map-rotation.js" />
     <Content Include="Scripts\views\view.settings.js" />
     <Content Include="Scripts\views\view.chat.js" />
     <Content Include="Scripts\views\view.globals.js" />
