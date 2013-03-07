@@ -148,33 +148,5 @@ namespace WebFrontend.Controllers
                 return new List<ChatMessageEntity>();
             }
         }
-
-        /** Queries the Azure storage for the setting saved for the given Server
-         *  using the Core.LoadServerSettings() method. <Auth> */
-
-       [HttpGet]
-       [ActionName("serverInfo")]
-       public String GetServerInfo()
-       {
-           // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
-           var settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
-           JavaScriptSerializer json = new JavaScriptSerializer();
-
-           if (settings != null)
-           {
-               return json.Serialize(new Dictionary<String, String>
-                                         {
-                                             {"ServerIP", settings.Address},
-                                             {"ServerPort", settings.Port.ToString()}
-
-                                         });
-           }
-           return
-               json.Serialize(new Dictionary<String, String>
-                                  {
-                                      {"ServerIP", ""},
-                                      {"ServerPort", ""}
-                                  });
-       }
     }
 }

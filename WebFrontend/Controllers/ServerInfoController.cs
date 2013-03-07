@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 using WebFrontend.Models;
 
 namespace WebFrontend.Controllers
@@ -12,22 +10,21 @@ namespace WebFrontend.Controllers
     public class ServerInfoController : ApiController
     {
         // GET api/serverinfo
-        public Dictionary<String, String> Get()
+        public Dictionary<string, string> Get()
         {
             // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
             var settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
 
             if (settings != null)
             {
-                return new Dictionary<String, String>
+                return new Dictionary<string, string>
                                          {
                                              {"ServerIP", settings.Address},
                                              {"ServerPort", settings.Port.ToString()}
 
                                          };
             }
-            return
-                new Dictionary<String, String>
+            return new Dictionary<string, string>
                                   {
                                       {"ServerIP", ""},
                                       {"ServerPort", ""}
