@@ -1,6 +1,6 @@
 ﻿/* Global */
 body {
-    padding-top: 42px;
+    padding-top: 52px;
 }
 
 @media (min-width: 0px) and (max-width: 979px) {
@@ -41,6 +41,10 @@ table .table-actions {
 	width:25%;
 }
 
+.form-horizontal .control-group > .control-label {
+	width:auto;
+}
+
 /* Footer */
 #footer {
     display:none;
@@ -69,6 +73,12 @@ table .table-actions {
     display:none;
     background:#FFF;
     border-bottom: 1px solid #e5e5e5;
+	width:100%;
+	padding-bottom:10px;
+}
+
+#quick-settings {
+	padding-top:5px;
 }
 
 #server-chat-page .hide-server-msgs .server-message {
@@ -144,11 +154,16 @@ table .map-list-count {
 }
 
 /* Forms */
-.help-inline {
+.help-block {
 	display:none;
 }
 
-.error.number .error-number,
-.error.required .error-required {
+.has-error.number .error-number,
+.has-error.required .error-required {
 	display:block;
+}
+
+/* Settings */
+#settings h2 {
+	display:none;
 }
