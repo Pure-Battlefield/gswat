@@ -178,52 +178,10 @@
     <Content Include="Content\themes\base\CSS\loading.css" />
     <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.svg" />
     <Content Include="Content\themes\base\font\fontawesome-webfont.svg" />
-    <Content Include="Content\themes\base\img\bootstrap-docs-readme.png" />
-    <Content Include="Content\themes\base\img\bs-docs-bootstrap-features.png" />
-    <Content Include="Content\themes\base\img\bs-docs-masthead-pattern.png" />
-    <Content Include="Content\themes\base\img\bs-docs-responsive-illustrations.png" />
-    <Content Include="Content\themes\base\img\bs-docs-twitter-github.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-carousel.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-fluid.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-jumbotron-narrow.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-justified-nav.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-marketing.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-navbar-fixed-top.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-navbar-static-top.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-navbar.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-signin.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-starter.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-sticky-footer-navbar.png" />
-    <Content Include="Content\themes\base\img\examples\bootstrap-example-sticky-footer.png" />
-    <Content Include="Content\themes\base\img\examples\browser-icon-chrome.png" />
-    <Content Include="Content\themes\base\img\examples\browser-icon-firefox.png" />
-    <Content Include="Content\themes\base\img\examples\browser-icon-safari.png" />
-    <Content Include="Content\themes\base\img\examples\slide-01.jpg" />
-    <Content Include="Content\themes\base\img\examples\slide-02.jpg" />
-    <Content Include="Content\themes\base\img\examples\slide-03.jpg" />
     <Content Include="Content\themes\base\img\glyphicons-halflings-white.png" />
     <Content Include="Content\themes\base\img\glyphicons-halflings.png" />
     <Content Include="Content\themes\base\img\grid-baseline-20px.png" />
     <Content Include="Content\themes\base\jquery-ui-1.10.1.custom.min.css" />
-    <Content Include="Scripts\bootstrap\application.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-affix.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-alert.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-button.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-carousel.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-collapse.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-dropdown.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-modal.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-popover.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-scrollspy.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-tab.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-tooltip.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-transition.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-typeahead.js" />
-    <Content Include="Scripts\bootstrap\bootstrap.js" />
-    <Content Include="Scripts\bootstrap\bootstrap.min.js" />
-    <Content Include="Scripts\bootstrap\holder\holder.js" />
-    <Content Include="Scripts\bootstrap\html5shiv.js" />
-    <Content Include="Scripts\bootstrap\respond\respond.min.js" />
     <Content Include="Scripts\libraries\backbone-0.9.10.min.js" />
     <Content Include="Scripts\libraries\backbone.validate.js" />
     <Content Include="Scripts\libraries\bootstrap-2.3.0.min.js" />
@@ -303,7 +261,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\jquery-plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
