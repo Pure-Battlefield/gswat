@@ -175,6 +175,7 @@
     <Content Include="Content\themes\base\CSS\bootstrap3.css" />
     <Content Include="Content\themes\base\CSS\bootstrap.min.css" />
     <Content Include="Content\themes\base\CSS\font-awesome.min.css" />
+    <Content Include="Content\themes\base\CSS\jasmine.css" />
     <Content Include="Content\themes\base\CSS\loading.css" />
     <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.svg" />
     <Content Include="Content\themes\base\font\fontawesome-webfont.svg" />
@@ -186,11 +187,14 @@
     <Content Include="Scripts\libraries\backbone.validate.js" />
     <Content Include="Scripts\libraries\bootstrap-2.3.0.min.js" />
     <Content Include="Scripts\libraries\bootstrap-3.0.0.min.js" />
+    <Content Include="Scripts\libraries\jasmine-html.js" />
+    <Content Include="Scripts\libraries\jasmine.js" />
     <Content Include="Scripts\libraries\jquery-1.9.1.min.js" />
     <Content Include="Scripts\libraries\jquery-ui-1.10.1.custom.min.js" />
     <Content Include="Scripts\libraries\keyboard-0.4.1.min.js" />
     <Content Include="Scripts\libraries\moment-2.0.0.min.js" />
     <Content Include="Scripts\libraries\mustache-0.7.3.js" />
+    <Content Include="Scripts\libraries\sinon-1.6.0.js" />
     <Content Include="Scripts\libraries\toe-1.2.min.js" />
     <Content Include="Content\themes\base\CSS\structure.css" />
     <Content Include="Content\themes\base\fonts\iconFont.svg" />
@@ -238,6 +242,12 @@
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
     <Content Include="Scripts\router.js" />
+    <Content Include="Scripts\tests\account.js" />
+    <Content Include="Scripts\tests\chat.js" />
+    <Content Include="Scripts\tests\main.js" />
+    <Content Include="Scripts\tests\map-rotation.js" />
+    <Content Include="Scripts\tests\players.js" />
+    <Content Include="Scripts\tests\settings.js" />
     <Content Include="Scripts\views\view.account.js" />
     <Content Include="Scripts\views\view.map-rotation.js" />
     <Content Include="Scripts\views\view.settings.js" />
