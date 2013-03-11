@@ -13,8 +13,12 @@
     <!-- Libraries -->
     @Script("libraries/jquery-1.9.1.min.js")
     @Script("libraries/yepnope-1.5.4.min.js")
+    @Script("libraries/jasmine.js")
+    @Script("libraries/jasmine-html.js")
     <script type="text/javascript">
-        $(function (window, jasmine, undefined) {
+        $(function (window,$,yepnope,jasmine,undefined) {
+            "use strict";
+
             var jasmineEnv = jasmine.getEnv();
             jasmineEnv.updateInterval = 1000;
 
@@ -25,10 +29,6 @@
             jasmineEnv.specFilter = function(spec) {
                 return htmlReporter.specFilter(spec);
             };
-        }(window,jasmine));
-
-        $(function (window, $, yepnope, undefined) {
-            "use strict";
 
             var ichUrl = '/Scripts/libraries/icanhaz-0.10.5.js';
             var load_files = [
@@ -45,14 +45,14 @@
                 '/Scripts/libraries/underscore-1.4.3.min.js',
                 '/Scripts/libraries/backbone-0.9.10.min.js',
                 '/Scripts/libraries/backbone.validate.js',
-                '/Scripts/libraries/libraries/jasmine.js',
-                '/Scripts/libraries/libraries/jasmine-html.js',
                 '/Scripts/main.js',
                 '/Scripts/lib.js',
                 '/Scripts/router.js',
+                '/Scripts/tests/main.js',
                 '/Scripts/views/view.globals.js',
                 '/Scripts/models/model.globals.js',
-                '/Scripts/models/model.account.js'
+                '/Scripts/models/model.account.js',
+                '/Scripts/views/view.account.js'
             ];
 
             var increment = 100 / load_files.length;
@@ -74,11 +74,11 @@
                     },1000);
                 }
             });
-        }(window,$,yepnope));
+        }(window,$,yepnope,jasmine));
     </script>
 
     <!-- ICanHaz Templates -->
-    @RenderBody()
+	@RenderPage("~/Views/Home/Index.cshtml")
 </head>
 <body id="body">
 <header id="header"></header>
