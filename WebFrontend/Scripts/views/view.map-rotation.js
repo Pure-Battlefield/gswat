@@ -75,10 +75,10 @@
 						switch(err){
 							case 'min':
 							case 'max':
-								element.addClass('error number');
+								element.addClass('has-error number');
 								break;
 							case 'required':
-								element.addClass('error required');
+								element.addClass('has-error required');
 								break;
 						}
 					});

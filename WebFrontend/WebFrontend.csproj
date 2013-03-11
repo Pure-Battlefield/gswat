@@ -15,7 +15,7 @@
     <AssemblyName>WebFrontend</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -157,6 +157,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\ServerInfoController.cs" />
+    <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -171,22 +172,29 @@
     </Compile>
     <Compile Include="Utilities\SquadNameConverter.cs" />
     <Compile Include="Utilities\TeamNameConverter.cs" />
-    <Content Include="Content\themes\base\CSS\bootstrap-responsive.min.css" />
+    <Content Include="Content\themes\base\CSS\bootstrap3.css" />
     <Content Include="Content\themes\base\CSS\bootstrap.min.css" />
     <Content Include="Content\themes\base\CSS\font-awesome.min.css" />
+    <Content Include="Content\themes\base\CSS\jasmine.css" />
     <Content Include="Content\themes\base\CSS\loading.css" />
+    <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.svg" />
     <Content Include="Content\themes\base\font\fontawesome-webfont.svg" />
     <Content Include="Content\themes\base\img\glyphicons-halflings-white.png" />
     <Content Include="Content\themes\base\img\glyphicons-halflings.png" />
+    <Content Include="Content\themes\base\img\grid-baseline-20px.png" />
     <Content Include="Content\themes\base\jquery-ui-1.10.1.custom.min.css" />
     <Content Include="Scripts\libraries\backbone-0.9.10.min.js" />
     <Content Include="Scripts\libraries\backbone.validate.js" />
     <Content Include="Scripts\libraries\bootstrap-2.3.0.min.js" />
+    <Content Include="Scripts\libraries\bootstrap-3.0.0.min.js" />
+    <Content Include="Scripts\libraries\jasmine-html.js" />
+    <Content Include="Scripts\libraries\jasmine.js" />
     <Content Include="Scripts\libraries\jquery-1.9.1.min.js" />
     <Content Include="Scripts\libraries\jquery-ui-1.10.1.custom.min.js" />
     <Content Include="Scripts\libraries\keyboard-0.4.1.min.js" />
     <Content Include="Scripts\libraries\moment-2.0.0.min.js" />
     <Content Include="Scripts\libraries\mustache-0.7.3.js" />
+    <Content Include="Scripts\libraries\sinon-1.6.0.js" />
     <Content Include="Scripts\libraries\toe-1.2.min.js" />
     <Content Include="Content\themes\base\CSS\structure.css" />
     <Content Include="Content\themes\base\fonts\iconFont.svg" />
@@ -214,10 +222,6 @@
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Images\chatRefreshBtn.png" />
-    <Content Include="Images\chatRefreshBtn_hover.png" />
-    <Content Include="Images\settingsBtn.png" />
-    <Content Include="Images\settingsBtn_active.png" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -238,6 +242,12 @@
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
     <Content Include="Scripts\router.js" />
+    <Content Include="Scripts\tests\account.js" />
+    <Content Include="Scripts\tests\chat.js" />
+    <Content Include="Scripts\tests\main.js" />
+    <Content Include="Scripts\tests\map-rotation.js" />
+    <Content Include="Scripts\tests\players.js" />
+    <Content Include="Scripts\tests\settings.js" />
     <Content Include="Scripts\views\view.account.js" />
     <Content Include="Scripts\views\view.map-rotation.js" />
     <Content Include="Scripts\views\view.settings.js" />
@@ -251,19 +261,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -274,7 +271,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\jquery-plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -294,6 +290,15 @@
     <Content Include="Content\themes\base\font\fontawesome-webfont.woff" />
     <Content Include="Content\themes\base\font\FontAwesome.otf" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Tests\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.eot" />
+    <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.otf" />
+    <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.ttf" />
+    <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.woff" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -308,11 +313,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>65304</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1592/</IISUrl>
+          <IISUrl>http://localhost/WebFrontend</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
