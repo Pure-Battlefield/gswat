@@ -129,6 +129,7 @@
 					if(!_.isUndefined(modal.model.callback)){
 						modal.model.callback();
 					}
+					modal.model.destroy();
 					modal.remove();
 				});
 				this.$modal.modal('hide');
