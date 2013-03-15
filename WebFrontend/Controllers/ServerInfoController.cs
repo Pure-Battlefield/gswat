@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web.Http;
 using WebFrontend.Models;
+using core;
 
 namespace WebFrontend.Controllers
 {
     public class ServerInfoController : ApiController
     {
+        private readonly ICore core;
+
+        public ServerInfoController(ICore core)
+        {
+            this.core = core;
+        }
         // GET api/serverinfo
         public Dictionary<string, string> Get()
         {
             // Query Azure Storage ** Right now were using Last and Server because of the current StorageScheme
-            var settings = GlobalStaticVars.StaticCore.LoadServerSettings("Last", "Server");
+            var settings = core.LoadServerSettings("Last", "Server");
 
             if (settings != null)
             {
@@ -38,7 +43,7 @@ namespace WebFrontend.Controllers
         {
             try
             {
-                var result = GlobalStaticVars.StaticCore.Connect(connection.ServerIP, connection.ServerPort,
+                var result = core.Connect(connection.ServerIP, connection.ServerPort,
                                                                  connection.Password, connection.OldPassword);
 
                 return request.CreateResponse(HttpStatusCode.OK, result);
