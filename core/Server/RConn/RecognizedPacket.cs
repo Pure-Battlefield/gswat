@@ -76,8 +76,17 @@ namespace core.Server.RConn
 
             if (ValidRequestFormats.ContainsKey(name))
             {
+                PacketFormat format;
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
-                PacketFormat format = ValidRequestFormats[name];
+                try
+                {
+                    format = ValidRequestFormats[name];
+                }
+                catch (KeyNotFoundException e)
+                {
+                    throw new ArgumentException("Somehow, the key wasn't in the ValidRequestFormats dictionary...");
+                }
+                
 
                 if (packet.WordCount - 1 > format.Parameters.Count && format.Parameters.Count == 0)
                 {

@@ -6,18 +6,25 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 using WebFrontend.Models;
 using WebFrontend.Utilities;
+using core;
 using core.TableStoreEntities;
 
 namespace WebFrontend.Controllers
 {
     public class MessagesController : ApiController
     {
+        private readonly ICore core;
+
+        public MessagesController(ICore core)
+        {
+            this.core = core;
+        }
+
         public IEnumerable<ChatMessageEntity> RetrieveAllMessages()
         {
-            var q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            var q = core.GetMessageQueue();
             
             return q;
         }
@@ -61,7 +68,7 @@ namespace WebFrontend.Controllers
             /*TODO: Note that this is still unsafe; while it is *highly unlikely* that two messages could be received in under a ms,
              * there still exists a race condition here, and a message may not be sent.  This should be fixed with sessions.  
             */
-            var q = GlobalStaticVars.StaticCore.GetMessageQueue();
+            var q = core.GetMessageQueue();
             var constructedDateTime = UnixTimeStampToDateTime(dateTime.DateTimeUnix);
 
             var output =
@@ -74,7 +81,7 @@ namespace WebFrontend.Controllers
         public IEnumerable<ChatMessageEntity> RetrieveByDay(DateTimeInfo dateTime)
         {
                 var temp = UnixTimeStampToDateTime(dateTime.DateTimeUnix);
-                return GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                return core.GetMessagesFromDate(temp);
         }
 
         public HttpResponseMessage DownloadByDay(DateTimeInfo dateTime)
@@ -84,7 +91,7 @@ namespace WebFrontend.Controllers
             try
             {
                 var temp = UnixTimeStampToDateTime(dateTime.DateTimeUnix);
-                var q = GlobalStaticVars.StaticCore.GetMessagesFromDate(temp);
+                var q = core.GetMessagesFromDate(temp);
                 const string messageFmt = @"[{0}] [{1}] {2}:  {3}";
                 var stream = new MemoryStream();
                 var writer = new StreamWriter(stream);
