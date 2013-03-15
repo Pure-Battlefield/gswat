@@ -179,6 +179,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\MessagesHandler.cs" />
     <Compile Include="Models\DateTimeInfo.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
