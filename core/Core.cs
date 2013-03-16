@@ -138,7 +138,7 @@ namespace core
                     batchOp.InsertOrReplace(messages[runs*100 + i]);
                 }
                 ++runs;
-                MessageTable.BeginExecuteBatch(batchOp, null, null);
+                MessageTable.ExecuteBatch(batchOp);
             }
         }
 
