@@ -130,7 +130,7 @@ namespace core
         public void StoreMessagesIntoTableStore(IList<ChatMessageEntity> messages)
         {
             var runs = 0;
-            while (messages.Count / 100 != runs)
+            while (messages.Count / 100 >= runs)
             {
                 var batchOp = new TableBatchOperation();
                 for (var i = 0; i < Math.Min(100, messages.Count - (runs * 100)); i++)
