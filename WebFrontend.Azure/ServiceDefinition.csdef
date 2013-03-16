@@ -4,12 +4,14 @@
     <Sites>
       <Site name="Web">
         <Bindings>
-          <Binding name="Endpoint1" endpointName="Endpoint1" />
+          <Binding name="Endpoint1" endpointName="HTTP" />
+          <Binding name="Endpoint1" endpointName="HTTPS" />
         </Bindings>
       </Site>
     </Sites>
     <Endpoints>
-      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+      <InputEndpoint name="HTTP" protocol="http" port="80" />
+      <InputEndpoint name="HTTPS" protocol="https" port="443" certificate="Wildcard" />
     </Endpoints>
     <Imports>
       <Import moduleName="Diagnostics" />
@@ -20,5 +22,8 @@
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Wildcard" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
   </WebRole>
 </ServiceDefinition>
