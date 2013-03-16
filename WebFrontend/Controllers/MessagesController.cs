@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 using WebFrontend.Handlers;
 using WebFrontend.Models;
-using WebFrontend.Utilities;
-using core;
 using core.TableStoreEntities;
 
 namespace WebFrontend.Controllers
@@ -56,5 +52,19 @@ namespace WebFrontend.Controllers
                     return request.CreateResponse(HttpStatusCode.OK, messages);
             }
         }
+        
+        public HttpResponseMessage Post(HttpRequestMessage request, [FromBody]InboundMessageWrapper messages)
+        {
+            if (messages != null)
+            {
+                messagesHandler.ImportMessages(messages.Data);
+                return request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            return request.CreateResponse(HttpStatusCode.BadRequest);
+        }
     }
+    public class InboundMessageWrapper{
+        public List<ChatMessageEntity> Data { get; set; }
+    }
+
 }

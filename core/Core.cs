@@ -122,6 +122,26 @@ namespace core
             }
         }
 
+        /// <summary>
+        /// Bulk adds an enumerable of chat messages to table store.  
+        /// NOTE:  This can cause data consistency issues, as records are replaced if duplicate primary key is found.  
+        /// </summary>
+        /// <param name="messages">The enumerable of messages to add to Table Store.</param>
+        public void StoreMessagesIntoTableStore(IList<ChatMessageEntity> messages)
+        {
+            var runs = 0;
+            while (messages.Count > 0)
+            {
+                var batchOp = new TableBatchOperation();
+                for (var i = 0; i < Math.Min(100, messages.Count); i++)
+                {
+                    batchOp.InsertOrReplace(messages[runs*100 + i]);
+                }
+                ++runs;
+                MessageTable.BeginExecuteBatch(batchOp, null, null);
+            }
+        }
+
         // Implements ICore
         public IEnumerable<ChatMessageEntity> GetMessageQueue()
         {
