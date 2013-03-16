@@ -61,5 +61,12 @@ namespace core
         /// <param name="partitionKey">The primary IP of the server</param>
         /// <param name="rowKey">The unique port of the server</param>
         ServerSettingsEntity LoadServerSettings(string partitionKey, string rowKey);
+
+        /// <summary>
+        /// Bulk adds an enumerable of chat messages to table store.  
+        /// NOTE:  This can cause data consistency issues, as records are replaced if duplicate primary key is found.  
+        /// </summary>
+        /// <param name="messages">The enumerable of messages to add to Table Store.</param>
+        void StoreMessagesIntoTableStore(IList<ChatMessageEntity> messages);
     }
 }

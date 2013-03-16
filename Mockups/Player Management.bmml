@@ -1,0 +1,50 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1596" measuredH="971" mockupW="1280" mockupH="960">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="316" y="11" w="1280" h="960" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>GSWAT%0Ahttp%3A//gswat.com</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="318" y="82" w="1278" h="42" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+        <borderStyle>none</borderStyle>
+        <color>0</color>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="376" y="89" w="-1" h="-1" measuredW="67" measuredH="28" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <size>20</size>
+        <text>GSWAT</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::LinkBar" x="481" y="94" w="-1" h="-1" measuredW="306" measuredH="19" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Home%2C%20Chat%2C%20Map%20Rotation%2C%20Players%2C%20Settings</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Link" x="1471" y="94" w="-1" h="-1" measuredW="49" measuredH="19" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Account</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Title" x="378" y="132" w="-1" h="-1" measuredW="132" measuredH="43" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Players</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::HRule" x="382" y="178" w="1160" h="-1" measuredW="100" measuredH="10" zOrder="7" locked="true" isInGroup="-1"/>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::FieldSet" x="376" y="122" w="1170" h="813" measuredW="200" measuredH="170" zOrder="5" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Page%20Content</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::DataGrid" x="387" y="191" w="1150" h="209" measuredW="501" measuredH="201" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Player%20Name%20%5Ev%2C%20Team%20%5Ev%2C%20Squad%20%5Ev%2C%20Kills%20%5Ev%2C%20Deaths%20%5Ev%2C%20Score%20%5Ev%2C%20Ping%20%5Ev%2C%20Actions%0APlayer%201%2C%20RU%2C%20Charlie%2C%205%2C%206%2C%20740%2C100%0APlayer%202%2C%20RU%2C%20Charlie%2C%205%2C%206%2C%20740%2C100%0APlayer%203%2C%20RU%2C%20Charlie%2C%205%2C%206%2C%20740%2C100%0APlayer%204%2C%20US%2C%20Charlie%2C%205%2C%206%2C%20740%2C100%0APlayer%205%2C%20US%2C%20Charlie%2C%205%2C%206%2C%20740%2C100%0APlayer%206%2C%20US%2C%20Charlie%2C%205%2C%206%2C%20740%2C100%0A%7B40%2C10%2C5%2C5%2C5%2C5%2C5%2C25%7D</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

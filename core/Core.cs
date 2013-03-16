@@ -6,14 +6,12 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.Logging;
-using core.Roles;
 using core.Roles.CoreRoleManager;
 using core.Server;
 using core.TableStoreEntities;
 
 namespace core
 {
-    // COMMENT!
     // Handler for mocking ChatEvents
     public delegate void ChatEventHandler(object sender, ChatEventArgs e);
 
@@ -55,6 +53,9 @@ namespace core
 
             // Create role manager if it does not exist
             RoleManager = new CoreRoleManager();
+
+            //Attempt to load existing connection.
+            LoadExistingConnection();
         }
 
         // Implements ICore
@@ -121,6 +122,26 @@ namespace core
             }
         }
 
+        /// <summary>
+        /// Bulk adds an enumerable of chat messages to table store.  
+        /// NOTE:  This can cause data consistency issues, as records are replaced if duplicate primary key is found.  
+        /// </summary>
+        /// <param name="messages">The enumerable of messages to add to Table Store.</param>
+        public void StoreMessagesIntoTableStore(IList<ChatMessageEntity> messages)
+        {
+            var runs = 0;
+            while (messages.Count > 0)
+            {
+                var batchOp = new TableBatchOperation();
+                for (var i = 0; i < Math.Min(100, messages.Count); i++)
+                {
+                    batchOp.InsertOrReplace(messages[runs*100 + i]);
+                }
+                ++runs;
+                MessageTable.BeginExecuteBatch(batchOp, null, null);
+            }
+        }
+
         // Implements ICore
         public IEnumerable<ChatMessageEntity> GetMessageQueue()
         {
@@ -164,7 +185,7 @@ namespace core
                     {
                         // Disconnect from current server
                         MessageQueue.Clear();
-                    CommLayer.Disconnect();
+                        CommLayer.Disconnect();
 
                         // Attempt to connect to the new server - if this fails, we leave the old "last server" entry in Table Store
                         CommLayer.Connect(address, port, password);

@@ -1,39 +1,40 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <title>GSWAT - Brought to you by Pure Battlefield</title>
+	<head>
+		<meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        @Styles.Render("~/Content/themes/base/CSS/bootstrap.min.css")
-        @Styles.Render("~/Content/themes/base/CSS/bootstrap-responsive.min.css")
-        @Styles.Render("~/Content/themes/base/CSS/loading.css")
+		<title>GSWAT - Server Managing made Awesome</title>
+		@Styles.Render("~/Content/themes/base/CSS/bootstrap3.css")
 
-        <!-- Libraries -->
-        @Script("libraries/jquery-1.9.1.min.js")
-        @Script("libraries/yepnope-1.5.4.min.js")
-        <script type="text/javascript">
-            $(function (window, $, yepnope, undefined) {
-            	"use strict";
+		@Styles.Render("~/Content/themes/base/CSS/loading.css")
+
+		<!-- Libraries -->
+		@Script("libraries/jquery-1.9.1.min.js")
+		@Script("libraries/yepnope-1.5.4.min.js")
+		<script type="text/javascript">
+			$(function (window, $, yepnope, undefined) {
+				"use strict";
 
 				var ichUrl = '/Scripts/libraries/icanhaz-0.10.5.js';
 				var load_files = [
 					'/Scripts/libraries/mustache-0.7.3.js',
 					ichUrl,
-                    '/Content/themes/base/CSS/font-awesome.min.css',
-                    '/Scripts/libraries/jquery-ui-1.10.0.custom.min.js',
-                    '/Content/themes/base/jquery-ui-1.10.0.custom.min.css',
-                    '/Scripts/libraries/bootstrap-2.3.0.min.js',
-                    '/Content/themes/base/CSS/structure.css',
-                    '/Scripts/libraries/toe-1.2.min.js',
-                    '/Scripts/libraries/moment-2.0.0.min.js',
-                    '/Scripts/libraries/underscore-1.4.3.min.js',
-                    '/Scripts/libraries/backbone-0.9.10.min.js',
-                    '/Scripts/main.js',
-                    '/Scripts/lib.js',
-                    '/Scripts/router.js',
-                    '/Scripts/views/view.globals.js',
-                    '/Scripts/models/model.globals.js'
+					'/Content/themes/base/CSS/font-awesome.min.css',
+					'/Scripts/libraries/jquery-ui-1.10.1.custom.min.js',
+					'/Content/themes/base/jquery-ui-1.10.1.custom.min.css',
+					'/Scripts/libraries/bootstrap-3.0.0.min.js',
+					'/Content/themes/base/CSS/structure.css',
+					'/Scripts/libraries/toe-1.2.min.js',
+					'/Scripts/libraries/moment-2.0.0.min.js',
+					'/Scripts/libraries/underscore-1.4.3.min.js',
+					'/Scripts/libraries/backbone-0.9.10.min.js',
+					'/Scripts/libraries/backbone.validate.js',
+					'/Scripts/main.js',
+					'/Scripts/lib.js',
+					'/Scripts/router.js',
+					'/Scripts/views/view.globals.js',
+					'/Scripts/models/model.globals.js',
+                    '/Scripts/models/model.account.js'
 				];
 
 				var increment = 100 / load_files.length;
@@ -59,31 +60,36 @@
 								console.log('Models',PBF.model_definitions);
 								console.log('Collections',PBF.collection_definitions);
 								console.log('PBF Object',PBF);
+
+                                window.onSignInCallback = function(authResult){
+                                    var account_model = PBF.get({model:{name:'account_model'}});
+                                    account_model.onSignInCallback(authResult);
+                                };
 							});
 						},1000);
 					}
 				});
 			}(window,$,yepnope));
-        </script>
-        
-        <!-- ICanHaz Templates -->
-        @RenderBody()
-    </head>
-    <body id="body">
-        <header id="header"></header>
-        <section id="content" class="container">
+		</script>
+
+		<!-- ICanHaz Templates -->
+		@RenderBody()
+	</head>
+	<body id="body">
+		<header id="header"></header>
+		<section id="content" class="container">
 			<div id="loading" class="row-fluid">
 				<div class="well">
-                    <h3>Loading Base Application <small>- Please Wait</small></h3>
-                    <div class="progress progress-striped active">
-                        <div id="progress-bar-inner" class="bar"></div>
-                    </div>
+					<h3>Loading Base Application <small>- Please Wait</small></h3>
+					<div class="progress progress-striped active">
+						<div id="progress-bar-inner" class="progress-bar"></div>
+					</div>
 				</div>
 			</div>
-        </section>
-        <footer id="footer" class="footer"></footer>
+		</section>
+		<footer id="footer" class="footer"></footer>
     </body>
 </html>
 @helper Script(string scriptName) {
-    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
 }

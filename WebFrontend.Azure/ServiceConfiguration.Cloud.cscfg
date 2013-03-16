@@ -3,7 +3,7 @@
   <Role name="WebFrontend">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=devgswatenzo;AccountKey=zAm4nwdwBdH7V/2Lq61zUmy77omV3H6Y8iIqJTrNY4gI+gPWBTi1Grm4fZ3unfEqgw05fSa1rmRmugU9O6/O8A==" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
     <Certificates>

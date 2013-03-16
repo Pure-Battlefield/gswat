@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using core;
-using core.Server;
 
 namespace WebFrontend
 {
@@ -20,9 +19,6 @@ namespace WebFrontend
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            GlobalStaticVars.StaticCore = new Core();
-            GlobalStaticVars.StaticCore.LoadExistingConnection();
         }
     }
 }
