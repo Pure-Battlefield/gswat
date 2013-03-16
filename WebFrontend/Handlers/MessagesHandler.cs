@@ -18,6 +18,7 @@ namespace WebFrontend.Handlers
         IEnumerable<ChatMessageEntity> RetrieveAllMessagesFromTime(DateTimeInfo dateTime);
         IEnumerable<ChatMessageEntity> RetrieveByDay(DateTimeInfo dateTime);
         HttpResponseMessage DownloadByDay(DateTimeInfo dateTime);
+        void ImportMessages(IList<ChatMessageEntity> messages);
     }
     
     public class MessagesHandler : IMessagesHandler
@@ -27,6 +28,11 @@ namespace WebFrontend.Handlers
         public MessagesHandler(ICore core)
         {
             this.core = core;
+        }
+
+        public void ImportMessages(IList<ChatMessageEntity> messages)
+        {
+            core.StoreMessagesIntoTableStore(messages);
         }
 
         public IEnumerable<ChatMessageEntity> RetrieveAllMessages()
