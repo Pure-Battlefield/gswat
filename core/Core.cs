@@ -133,7 +133,7 @@ namespace core
             while (messages.Count / 100 != runs)
             {
                 var batchOp = new TableBatchOperation();
-                for (var i = 0; i < Math.Min(100, messages.Count % 100); i++)
+                for (var i = 0; i < Math.Min(100, messages.Count - (runs * 100)); i++)
                 {
                     batchOp.InsertOrReplace(messages[runs*100 + i]);
                 }
