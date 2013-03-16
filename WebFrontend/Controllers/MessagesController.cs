@@ -53,14 +53,15 @@ namespace WebFrontend.Controllers
             }
         }
         
-        public HttpResponseMessage Post(HttpRequestMessage request, [FromBody]InboundMessageWrapper messages)
+        [HttpPost]
+        public HttpResponseMessage Post([FromBody]InboundMessageWrapper messages)
         {
             if (messages != null)
             {
                 messagesHandler.ImportMessages(messages.Data);
-                return request.CreateResponse(HttpStatusCode.Accepted);
+                return Request.CreateResponse(HttpStatusCode.Accepted);
             }
-            return request.CreateResponse(HttpStatusCode.BadRequest);
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
     }
     public class InboundMessageWrapper{
