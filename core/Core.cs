@@ -39,8 +39,7 @@ namespace core
             ServerMessages = new Dictionary<string, DateTime>();
 
             // Connect to storage
-            var storageAccount =
-                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             var tableClient = storageAccount.CreateCloudTableClient();
 
             // Create message table if it does not exist
@@ -321,12 +320,12 @@ namespace core
 
         public bool ValidateUser(string token, PermissionSetEntity permissionSet)
         {
-            return PermissionsUtil.ValidateToken(token, permissionSet);
+            return PermissionsUtil.ValidateUser(token, permissionSet);
         }
 
-        public void SetUserPermissions(UserEntity user)
+        public void AddorUpdateUser(UserEntity user)
         {
-            PermissionsUtil.SetUserPermissions(user);
+            PermissionsUtil.AddorUpdateUser(user);
         }
     }
 }
