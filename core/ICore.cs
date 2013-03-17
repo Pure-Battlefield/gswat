@@ -9,14 +9,6 @@ namespace core
 {
     public interface ICore
     {
-        // CommHandler that this Core instance is hooked to
-
-        // CloudTable object for ChatMessages
-
-        // CloudTable object for CredMessages
-
-        // Current queue of messages
-
         // ServerMessage dictionary for filtering
         ICommLayer CommLayer { get; set; }
         CloudTable MessageTable { get; set; }
@@ -49,5 +41,6 @@ namespace core
         ServerSettingsEntity LoadServerSettings(String partitionKey, String rowKey);
 
         bool ValidateUser(string token, PermissionSetEntity permissionSet);
+        void AddorUpdateUser(UserEntity user);
     }
 }

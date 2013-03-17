@@ -83,7 +83,7 @@ namespace core.Roles
             try
             {
                 var retrieveOp = TableOperation.Retrieve<UserEntity>(nameSpace, googleUserName);
-                var result = PermissionSetTable.Execute(retrieveOp);
+                var result = UserTable.Execute(retrieveOp);
 
                 if (result.Result != null)
                 {

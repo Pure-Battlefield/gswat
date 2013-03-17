@@ -21,7 +21,7 @@ namespace core.Roles
             RoleUtility = new RoleTableStoreUtility();
         }
 
-        public void SetUserPermissions(UserEntity user)
+        public void AddorUpdateUser(UserEntity user)
         {
             RoleUtility.SetUserEntity(user);
         }
@@ -33,29 +33,27 @@ namespace core.Roles
         /// <param name="token">OpenID token of the user to be validated</param>
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
         /// <returns></returns>
-        public bool ValidateToken(string token, PermissionSetEntity permissionSet)
+        public bool ValidateUser(string token, PermissionSetEntity permissionSet)
         {
             var request = WebRequest.Create("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
             request.Method = "GET";
-            //request.ContentLength = 0;
-            //request.ContentType = "application/x-www-form-urlencoded";
-            string userid = "";
             try
             {
+                string userid = "";
                 using (var response = (HttpWebResponse) request.GetResponse())
                 {
                     using (var reader = new StreamReader(response.GetResponseStream()))
                     {
                         var js = new JavaScriptSerializer();
                         var obj = js.Deserialize<dynamic>(reader.ReadToEnd());
-                        userid = obj["userid"];
+                        userid = obj["user_id"];
                     }
                 }
 
                 var user = RoleUtility.GetUserEntity(permissionSet.Namespace, userid);
 
-                //Resharper is amazing - this returns false if any permissions are not found, otherwise returns true
-                return permissionSet.PermissionSet.All(permission => user.Permissions.PermissionSet.Contains(permission));
+                //Resharper is amazing - this returns false if any permissions are not found or the user is null, otherwise returns true
+                return user != null && permissionSet.PermissionSet.All(permission => user.Permissions.PermissionSet.Contains(permission));
             }
             catch (Exception e)
             {
