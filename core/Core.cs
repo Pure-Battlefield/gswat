@@ -6,7 +6,7 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.Logging;
-using core.Roles.CoreRoleManager;
+using core.Roles;
 using core.Server;
 using core.TableStoreEntities;
 
@@ -24,7 +24,7 @@ namespace core
         public CloudTable CredTable { get; set; }
         public Queue<ChatMessageEntity> MessageQueue { get; set; }
         public Dictionary<string, DateTime> ServerMessages { get; set; }
-        public CoreRoleManager RoleManager { get; set; }
+        public PermissionsUtility PermissionsUtil { get; set; }
 
         /// <summary>
         ///     Constructs an instance of Core
@@ -52,7 +52,8 @@ namespace core
             CredTable.CreateIfNotExists();
 
             // Create role manager if it does not exist
-            RoleManager = new CoreRoleManager();
+            PermissionsUtil = new PermissionsUtility();
+            PermissionsUtil.LoadPermissionsFromConfig();
 
             //Attempt to load existing connection.
             LoadExistingConnection();
@@ -97,7 +98,6 @@ namespace core
             args.Add("message", message);
             CommLayer.IssueRequest("admin.say", args, null);
         }
-
 
         // Implements ICore
         public void MessageHandler(object sender, Dictionary<string, string> packet)
@@ -317,6 +317,16 @@ namespace core
                 return (ServerSettingsEntity)result.Result;
             }
             return null;
+        }
+
+        public bool ValidateUser(string token, PermissionSetEntity permissionSet)
+        {
+            return PermissionsUtil.ValidateToken(token, permissionSet);
+        }
+
+        public void SetUserPermissions(UserEntity user)
+        {
+            PermissionsUtil.SetUserPermissions(user);
         }
     }
 }

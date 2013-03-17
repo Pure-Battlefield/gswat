@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace core.Roles
@@ -17,49 +19,36 @@ namespace core.Roles
 
         public string BattlelogID { get; set; }
 
-        private string _namespace;
-        public string Namespace {
-            get { return _namespace; }
-            set 
-            { 
-                _namespace = value;
-                PartitionKey = Namespace;
-            } 
-        }
-
         public bool AccountEnabled { get; set; }
-        public ArrayList Permissions { get; set; }
+
+        private PermissionSetEntity _permissions;
+        public PermissionSetEntity Permissions {
+            get { return _permissions; }
+            set { 
+                _permissions = value;
+                PartitionKey = value.Namespace;
+            }
+        }
 
         public UserEntity()
         {
             GoogleUsername = "";
             BattlelogID = "";
-            Namespace = "";
             AccountEnabled = true;
-            Permissions = new ArrayList();
-            PartitionKey = Namespace;
+            Permissions = new PermissionSetEntity();
+            PartitionKey = Permissions.Namespace;
             RowKey = GoogleUsername;
         }
 
         public UserEntity(string googleUsername, string battlelogID, bool accountEnabled,
-                          ArrayList permissions)
+                          PermissionSetEntity permissions)
         {
             GoogleUsername = googleUsername;
             BattlelogID = battlelogID;
             AccountEnabled = accountEnabled;
             Permissions = permissions;
-            PartitionKey = Namespace;
+            PartitionKey = permissions.Namespace;
             RowKey = GoogleUsername;
-        }
-
-        public void AddPermission(string permissionName)
-        {
-            
-        }
-
-        public void RemovePermission(string permissionName)
-        {
-            
         }
     }
 }
