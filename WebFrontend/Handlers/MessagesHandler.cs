@@ -19,6 +19,7 @@ namespace WebFrontend.Handlers
         IEnumerable<ChatMessageEntity> RetrieveByDay(DateTimeInfo dateTime);
         HttpResponseMessage DownloadByDay(DateTimeInfo dateTime);
         void ImportMessages(IList<ChatMessageEntity> messages);
+        void AdminSay(string message, string admin);
     }
     
     public class MessagesHandler : IMessagesHandler
@@ -114,6 +115,14 @@ namespace WebFrontend.Handlers
             {
                 return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
+        }
+
+        public void AdminSay(string message, string admin)
+        {
+            //TODO: Permission checking here.  
+
+            var newMsg = String.Format("[{0}]:  {1}", admin, message);
+            core.SendAdminSay(newMsg);
         }
 
         public static DateTime UnixTimeStampToDateTime(long unixTimeStamp)

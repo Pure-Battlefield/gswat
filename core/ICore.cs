@@ -68,5 +68,7 @@ namespace core
         /// </summary>
         /// <param name="messages">The enumerable of messages to add to Table Store.</param>
         void StoreMessagesIntoTableStore(IList<ChatMessageEntity> messages);
+
+        void SendAdminSay(string message, string playerName = null, string teamId = null, string squadId = null);
     }
 }

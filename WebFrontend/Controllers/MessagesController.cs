@@ -63,9 +63,28 @@ namespace WebFrontend.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
+
+        public HttpResponseMessage Put([FromBody]AdminChatWrapper chatMessage)
+        {
+            try
+            {
+                messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName);
+            }
+            catch (ArgumentException e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
     public class InboundMessageWrapper{
         public List<ChatMessageEntity> Data { get; set; }
+    }
+
+    public class AdminChatWrapper
+    {
+        public string Message { get; set; }
+        public string AdminName { get; set; }
     }
 
 }
