@@ -50,7 +50,7 @@ namespace core.Server
             }
         }
 
-        public void IssueRequest(string requestName, Dictionary<string, string> parameters, MessageEventHandler callback)
+        public override void IssueRequest(string requestName, Dictionary<string, string> parameters, MessageEventHandler callback)
         {
             Packet request = RecognizedPacket.CreatePacketFromFormattedData(requestName, parameters);
             request = RconProtocol.SendRequest(request);

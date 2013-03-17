@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using core.Server.RConn;
 
 namespace core.Server
 {
@@ -21,5 +22,7 @@ namespace core.Server
         ///     Disconnect server connection
         /// </summary>
         public abstract void Disconnect();
+
+        public abstract void IssueRequest(string requestName, Dictionary<string, string> parameters, MessageEventHandler callback);
     }
 }

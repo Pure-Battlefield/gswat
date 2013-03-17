@@ -58,6 +58,47 @@ namespace core
             LoadExistingConnection();
         }
 
+        public void SendAdminSay(string message, string playerName = null, string teamId = null, string squadId = null)
+        {
+            if (message.Length > 128)
+            {
+                throw new ArgumentException("Message length over maximum message size.");
+            }
+            var args = new Dictionary<string, string>();
+            var playersSubset = "";
+
+            if (playerName != null)
+            {
+                if (squadId != null || teamId != null)
+                {
+                    throw new ArgumentException("Cannot specify both playerName and Team/Squad.");
+                }
+                playersSubset = String.Format("player {0}", playerName);
+            }
+            else if (squadId != null)
+            {
+                if (teamId == null)
+                {
+                    throw new ArgumentException("teamId cannot be null when specifying squadId");
+                }
+
+                playersSubset = String.Format("sqaud {0} {1}", teamId, squadId);
+            }
+            else if (teamId != null)
+            {
+                playersSubset = String.Format("team {0}", teamId);
+            }
+            else
+            {
+                playersSubset = String.Format("all");
+            }
+
+            args.Add("players", playersSubset);
+            args.Add("message", message);
+            CommLayer.IssueRequest("admin.say", args, null);
+        }
+
+
         // Implements ICore
         public void MessageHandler(object sender, Dictionary<string, string> packet)
         {
