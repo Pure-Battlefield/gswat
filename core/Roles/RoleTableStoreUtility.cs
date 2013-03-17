@@ -99,7 +99,7 @@ namespace core.Roles
 
         public void SetUserEntity(UserEntity user)
         {
-            var userEntity = GetUserEntity(user.Namespace, user.GoogleUsername);
+            var userEntity = GetUserEntity(user.Permissions.Namespace, user.GoogleUsername);
             if (userEntity == null)
             {
                 var insertOp = TableOperation.Insert(user);

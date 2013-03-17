@@ -53,6 +53,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Spatial.5.0.2\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,7 +64,7 @@
     <Compile Include="Logging\LogUtility.cs" />
     <Compile Include="Roles\IRoleTableStoreUtility.cs" />
     <Compile Include="Roles\PermissionSetEntity.cs" />
-    <Compile Include="Roles\CoreRoleManager\CoreRoleManager.cs" />
+    <Compile Include="Roles\PermissionsUtility.cs" />
     <Compile Include="Roles\RoleTableStoreUtility.cs" />
     <Compile Include="TableStoreEntities\ChatMessageEntity.cs" />
     <Compile Include="ICore.cs" />
@@ -121,6 +122,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Roles\Permissions.txt" />
+    <Content Include="Roles\readme.txt" />
     <Content Include="Server\RConn\BF3_formatted_scrape.txt" />
   </ItemGroup>
   <ItemGroup />

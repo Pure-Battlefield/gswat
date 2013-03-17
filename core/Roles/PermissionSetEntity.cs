@@ -23,15 +23,15 @@ namespace core.Roles
             }
         }
 
-        public ArrayList PermissionSet { get; set; }
+        public List<String> PermissionSet { get; set; }
 
         public PermissionSetEntity()
         {
             Namespace = "";
-            PermissionSet = new ArrayList();
+            PermissionSet = new List<String>();
         }
 
-        public PermissionSetEntity(string nameSpace, ArrayList permissionSet)
+        public PermissionSetEntity(string nameSpace, List<String> permissionSet)
         {
             Namespace = nameSpace;
             PermissionSet = permissionSet;
