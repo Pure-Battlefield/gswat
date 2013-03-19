@@ -165,3 +165,4 @@ pip-log.txt
 /WebFrontend.Azure/WebFrontend.Azure.ccproj
 /WebFrontend.Azure/Profiles/dev-gswat-enzoStaging.azurePubxml
 /.idea
+/WebFrontend.Azure/Profiles/*.azurePubxml

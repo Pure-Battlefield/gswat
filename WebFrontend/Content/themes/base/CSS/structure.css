@@ -1,6 +1,6 @@
 ﻿/* Global */
 body {
-    padding-top: 42px;
+    padding-top: 52px;
 }
 
 @media (min-width: 0px) and (max-width: 979px) {
@@ -9,9 +9,40 @@ body {
     }
 }
 
+body #logout,
+body.logged-in #login {
+	display:none;
+}
+
+body.logged-in #logout,
+body #login {
+	display:block;
+}
+
+table .table-status-icons {
+	font-size:20px;
+	text-align:center;
+}
+
+table .table-actions {
+	text-align:center;
+}
+
+.table-status-icons .icon-ok-sign {
+	color:#006400;
+}
+
+.table-status-icons .icon-remove-sign {
+	color:#ff0000;
+}
+
 #header-alert .container {
 	padding:20px 0 0;
 	width:25%;
+}
+
+.form-horizontal .control-group > .control-label {
+	width:auto;
 }
 
 /* Footer */
@@ -42,10 +73,32 @@ body {
     display:none;
     background:#FFF;
     border-bottom: 1px solid #e5e5e5;
+	width:100%;
+	padding-bottom:10px;
+}
+
+#quick-settings {
+	padding-top:5px;
 }
 
 #server-chat-page .hide-server-msgs .server-message {
     display: none;
+}
+
+#server-chat-page .hide-us-msgs .team-US {
+	display: none;
+}
+
+#server-chat-page .hide-ru-msgs .team-RU {
+	display: none;
+}
+
+#server-chat-page .hide-global-msgs .team-all {
+	display: none;
+}
+
+#server-chat-page .hide-squad-msgs .squad {
+	display: none;
 }
 
 #server-chat-page .grid.page-region {
@@ -87,4 +140,30 @@ body {
 
 .player-name {
     font-weight: bold;
+}
+
+/* Map Rotation */
+table .map-list-player-criterias,
+table .map-list-count {
+	text-align:center;
+}
+
+#map-rotation th,
+#map-rotation td {
+	vertical-align:middle;
+}
+
+/* Forms */
+.help-block {
+	display:none;
+}
+
+.has-error.number .error-number,
+.has-error.required .error-required {
+	display:block;
+}
+
+/* Settings */
+#settings h2 {
+	display:none;
 }
