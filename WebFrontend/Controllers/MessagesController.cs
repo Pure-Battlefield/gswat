@@ -66,9 +66,30 @@ namespace WebFrontend.Controllers
 
         public HttpResponseMessage Put([FromBody]AdminChatWrapper chatMessage)
         {
+            if (chatMessage == null || chatMessage.Message == null || chatMessage.AdminName == null || chatMessage.Type == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "chatMessage object, chatMessage message, or chatMessage admin name not specified.");
+            }
             try
             {
-                messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName);
+                switch (chatMessage.Type.ToLower())
+                {
+                    case "say":
+                        if (chatMessage.PlayerTargets != null)
+                        {
+                            messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName, chatMessage.PlayerTargets);
+                        }
+                        else
+                        {
+                            messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName, teamId: chatMessage.TeamId, squadId: chatMessage.SquadId);
+                        }
+                        break;
+                    case "yell":
+                        break;
+                    default:
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "type must be either say or yell.");
+                }
+                
             }
             catch (ArgumentException e)
             {
@@ -85,6 +106,10 @@ namespace WebFrontend.Controllers
     {
         public string Message { get; set; }
         public string AdminName { get; set; }
+        public string Type { get; set; }
+        public IList<string> PlayerTargets { get; set; }
+        public string TeamId { get; set; }
+        public string SquadId { get; set; }
     }
 
 }

@@ -16,8 +16,6 @@ namespace core.Server
         private string Address, Password;
         private int Port;
 
-        public event ChatEventHandler CommHandler;
-
         public CommLayer()
         {
             MessageEvents = new Dictionary<string, MessageEventHandler>();
@@ -110,7 +108,10 @@ namespace core.Server
             else if (args.IsResponse && RequestCallbacks.ContainsKey(args.SequenceNumber))
             {
                 Packet request = RequestPackets[args.SequenceNumber];
-                RequestCallbacks[args.SequenceNumber](this, RecognizedPacket.FormatResponsePacket(request, args));
+                if (RequestCallbacks[args.SequenceNumber] != null)
+                {
+                    RequestCallbacks[args.SequenceNumber](this, RecognizedPacket.FormatResponsePacket(request, args));
+                }
             }
         }
     }
