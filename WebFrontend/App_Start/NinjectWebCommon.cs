@@ -1,4 +1,5 @@
 using System.Web.Http;
+using core;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(WebFrontend.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(WebFrontend.App_Start.NinjectWebCommon), "Stop")]
@@ -57,6 +58,7 @@ namespace WebFrontend.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Load("WebFrontend.dll");
+            kernel.Get<ICore>();
         }        
     }
 }
