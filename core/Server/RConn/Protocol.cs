@@ -43,7 +43,7 @@ namespace core.Server.RConn
 
                 if (!ResponseOk.IsPacketResponseOk(ReceivePacket()))
                 {
-                    throw new Exception("Password incorrect.");
+                    throw new ArgumentException("Password incorrect.");
                 }
 
                 Packet enableEvents = new EnableEvents();
@@ -97,9 +97,10 @@ namespace core.Server.RConn
 
                 if (PacketEvent != null)
                 {
+                    //We're going to return from this function anyway which will end the thread; allow a new MessagePump to be started.
+                    MessagePump = null;    
                     PacketEvent(serverDied);
                 }
-                return;
             }
         }
 
