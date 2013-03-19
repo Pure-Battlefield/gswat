@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading;
 using core.Logging;
 using core.Server.RConn;
 using core.Server.RConn.Commands;
@@ -64,7 +65,28 @@ namespace core.Server
             if (args.FirstWord == "SocketException")
             {
                 Disconnect();
-                Connect(Address, Port, Password);
+                //Continue to attempt to reconnect unless credentials fail.  
+                while (true)
+                {
+                    try
+                    {
+                        Connect(Address, Port, Password);
+                        break;
+                    }
+                    catch (ArgumentException e)
+                    {
+                        //Bad Password -- we should stop trying to reconnect and let the user handle it.  
+                        LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+                        throw;
+                    }
+                    catch (Exception e)
+                    {
+                        //Random connection exceptions; sleep for 2 seconds and try again.  
+                        LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+                        Thread.Sleep(2000);
+                    }
+                }
+                
                 return;
             }
 
