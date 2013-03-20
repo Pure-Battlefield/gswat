@@ -58,6 +58,7 @@ namespace WebFrontend.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Load("WebFrontend.dll");
+            kernel.Load("core.dll");
             kernel.Get<ICore>();
         }        
     }

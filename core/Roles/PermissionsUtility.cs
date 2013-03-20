@@ -4,21 +4,37 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
 using System.Web.Script.Serialization;
 using core.Logging;
 
 namespace core.Roles
 {
-    public class PermissionsUtility
+    public interface IPermissionsUtility
+    {
+        void AddorUpdateUser(UserEntity user);
+
+        /// <summary>
+        /// Attemps to validate a user given his OpenID token as well as a PermissionSet
+        /// Every permission in the permissionSet parameter must be present in the user's permission set for the function to return true
+        /// </summary>
+        /// <param name="token">OpenID token of the user to be validated</param>
+        /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
+        /// <returns></returns>
+        bool ValidateUser(string token, PermissionSetEntity permissionSet);
+
+        /// <summary>
+        /// Loads permissions for all plugins from the global config file.
+        /// </summary>
+        void LoadPermissionsFromConfig();
+    }
+
+    public class PermissionsUtility : IPermissionsUtility
     {
         public IRoleTableStoreUtility RoleUtility;
 
-        public PermissionsUtility()
+        public PermissionsUtility(IRoleTableStoreUtility roleUtility)
         {
-            RoleUtility = new RoleTableStoreUtility();
+            RoleUtility = roleUtility;
         }
 
         public void AddorUpdateUser(UserEntity user)

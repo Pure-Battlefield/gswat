@@ -24,13 +24,13 @@ namespace core
         public CloudTable CredTable { get; set; }
         public Queue<ChatMessageEntity> MessageQueue { get; set; }
         public Dictionary<string, DateTime> ServerMessages { get; set; }
-        public PermissionsUtility PermissionsUtil { get; set; }
+        public IPermissionsUtility PermissionsUtil { get; set; }
 
         /// <summary>
         ///     Constructs an instance of Core
         ///     Registers handlers to catch ChatMessage events
         /// </summary>
-        public Core()
+        public Core(IPermissionsUtility permsUtility)
         {
             CommLayer = new CommLayer();
             CommLayer.MessageEvents["player.onChat"] = MessageHandler;
@@ -51,7 +51,7 @@ namespace core
             CredTable.CreateIfNotExists();
 
             // Create role manager if it does not exist
-            PermissionsUtil = new PermissionsUtility();
+            PermissionsUtil = permsUtility;
             PermissionsUtil.LoadPermissionsFromConfig();
 
             //Attempt to load existing connection.

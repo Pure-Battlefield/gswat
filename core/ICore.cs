@@ -15,7 +15,7 @@ namespace core
         CloudTable CredTable { get; set; }
         Queue<ChatMessageEntity> MessageQueue { get; set; }
         Dictionary<string, DateTime> ServerMessages { get; set; }
-        PermissionsUtility PermissionsUtil { get; set; }
+        IPermissionsUtility PermissionsUtil { get; set; }
         void SendAdminSay(string message, string playerName = null, string teamId = null, string squadId = null);
         void MessageHandler(object sender, Dictionary<string, string> packet);
 
