@@ -6,9 +6,10 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.Logging;
-using core.Roles.CoreRoleManager;
+using core.Roles;
 using core.Server;
 using core.TableStoreEntities;
+using core.Utilities;
 
 namespace core
 {
@@ -24,13 +25,13 @@ namespace core
         public CloudTable CredTable { get; set; }
         public Queue<ChatMessageEntity> MessageQueue { get; set; }
         public Dictionary<string, DateTime> ServerMessages { get; set; }
-        public CoreRoleManager RoleManager { get; set; }
+        public IPermissionsUtility PermissionsUtil { get; set; }
 
         /// <summary>
         ///     Constructs an instance of Core
         ///     Registers handlers to catch ChatMessage events
         /// </summary>
-        public Core()
+        public Core(IPermissionsUtility permsUtility)
         {
             CommLayer = new CommLayer();
             CommLayer.MessageEvents["player.onChat"] = MessageHandler;
@@ -39,8 +40,7 @@ namespace core
             ServerMessages = new Dictionary<string, DateTime>();
 
             // Connect to storage
-            var storageAccount =
-                CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             var tableClient = storageAccount.CreateCloudTableClient();
 
             // Create message table if it does not exist
@@ -52,10 +52,51 @@ namespace core
             CredTable.CreateIfNotExists();
 
             // Create role manager if it does not exist
-            RoleManager = new CoreRoleManager();
+            PermissionsUtil = permsUtility;
+            PermissionsUtil.LoadPermissionsFromConfig();
 
             //Attempt to load existing connection.
             LoadExistingConnection();
+        }
+
+        public void SendAdminSay(string message, string playerName = null, string teamId = null, string squadId = null)
+        {
+            if (message.Length > 128)
+            {
+                throw new ArgumentException("Message length over maximum message size.");
+            }
+            var args = new Dictionary<string, string>();
+            var playersSubset = "";
+
+            if (playerName != null)
+            {
+                if (squadId != null || teamId != null)
+                {
+                    throw new ArgumentException("Cannot specify both playerName and Team/Squad.");
+                }
+                playersSubset = String.Format("player {0}", playerName);
+            }
+            else if (squadId != null)
+            {
+                if (teamId == null)
+                {
+                    throw new ArgumentException("teamId cannot be null when specifying squadId");
+                }
+
+                playersSubset = String.Format("sqaud {0} {1}", teamId, squadId);
+            }
+            else if (teamId != null)
+            {
+                playersSubset = String.Format("team {0}", teamId);
+            }
+            else
+            {
+                playersSubset = String.Format("all");
+            }
+
+            args.Add("players", playersSubset);
+            args.Add("message", message);
+            CommLayer.IssueRequest("admin.say", args, null);
         }
 
         // Implements ICore
@@ -65,6 +106,7 @@ namespace core
             if (packet != null)
             {
                 ChatMessageEntity msg = new ChatMessageEntity(DateTime.UtcNow, packet["source soldier name"], packet["text"], packet["target players"]);
+                msg = ChatMessageCleaner.CleanPlayerTargets(msg);
                 if (msg.Speaker == "Server")
                 {
                     if (ServerMessages.ContainsKey(msg.Text))
@@ -276,6 +318,16 @@ namespace core
                 return (ServerSettingsEntity)result.Result;
             }
             return null;
+        }
+
+        public bool ValidateUser(string token, PermissionSetEntity permissionSet)
+        {
+            return PermissionsUtil.ValidateUser(token, permissionSet);
+        }
+
+        public void AddorUpdateUser(UserEntity user)
+        {
+            PermissionsUtil.AddorUpdateUser(user);
         }
     }
 }

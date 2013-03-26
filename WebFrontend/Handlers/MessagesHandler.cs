@@ -19,6 +19,7 @@ namespace WebFrontend.Handlers
         IEnumerable<ChatMessageEntity> RetrieveByDay(DateTimeInfo dateTime);
         HttpResponseMessage DownloadByDay(DateTimeInfo dateTime);
         void ImportMessages(IList<ChatMessageEntity> messages);
+        void AdminSay(string message, string admin, IList<string> playerNames = null, string teamId = null, string squadId = null);
     }
     
     public class MessagesHandler : IMessagesHandler
@@ -113,6 +114,24 @@ namespace WebFrontend.Handlers
             catch (Exception)
             {
                 return new HttpResponseMessage(HttpStatusCode.NoContent);
+            }
+        }
+
+        public void AdminSay(string message, string admin, IList<string> playerNames = null, string teamId = null, string squadId = null)
+        {
+            //TODO: Permission checking here.  
+
+            var newMsg = String.Format("[{0}]:  {1}", admin, message);
+            if (playerNames != null)
+            {
+                foreach (var player in playerNames)
+                {
+                    core.SendAdminSay(newMsg, player);
+                }
+            }
+            else
+            {
+                core.SendAdminSay(newMsg, teamId: teamId, squadId: squadId);
             }
         }
 

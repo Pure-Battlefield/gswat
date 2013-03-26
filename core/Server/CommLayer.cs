@@ -16,8 +16,6 @@ namespace core.Server
         private string Address, Password;
         private int Port;
 
-        public event ChatEventHandler CommHandler;
-
         public CommLayer()
         {
             MessageEvents = new Dictionary<string, MessageEventHandler>();
@@ -51,7 +49,7 @@ namespace core.Server
             }
         }
 
-        public void IssueRequest(string requestName, Dictionary<string, string> parameters, MessageEventHandler callback)
+        public override void IssueRequest(string requestName, Dictionary<string, string> parameters, MessageEventHandler callback)
         {
             Packet request = RecognizedPacket.CreatePacketFromFormattedData(requestName, parameters);
             request = RconProtocol.SendRequest(request);
@@ -110,7 +108,10 @@ namespace core.Server
             else if (args.IsResponse && RequestCallbacks.ContainsKey(args.SequenceNumber))
             {
                 Packet request = RequestPackets[args.SequenceNumber];
-                RequestCallbacks[args.SequenceNumber](this, RecognizedPacket.FormatResponsePacket(request, args));
+                if (RequestCallbacks[args.SequenceNumber] != null)
+                {
+                    RequestCallbacks[args.SequenceNumber](this, RecognizedPacket.FormatResponsePacket(request, args));
+                }
             }
         }
     }
