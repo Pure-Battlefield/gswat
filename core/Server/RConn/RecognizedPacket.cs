@@ -82,7 +82,7 @@ namespace core.Server.RConn
                 {
                     format = ValidRequestFormats[name];
                 }
-                catch (KeyNotFoundException e)
+                catch (KeyNotFoundException)
                 {
                     throw new ArgumentException("Somehow, the key wasn't in the ValidRequestFormats dictionary...");
                 }
