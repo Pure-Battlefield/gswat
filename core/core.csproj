@@ -107,6 +107,7 @@
     <Compile Include="Server\RConn\Protocol.cs" />
     <Compile Include="Server\RConn\Word.cs" />
     <Compile Include="Roles\UserEntity.cs" />
+    <Compile Include="Utilities\ChatMessageCleaner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

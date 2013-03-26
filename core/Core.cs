@@ -9,6 +9,7 @@ using core.Logging;
 using core.Roles;
 using core.Server;
 using core.TableStoreEntities;
+using core.Utilities;
 
 namespace core
 {
@@ -105,6 +106,7 @@ namespace core
             if (packet != null)
             {
                 ChatMessageEntity msg = new ChatMessageEntity(DateTime.UtcNow, packet["source soldier name"], packet["text"], packet["target players"]);
+                msg = ChatMessageCleaner.CleanPlayerTargets(msg);
                 if (msg.Speaker == "Server")
                 {
                     if (ServerMessages.ContainsKey(msg.Text))
