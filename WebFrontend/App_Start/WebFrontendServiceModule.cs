@@ -1,4 +1,6 @@
-﻿using Ninject.Modules;
+﻿using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Storage;
+using Ninject.Modules;
 using WebFrontend.Handlers;
 using core;
 using core.Roles;

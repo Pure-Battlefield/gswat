@@ -15,12 +15,11 @@ namespace core.Logging
     {
         static CloudTable LogTable { get; set; }
 
-        static LogUtility()
+        public static void Init()
         {
             try
             {
-                var storageAccount =
-                    CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+                var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
                 var tableClient = storageAccount.CreateCloudTableClient();
                 LogTable = tableClient.GetTableReference("serverLogs");
                 LogTable.CreateIfNotExists();

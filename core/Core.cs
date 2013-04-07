@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -55,7 +56,10 @@ namespace core
             PermissionsUtil = permsUtility;
             PermissionsUtil.LoadPermissionsFromConfig();
 
-            //Attempt to load existing connection.
+            // Initialize the log utility
+            LogUtility.Init();
+
+            // Attempt to load existing connection.
             LoadExistingConnection();
         }
 
@@ -320,9 +324,9 @@ namespace core
             return null;
         }
 
-        public bool ValidateUser(string token, PermissionSetEntity permissionSet)
+        public bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID = "")
         {
-            return PermissionsUtil.ValidateUser(token, permissionSet);
+            return PermissionsUtil.ValidateUser(token, email, permissionSet, debugID);
         }
 
         public void AddorUpdateUser(UserEntity user)

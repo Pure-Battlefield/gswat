@@ -1,0 +1,13 @@
+﻿###############################################################################################
+List further namespace/permission pairs below in the same format
+<<<<<<< HEAD
+Namespaces must be one word, no spaces or funky shit inside words
+Permissions must be a list of comma-separated words, no spaces or funky shit inside words
+=======
+Namespaces must be one word, no spaces or funky stuff inside words
+Permissions must be a list of comma-separated words, no spaces or funky stuff inside words
+>>>>>>> f5e3e64d66ad33425d5eeade5d31834a852aa349
+###############################################################################################
+
+NAMESPACE: GSWAT
+PERMISSIONS: anonymous, admin

@@ -19,8 +19,7 @@ namespace core.Roles
         {
             try
             {
-                var storageAccount =
-                    CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+                var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
                 var tableClient = storageAccount.CreateCloudTableClient();
 
                 PermissionSetTable = tableClient.GetTableReference("permissionSets");
@@ -78,11 +77,11 @@ namespace core.Roles
             }
         }
 
-        public UserEntity GetUserEntity(string nameSpace, string googleUserName)
+        public UserEntity GetUserEntity(string nameSpace, string googleIDNumber)
         {
             try
             {
-                var retrieveOp = TableOperation.Retrieve<UserEntity>(nameSpace, googleUserName);
+                var retrieveOp = TableOperation.Retrieve<UserEntity>(nameSpace, googleIDNumber);
                 var result = UserTable.Execute(retrieveOp);
 
                 if (result.Result != null)
@@ -99,7 +98,7 @@ namespace core.Roles
 
         public void SetUserEntity(UserEntity user)
         {
-            var userEntity = GetUserEntity(user.Permissions.Namespace, user.GoogleUsername);
+            var userEntity = GetUserEntity(user.Permissions.Namespace, user.GoogleIDNumber);
             if (userEntity == null)
             {
                 var insertOp = TableOperation.Insert(user);
@@ -110,7 +109,7 @@ namespace core.Roles
                 try
                 {
                     userEntity.BattlelogID = user.BattlelogID;
-                    userEntity.GoogleUsername = user.GoogleUsername;
+                    userEntity.GoogleIDNumber = user.GoogleIDNumber;
                     userEntity.AccountEnabled = user.AccountEnabled;
                     userEntity.Permissions = user.Permissions;
                     var insertOrReplaceOperation = TableOperation.InsertOrReplace(userEntity);

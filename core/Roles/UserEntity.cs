@@ -2,27 +2,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Security;
 using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage.Table;
+using core.Logging;
 
 namespace core.Roles
 {
     public class UserEntity : TableEntity
     {
-        private string _googleUsername;
-        public string GoogleUsername { 
-            get { return _googleUsername; }
+        private string _googleIdNumber;
+        public string GoogleIDNumber { 
+            get { return _googleIdNumber; }
             set 
             { 
-                _googleUsername = value;
-                RowKey = GoogleUsername;
+                _googleIdNumber = value;
+                RowKey = GoogleIDNumber;
             }
         }
+
+        public string Email { get; set; }
 
         public string BattlelogID { get; set; }
 
         public bool AccountEnabled { get; set; }
+
+        private PermissionSetEntity _permissions;
+        public PermissionSetEntity Permissions {
+            get { return _permissions; }
+            set { 
+                _permissions = value;
+                StringWriter righter = new StringWriter();
+                XmlSerializer cereal = new XmlSerializer(typeof(PermissionSetEntity));
+                cereal.Serialize(righter, value);
+                _serializedPermissionSetEntity = righter.ToString();
+                PartitionKey = value.Namespace;
+            }
+        }
 
         private string _serializedPermissionSetEntity;
         public string SerializedPermissionSetEntity
@@ -38,38 +55,26 @@ namespace core.Roles
             }
         }
 
-        private PermissionSetEntity _permissions;
-        public PermissionSetEntity Permissions {
-            get { return _permissions; }
-            set { 
-                _permissions = value;
-                StringWriter righter = new StringWriter();
-                XmlSerializer cereal = new XmlSerializer(typeof(PermissionSetEntity));
-                cereal.Serialize(righter, value);
-                _serializedPermissionSetEntity = righter.ToString();
-                PartitionKey = value.Namespace;
-            }
-        }
-
         public UserEntity()
         {
-            GoogleUsername = "";
+            GoogleIDNumber = "";
             BattlelogID = "";
             AccountEnabled = true;
             Permissions = new PermissionSetEntity();
             PartitionKey = Permissions.Namespace;
-            RowKey = GoogleUsername;
+            RowKey = GoogleIDNumber;
         }
 
-        public UserEntity(string googleUsername, string battlelogID, bool accountEnabled,
+        public UserEntity(string googleIDNumber, string email, string battlelogID, bool accountEnabled,
                           PermissionSetEntity permissions)
         {
-            GoogleUsername = googleUsername;
+            GoogleIDNumber = googleIDNumber;
+            Email = email;
             BattlelogID = battlelogID;
             AccountEnabled = accountEnabled;
             Permissions = permissions;
             PartitionKey = permissions.Namespace;
-            RowKey = GoogleUsername;
+            RowKey = GoogleIDNumber;
         }
     }
 }
