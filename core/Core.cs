@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -30,7 +31,7 @@ namespace core
         ///     Constructs an instance of Core
         ///     Registers handlers to catch ChatMessage events
         /// </summary>
-        public Core()
+        public Core(bool debug = false)
         {
             CommLayer = new CommLayer();
             CommLayer.MessageEvents["player.onChat"] = MessageHandler;
@@ -39,8 +40,24 @@ namespace core
             ServerMessages = new Dictionary<string, DateTime>();
 
             // Connect to storage
-            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-            var tableClient = storageAccount.CreateCloudTableClient();
+            CloudStorageAccount storageAccount;
+            CloudTableClient tableClient;
+            if (debug)
+            {
+                storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
+                tableClient = storageAccount.CreateCloudTableClient();
+                tableClient.GetTableReference("chatMessages").DeleteIfExists();
+                tableClient.GetTableReference("serverSettings").DeleteIfExists();
+                tableClient.GetTableReference("permissionSets").DeleteIfExists();
+                tableClient.GetTableReference("serverLogs").DeleteIfExists();
+                tableClient.GetTableReference("users").DeleteIfExists();
+                System.Threading.Thread.Sleep(1000);
+            }
+            else
+            {
+                storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+                tableClient = storageAccount.CreateCloudTableClient();
+            }
 
             // Create message table if it does not exist
             MessageTable = tableClient.GetTableReference("chatMessages");
@@ -51,11 +68,20 @@ namespace core
             CredTable.CreateIfNotExists();
 
             // Create role manager if it does not exist
-            PermissionsUtil = new PermissionsUtility();
+            PermissionsUtil = new PermissionsUtility(storageAccount);
             PermissionsUtil.LoadPermissionsFromConfig();
 
-            //Attempt to load existing connection.
+            // Initialize the log utility
+            LogUtility.Init(storageAccount);
+
+            // Attempt to load existing connection.
             LoadExistingConnection();
+
+            // We want to clear table store, as this is a debug instance
+            if (debug)
+            {
+                
+            }
         }
 
         public void SendAdminSay(string message, string playerName = null, string teamId = null, string squadId = null)
@@ -318,9 +344,9 @@ namespace core
             return null;
         }
 
-        public bool ValidateUser(string token, PermissionSetEntity permissionSet)
+        public bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID = "")
         {
-            return PermissionsUtil.ValidateUser(token, permissionSet);
+            return PermissionsUtil.ValidateUser(token, email, permissionSet, debugID);
         }
 
         public void AddorUpdateUser(UserEntity user)

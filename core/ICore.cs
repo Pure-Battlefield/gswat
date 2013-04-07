@@ -40,7 +40,7 @@ namespace core
         /// <returns>ServerConfig object containing server settings (or null if none was found)</returns>
         ServerSettingsEntity LoadServerSettings(String partitionKey, String rowKey);
 
-        bool ValidateUser(string token, PermissionSetEntity permissionSet);
+        bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string defaultID);
         void AddorUpdateUser(UserEntity user);
     }
 }
