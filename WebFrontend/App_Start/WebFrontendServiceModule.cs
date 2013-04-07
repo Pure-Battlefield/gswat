@@ -11,11 +11,10 @@ namespace WebFrontend.App_Start
     {
         public override void Load()
         {
-            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             this.Bind<ICore>().To<Core>().InSingletonScope();
             this.Bind<IMessagesHandler>().To<MessagesHandler>();
-            this.Bind<IPermissionsUtility>().To<PermissionsUtility>(storageAccount);
-            this.Bind<IRoleTableStoreUtility>().To<RoleTableStoreUtility>(storageAccount);
+            this.Bind<IPermissionsUtility>().To<PermissionsUtility>();
+            this.Bind<IRoleTableStoreUtility>().To<RoleTableStoreUtility>();
         }
     }
 }

@@ -57,7 +57,7 @@ namespace core
             PermissionsUtil.LoadPermissionsFromConfig();
 
             // Initialize the log utility
-            LogUtility.Init(storageAccount);
+            LogUtility.Init();
 
             // Attempt to load existing connection.
             LoadExistingConnection();
@@ -325,7 +325,6 @@ namespace core
         }
 
         public bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID = "")
-        {
         {
             return PermissionsUtil.ValidateUser(token, email, permissionSet, debugID);
         }

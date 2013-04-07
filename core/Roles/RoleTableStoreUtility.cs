@@ -15,10 +15,11 @@ namespace core.Roles
         public CloudTable PermissionSetTable;
         public CloudTable UserTable;
 
-        public RoleTableStoreUtility(CloudStorageAccount storageAccount)
+        public RoleTableStoreUtility()
         {
             try
             {
+                var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
                 var tableClient = storageAccount.CreateCloudTableClient();
 
                 PermissionSetTable = tableClient.GetTableReference("permissionSets");

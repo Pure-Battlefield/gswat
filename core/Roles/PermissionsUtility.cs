@@ -21,7 +21,7 @@ namespace core.Roles
         /// <param name="token">OpenID token of the user to be validated</param>
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
         /// <returns></returns>
-        bool ValidateUser(string token, PermissionSetEntity permissionSet);
+        bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID);
 
         /// <summary>
         /// Loads permissions for all plugins from the global config file.
