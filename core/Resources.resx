@@ -121,4 +121,7 @@
   <data name="BF3_formatted_scrape" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Server\RConn\BF3_formatted_scrape.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="Permissions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Roles\Permissions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

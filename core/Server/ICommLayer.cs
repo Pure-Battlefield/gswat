@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using core.Server.RConn;
 
 namespace core.Server
 {
-    public interface ICommLayer
+    public abstract class ICommLayer
     {
-        // Event handler to pass ChatMessages to CommHandler
-        event ChatEventHandler CommHandler; 
+        // Event handler for all message types.
+        public delegate void MessageEventHandler(object sender, Dictionary<string, string> message);
+        // Directory of handlers for various message types.
+        public Dictionary<string, MessageEventHandler> MessageEvents;
 
         /// <summary>
         ///     Connect to a given server
@@ -13,18 +16,13 @@ namespace core.Server
         /// <param name="address">IP address of the server</param>
         /// <param name="port">Port number to connect to</param>
         /// <param name="password">Plaintext password to connect with</param>
-        void Connect(string address, int port, string password);
-
-        /// <summary>
-        ///     Notifies Core with a ChatMessage
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        /// <param name="e">ChatEventArgs that contains the ChatMessage to be sent</param>
-        void NotifyCommHandler(object sender, ChatEventArgs e);
+        public abstract void Connect(string address, int port, string password);
 
         /// <summary>
         ///     Disconnect server connection
         /// </summary>
-        void Disconnect();
+        public abstract void Disconnect();
+
+        public abstract void IssueRequest(string requestName, Dictionary<string, string> parameters, MessageEventHandler callback);
     }
 }
