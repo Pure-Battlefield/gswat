@@ -10,6 +10,7 @@ using core.Logging;
 using core.Roles;
 using core.Server;
 using core.TableStoreEntities;
+using core.Utilities;
 
 namespace core
 {
@@ -25,13 +26,13 @@ namespace core
         public CloudTable CredTable { get; set; }
         public Queue<ChatMessageEntity> MessageQueue { get; set; }
         public Dictionary<string, DateTime> ServerMessages { get; set; }
-        public PermissionsUtility PermissionsUtil { get; set; }
+        public IPermissionsUtility PermissionsUtil { get; set; }
 
         /// <summary>
         ///     Constructs an instance of Core
         ///     Registers handlers to catch ChatMessage events
         /// </summary>
-        public Core(bool debug = false)
+        public Core(IPermissionsUtility permsUtility)
         {
             CommLayer = new CommLayer();
             CommLayer.MessageEvents["player.onChat"] = MessageHandler;
@@ -40,24 +41,8 @@ namespace core
             ServerMessages = new Dictionary<string, DateTime>();
 
             // Connect to storage
-            CloudStorageAccount storageAccount;
-            CloudTableClient tableClient;
-            if (debug)
-            {
-                storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
-                tableClient = storageAccount.CreateCloudTableClient();
-                tableClient.GetTableReference("chatMessages").DeleteIfExists();
-                tableClient.GetTableReference("serverSettings").DeleteIfExists();
-                tableClient.GetTableReference("permissionSets").DeleteIfExists();
-                tableClient.GetTableReference("serverLogs").DeleteIfExists();
-                tableClient.GetTableReference("users").DeleteIfExists();
-                System.Threading.Thread.Sleep(1000);
-            }
-            else
-            {
-                storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
-                tableClient = storageAccount.CreateCloudTableClient();
-            }
+            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            var tableClient = storageAccount.CreateCloudTableClient();
 
             // Create message table if it does not exist
             MessageTable = tableClient.GetTableReference("chatMessages");
@@ -68,7 +53,7 @@ namespace core
             CredTable.CreateIfNotExists();
 
             // Create role manager if it does not exist
-            PermissionsUtil = new PermissionsUtility(storageAccount);
+            PermissionsUtil = permsUtility;
             PermissionsUtil.LoadPermissionsFromConfig();
 
             // Initialize the log utility
@@ -76,12 +61,6 @@ namespace core
 
             // Attempt to load existing connection.
             LoadExistingConnection();
-
-            // We want to clear table store, as this is a debug instance
-            if (debug)
-            {
-                
-            }
         }
 
         public void SendAdminSay(string message, string playerName = null, string teamId = null, string squadId = null)
@@ -131,6 +110,7 @@ namespace core
             if (packet != null)
             {
                 ChatMessageEntity msg = new ChatMessageEntity(DateTime.UtcNow, packet["source soldier name"], packet["text"], packet["target players"]);
+                msg = ChatMessageCleaner.CleanPlayerTargets(msg);
                 if (msg.Speaker == "Server")
                 {
                     if (ServerMessages.ContainsKey(msg.Text))
@@ -345,6 +325,7 @@ namespace core
         }
 
         public bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID = "")
+        {
         {
             return PermissionsUtil.ValidateUser(token, email, permissionSet, debugID);
         }

@@ -43,7 +43,7 @@ namespace core.Logging
                 var insertOp = TableOperation.Insert(msg);
                 LogTable.Execute(insertOp);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // Abandon all hope, ye who enter here
             }

@@ -1,6 +1,7 @@
 ﻿using Ninject.Modules;
 using WebFrontend.Handlers;
 using core;
+using core.Roles;
 
 namespace WebFrontend.App_Start
 {
@@ -10,6 +11,8 @@ namespace WebFrontend.App_Start
         {
             this.Bind<ICore>().To<Core>().InSingletonScope();
             this.Bind<IMessagesHandler>().To<MessagesHandler>();
+            this.Bind<IPermissionsUtility>().To<PermissionsUtility>();
+            this.Bind<IRoleTableStoreUtility>().To<RoleTableStoreUtility>();
         }
     }
 }
