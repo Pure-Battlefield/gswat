@@ -176,10 +176,12 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\ServerInfoController.cs" />
     <Compile Include="Controllers\TestsController.cs" />
+    <Compile Include="Exceptions\AuthorizationValidationException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\MessagesHandler.cs" />
+    <Compile Include="Models\AuthenticatedUser.cs" />
     <Compile Include="Models\DateTimeInfo.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

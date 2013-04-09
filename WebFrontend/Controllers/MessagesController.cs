@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Script.Serialization;
+using WebFrontend.Exceptions;
 using WebFrontend.Handlers;
 using WebFrontend.Models;
 using core.TableStoreEntities;
@@ -64,7 +65,7 @@ namespace WebFrontend.Controllers
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        public HttpResponseMessage Put([FromBody]AdminChatWrapper chatMessage)
+        public HttpResponseMessage Put([FromUri]AuthenticatedUser user, [FromBody]AdminChatWrapper chatMessage)
         {
             if (chatMessage == null || chatMessage.Message == null || chatMessage.AdminName == null || chatMessage.Type == null)
             {
@@ -77,11 +78,13 @@ namespace WebFrontend.Controllers
                     case "say":
                         if (chatMessage.PlayerTargets != null)
                         {
-                            messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName, chatMessage.PlayerTargets);
+                            messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName,
+                                                     user, chatMessage.PlayerTargets);
                         }
                         else
                         {
-                            messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName, teamId: chatMessage.TeamId, squadId: chatMessage.SquadId);
+                            messagesHandler.AdminSay(chatMessage.Message, chatMessage.AdminName, user,
+                                                     teamId: chatMessage.TeamId, squadId: chatMessage.SquadId);
                         }
                         break;
                     case "yell":
@@ -89,11 +92,15 @@ namespace WebFrontend.Controllers
                     default:
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "type must be either say or yell.");
                 }
-                
+
             }
             catch (ArgumentException e)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+            }
+            catch (AuthorizationValidationException e)
+            {
+                return Request.CreateResponse(HttpStatusCode.Forbidden, e.Message);
             }
             return Request.CreateResponse(HttpStatusCode.OK);
         }
