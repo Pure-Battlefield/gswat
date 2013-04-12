@@ -5,6 +5,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="ServiceAdministrators" value="" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Wildcard" thumbprint="1E95BFDF7F39EA30BE92EC06E736846CB23A7D1F" thumbprintAlgorithm="sha1" />

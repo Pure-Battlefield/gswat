@@ -323,15 +323,5 @@ namespace core
             }
             return null;
         }
-
-        public bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID = "")
-        {
-            return PermissionsUtil.ValidateUser(token, email, permissionSet, debugID);
-        }
-
-        public void AddorUpdateUser(UserEntity user)
-        {
-            PermissionsUtil.AddorUpdateUser(user);
-        }
     }
 }

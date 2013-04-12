@@ -174,6 +174,7 @@
     <Compile Include="App_Start\WebFrontendServiceModule.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\ServerInfoController.cs" />
     <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Exceptions\AuthorizationValidationException.cs" />

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace WebFrontend.Models
 {
@@ -9,5 +6,8 @@ namespace WebFrontend.Models
     {
         public string Token { get; set; }
         public string Email { get; set; }
+        public string BattlelogId { get; set; }
+        public string Namespace { get; set; }
+        public List<string> Permissions { get; set; }
     }
 }

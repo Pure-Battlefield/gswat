@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web.Script.Serialization;
-using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using core.Logging;
 
 namespace core.Roles
@@ -80,6 +80,13 @@ namespace core.Roles
                 else
                 {
                     userid = debugID;
+                }
+
+                //First check to see if the user is a Service Administrator (All permissions).  If so, validate as true.  
+                var serviceAdmins = RoleEnvironment.GetConfigurationSettingValue("ServiceAdministrators").Split(',');
+                if (serviceAdmins.Any(serviceAdmin => userid == serviceAdmin.Trim()))
+                {
+                    return true;
                 }
 
                 var existingUser = RoleUtility.GetUserEntity(permissionSet.Namespace, userid);
