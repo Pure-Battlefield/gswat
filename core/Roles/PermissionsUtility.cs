@@ -110,7 +110,7 @@ namespace core.Roles
 
                 return validated;
             }
-            catch (Exception e)
+            catch (Exception e) //TODO: Make this specific to TableStore Exceptions only.  
             {
                 if (!(e is WebException))
                 {

@@ -20,11 +20,19 @@ namespace UnitTest
     [TestFixture]
     public class PermissionsTests
     {
+        private Mock<ICloudSettingsManager> settingsMgr;
+
+        [TestFixtureSetUp]
+        public void Init()
+        {
+            settingsMgr = new Mock<ICloudSettingsManager>();
+            settingsMgr.Setup(manager => manager.GetConfigurationSettingValue("StorageConnectionString")).Returns("UseDevelopmentStorage=true");
+            settingsMgr.Setup(manager => manager.GetConfigurationSettingValue("ServiceAdministrators")).Returns("");
+        }
+
         [Test]
         public void CreateandValidateNewUserTest()
         {
-            var settingsMgr = new Mock<ICloudSettingsManager>();
-            settingsMgr.Setup(manager => manager.GetConfigurationSettingValue("StorageConnectionString")).Returns("UseDevelopmentStorage=true");
             IPermissionsUtility perm = new PermissionsUtility(new RoleTableStoreUtility(settingsMgr.Object), settingsMgr.Object);
             var core = new Core(perm, settingsMgr.Object);
             var user = new UserEntity("12345","mail@mail.com","battlelogID",true, new PermissionSetEntity("GSWAT", new List<string> {"admin"}));
@@ -33,6 +41,7 @@ namespace UnitTest
 
             Assert.IsTrue(core.PermissionsUtil.ValidateUser("", "mail@mail.com", new PermissionSetEntity("GSWAT", new List<string> { "admin" }), "12345"));
         }
+
         /*
         [Test]
         public void PermissionDeniedTest()
