@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.Logging;
@@ -32,7 +30,7 @@ namespace core
         ///     Constructs an instance of Core
         ///     Registers handlers to catch ChatMessage events
         /// </summary>
-        public Core(IPermissionsUtility permsUtility)
+        public Core(IPermissionsUtility permsUtility, ICloudSettingsManager settingManager)
         {
             CommLayer = new CommLayer();
             CommLayer.MessageEvents["player.onChat"] = MessageHandler;
@@ -41,7 +39,8 @@ namespace core
             ServerMessages = new Dictionary<string, DateTime>();
 
             // Connect to storage
-            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            var storageSetting = settingManager.GetConfigurationSettingValue("StorageConnectionString");
+            var storageAccount = CloudStorageAccount.Parse(storageSetting);
             var tableClient = storageAccount.CreateCloudTableClient();
 
             // Create message table if it does not exist
@@ -57,7 +56,7 @@ namespace core
             PermissionsUtil.LoadPermissionsFromConfig();
 
             // Initialize the log utility
-            LogUtility.Init();
+            LogUtility.Init(settingManager);
 
             // Attempt to load existing connection.
             LoadExistingConnection();

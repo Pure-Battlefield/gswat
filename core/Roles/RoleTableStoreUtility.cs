@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.Logging;
+using core.Utilities;
 
 namespace core.Roles
 {
@@ -15,11 +15,11 @@ namespace core.Roles
         public CloudTable PermissionSetTable;
         public CloudTable UserTable;
 
-        public RoleTableStoreUtility()
+        public RoleTableStoreUtility(ICloudSettingsManager settingsManager)
         {
             try
             {
-                var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+                var storageAccount = CloudStorageAccount.Parse(settingsManager.GetConfigurationSettingValue("StorageConnectionString"));
                 var tableClient = storageAccount.CreateCloudTableClient();
 
                 PermissionSetTable = tableClient.GetTableReference("permissionSets");

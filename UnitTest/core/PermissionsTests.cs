@@ -13,23 +13,27 @@ using WebFrontend.Handlers;
 using WebFrontend.Models;
 using core;
 using core.Roles;
+using core.Utilities;
 
 namespace UnitTest
 {
     [TestFixture]
     public class PermissionsTests
     {
-        /*[Test]
+        [Test]
         public void CreateandValidateNewUserTest()
         {
-            StartAzureDevelopmentStorage();
-            IPermissionsUtility perm = new PermissionsUtility(new RoleTableStoreUtility(CloudStorageAccount.DevelopmentStorageAccount));
-            Core core = new Core(perm);
+            var settingsMgr = new Mock<ICloudSettingsManager>();
+            settingsMgr.Setup(manager => manager.GetConfigurationSettingValue("StorageConnectionString")).Returns("UseDevelopmentStorage=true");
+            IPermissionsUtility perm = new PermissionsUtility(new RoleTableStoreUtility(settingsMgr.Object), settingsMgr.Object);
+            var core = new Core(perm, settingsMgr.Object);
             var user = new UserEntity("12345","mail@mail.com","battlelogID",true, new PermissionSetEntity("GSWAT", new List<string> {"admin"}));
-            core.AddorUpdateUser(user);
-            Assert.IsTrue(core.ValidateUser("", "mail@mail.com", new PermissionSetEntity("GSWAT", new List<string> { "admin" }), "12345"));
-        }
 
+            core.PermissionsUtil.AddorUpdateUser(user);
+
+            Assert.IsTrue(core.PermissionsUtil.ValidateUser("", "mail@mail.com", new PermissionSetEntity("GSWAT", new List<string> { "admin" }), "12345"));
+        }
+        /*
         [Test]
         public void PermissionDeniedTest()
         {

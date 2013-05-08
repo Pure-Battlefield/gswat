@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Security;
+﻿using System.IO;
 using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage.Table;
-using core.Logging;
 
 namespace core.Roles
 {

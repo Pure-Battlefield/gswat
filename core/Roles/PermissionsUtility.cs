@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Web.Script.Serialization;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using core.Logging;
+using core.Utilities;
 
 namespace core.Roles
 {
@@ -33,10 +34,12 @@ namespace core.Roles
     public class PermissionsUtility : IPermissionsUtility
     {
         public IRoleTableStoreUtility RoleUtility;
+        private readonly ICloudSettingsManager settingsManager;
 
-        public PermissionsUtility(IRoleTableStoreUtility roleUtility)
+        public PermissionsUtility(IRoleTableStoreUtility roleUtility, ICloudSettingsManager settingsManager)
         {
             RoleUtility = roleUtility;
+            this.settingsManager = settingsManager;
         }
 
         public void AddorUpdateUser(UserEntity user)
@@ -83,7 +86,7 @@ namespace core.Roles
                 }
 
                 //First check to see if the user is a Service Administrator (All permissions).  If so, validate as true.  
-                var serviceAdmins = RoleEnvironment.GetConfigurationSettingValue("ServiceAdministrators").Split(',');
+                var serviceAdmins = settingsManager.GetConfigurationSettingValue("ServiceAdministrators").Split(',');
                 if (serviceAdmins.Any(serviceAdmin => userid == serviceAdmin.Trim()))
                 {
                     return true;
