@@ -77,7 +77,8 @@ namespace core
                 {
                     throw new ArgumentException("Cannot specify both playerName and Team/Squad.");
                 }
-                playersSubset = String.Format("player {0}", playerName);
+                playersSubset = "players";
+                args["playername"] = playerName;
             }
             else if (squadId != null)
             {
@@ -86,19 +87,22 @@ namespace core
                     throw new ArgumentException("teamId cannot be null when specifying squadId");
                 }
 
-                playersSubset = String.Format("sqaud {0} {1}", teamId, squadId);
+                playersSubset = "squad";
+                args["teamid"] = teamId;
+                args["squadid"] = squadId;
             }
             else if (teamId != null)
             {
-                playersSubset = String.Format("team {0}", teamId);
+                playersSubset = "team";
+                args["teamid"] = teamId;
             }
             else
             {
-                playersSubset = String.Format("all");
+                playersSubset = "all";
             }
 
-            args.Add("players", playersSubset);
-            args.Add("message", message);
+            args["players"] = playersSubset;
+            args["message"] = message;
             CommLayer.IssueRequest("admin.say", args, null);
         }
 

@@ -121,11 +121,11 @@ namespace WebFrontend.Handlers
 
         public void AdminSay(string message, string admin, AuthenticatedUser userInfo, IList<string> playerNames = null, string teamId = null, string squadId = null)
         {
-            if (userInfo == null || !core.PermissionsUtil.ValidateUser(userInfo.Token, userInfo.Email,
+            /*if (userInfo == null || !core.PermissionsUtil.ValidateUser(userInfo.Token, userInfo.Email,
                                                    new PermissionSetEntity("gswat", new List<string> {"admin"})))
             {
                 throw new AuthorizationValidationException("You must be an administrator to send chat.");
-            }
+            }*/
 
 
             var newMsg = String.Format("[{0}]:  {1}", admin, message);

@@ -78,7 +78,7 @@ Response:       InvalidArguments
 Request:        admin.effectiveMaxPlayers 
 Response:       OK <current max players: int> 
 Response:       InvalidArguments 
-Request:        admin.say <message: string> <players: player subset> 
+Request:        admin.say <message: string> <players: player subset> [teamid: integer] [squadid: integer] [playername: string]
 Response:       OK 
 Response:       InvalidArguments 
 Response:       InvalidTeam 
