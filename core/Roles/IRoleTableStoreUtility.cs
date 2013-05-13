@@ -7,7 +7,7 @@
     {
         PermissionSetEntity GetPermissionSetEntity(string nameSpace);
         void SetPermissionSetEntity(PermissionSetEntity permissionSet);
-        UserEntity GetUserEntity(string nameSpace, string googleUserName);
+        UserEntity GetUserEntity(string nameSpace, string googleIDNumber);
         void SetUserEntity(UserEntity user);
     }
 }

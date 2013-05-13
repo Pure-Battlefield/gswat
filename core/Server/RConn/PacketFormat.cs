@@ -31,7 +31,9 @@ namespace core.Server.RConn
             MatchCollection optionalMatches = optionalParameterRegex.Matches(format);
             foreach (Match match in optionalMatches)
             {
-                Parameters.Add(new Parameter(match.Value));
+                var newParam = new Parameter(match.Value);
+                newParam.IsOptional = true;
+                Parameters.Add(newParam);
             }
         }
 
@@ -55,8 +57,8 @@ namespace core.Server.RConn
         {
             get
             {
-                int count = 0;
-                foreach (Parameter parameter in Parameters)
+                var count = 0;
+                foreach (var parameter in Parameters)
                 {
                     if (!parameter.IsOptional)
                     {

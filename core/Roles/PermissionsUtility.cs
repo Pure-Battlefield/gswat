@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web.Script.Serialization;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using core.Logging;
+using core.Utilities;
 
 namespace core.Roles
 {
@@ -19,8 +21,9 @@ namespace core.Roles
         /// </summary>
         /// <param name="token">OpenID token of the user to be validated</param>
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
+        /// <param name="debugID">Only needed for debugging; leave blank.</param>
         /// <returns></returns>
-        bool ValidateUser(string token, PermissionSetEntity permissionSet);
+        bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID = "");
 
         /// <summary>
         /// Loads permissions for all plugins from the global config file.
@@ -31,10 +34,12 @@ namespace core.Roles
     public class PermissionsUtility : IPermissionsUtility
     {
         public IRoleTableStoreUtility RoleUtility;
+        private readonly ICloudSettingsManager settingsManager;
 
-        public PermissionsUtility(IRoleTableStoreUtility roleUtility)
+        public PermissionsUtility(IRoleTableStoreUtility roleUtility, ICloudSettingsManager settingsManager)
         {
             RoleUtility = roleUtility;
+            this.settingsManager = settingsManager;
         }
 
         public void AddorUpdateUser(UserEntity user)
@@ -45,33 +50,67 @@ namespace core.Roles
         /// <summary>
         /// Attemps to validate a user given his OpenID token as well as a PermissionSet
         /// Every permission in the permissionSet parameter must be present in the user's permission set for the function to return true
+        /// In addition, the user record is updated according to the following rules:
+        ///     1. The token is used to retrieve the GoogleIDNumber of the user
+        ///     2. The GoogleIDNumber is used to retrieve the user from the database
+        ///     3. If the entry does not exist, return false
+        ///     3. If the email in the record does not match the email provided by the user parameter, the table is updated with the new email
         /// </summary>
-        /// <param name="token">OpenID token of the user to be validated</param>
+        /// <param name="token">Google auth token</param>
+        /// <param name="email">Email of the user to be validated</param>
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
+        /// <param name="debugID">Debug parameter if we want to use our own ID</param>
         /// <returns></returns>
-        public bool ValidateUser(string token, PermissionSetEntity permissionSet)
+        public bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID)
         {
-            var request = WebRequest.Create("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
-            request.Method = "GET";
             try
             {
                 string userid = "";
-                using (var response = (HttpWebResponse) request.GetResponse())
+                if (debugID.Equals(""))
                 {
-                    using (var reader = new StreamReader(response.GetResponseStream()))
+                    var request = WebRequest.Create("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
+                    request.Method = "GET";
+                    using (var response = (HttpWebResponse) request.GetResponse())
                     {
-                        var js = new JavaScriptSerializer();
-                        var obj = js.Deserialize<dynamic>(reader.ReadToEnd());
-                        userid = obj["user_id"];
+                        using (var reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            var js = new JavaScriptSerializer();
+                            var obj = js.Deserialize<dynamic>(reader.ReadToEnd());
+                            userid = obj["user_id"];
+                        }
+                    }
+                }
+                else
+                {
+                    userid = debugID;
+                }
+
+                //First check to see if the user is a Service Administrator (All permissions).  If so, validate as true.  
+                var serviceAdmins = settingsManager.GetConfigurationSettingValue("ServiceAdministrators").Split(',');
+                if (serviceAdmins.Any(serviceAdmin => userid == serviceAdmin.Trim()))
+                {
+                    return true;
+                }
+
+                var existingUser = RoleUtility.GetUserEntity(permissionSet.Namespace, userid);
+
+                //Resharper is amazing - this returns false if any permissions are not found or the user is null, otherwise returns true
+                var validated = existingUser != null && permissionSet.PermissionSet.All(permission => existingUser.Permissions.PermissionSet.Contains(permission));
+
+                // If that GoogleIDNumber exists, check to make sure the emails match
+                // If they don't, update the record with the new email
+                if (existingUser != null)
+                {
+                    if (!existingUser.Email.Equals(email))
+                    {
+                        existingUser.Email = email;
+                        RoleUtility.SetUserEntity(existingUser);
                     }
                 }
 
-                var user = RoleUtility.GetUserEntity(permissionSet.Namespace, userid);
-
-                //Resharper is amazing - this returns false if any permissions are not found or the user is null, otherwise returns true
-                return user != null && permissionSet.PermissionSet.All(permission => user.Permissions.PermissionSet.Contains(permission));
+                return validated;
             }
-            catch (Exception e)
+            catch (Exception e) //TODO: Make this specific to TableStore Exceptions only.  
             {
                 if (!(e is WebException))
                 {

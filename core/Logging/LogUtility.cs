@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.TableStoreEntities;
+using core.Utilities;
 
 namespace core.Logging
 {
@@ -15,12 +11,11 @@ namespace core.Logging
     {
         static CloudTable LogTable { get; set; }
 
-        static LogUtility()
+        public static void Init(ICloudSettingsManager settingsManager)
         {
             try
             {
-                var storageAccount =
-                    CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+                var storageAccount = CloudStorageAccount.Parse(settingsManager.GetConfigurationSettingValue("StorageConnectionString"));
                 var tableClient = storageAccount.CreateCloudTableClient();
                 LogTable = tableClient.GetTableReference("serverLogs");
                 LogTable.CreateIfNotExists();

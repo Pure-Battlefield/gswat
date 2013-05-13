@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -26,7 +21,32 @@ namespace core.Roles
             }
         }
 
-        public List<string> PermissionSet { get; set; }
+        private List<string> _permissionSet; 
+        public List<string> PermissionSet
+        {
+            get { return _permissionSet; }
+            set
+            {
+                _permissionSet = value;
+                StringWriter righter = new StringWriter();
+                XmlSerializer cereal = new XmlSerializer(typeof(List<string>));
+                cereal.Serialize(righter, value);
+                _serializedPermissionSet = righter.ToString();
+            }
+        }
+
+        private string _serializedPermissionSet;
+        public string SerializedPermissionSet
+        {
+            get { return _serializedPermissionSet; }
+            set
+            {
+                _serializedPermissionSet = value;
+                StringReader righter = new StringReader(value);
+                XmlSerializer cereal = new XmlSerializer(typeof(List<string>));
+                _permissionSet = (List<string>)cereal.Deserialize(righter);
+            }
+        }
 
         public PermissionSetEntity()
         {
