@@ -21,6 +21,7 @@
     </LocalResources>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
+      <Setting name="ServiceAdministrators" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Wildcard" storeLocation="LocalMachine" storeName="My" />

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.Logging;
@@ -31,7 +30,7 @@ namespace core
         ///     Constructs an instance of Core
         ///     Registers handlers to catch ChatMessage events
         /// </summary>
-        public Core(IPermissionsUtility permsUtility)
+        public Core(IPermissionsUtility permsUtility, ICloudSettingsManager settingManager)
         {
             CommLayer = new CommLayer();
             CommLayer.MessageEvents["player.onChat"] = MessageHandler;
@@ -40,7 +39,8 @@ namespace core
             ServerMessages = new Dictionary<string, DateTime>();
 
             // Connect to storage
-            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            var storageSetting = settingManager.GetConfigurationSettingValue("StorageConnectionString");
+            var storageAccount = CloudStorageAccount.Parse(storageSetting);
             var tableClient = storageAccount.CreateCloudTableClient();
 
             // Create message table if it does not exist
@@ -55,7 +55,10 @@ namespace core
             PermissionsUtil = permsUtility;
             PermissionsUtil.LoadPermissionsFromConfig();
 
-            //Attempt to load existing connection.
+            // Initialize the log utility
+            LogUtility.Init(settingManager);
+
+            // Attempt to load existing connection.
             LoadExistingConnection();
         }
 
@@ -74,7 +77,8 @@ namespace core
                 {
                     throw new ArgumentException("Cannot specify both playerName and Team/Squad.");
                 }
-                playersSubset = String.Format("player {0}", playerName);
+                playersSubset = "player";
+                args["playername"] = playerName;
             }
             else if (squadId != null)
             {
@@ -83,19 +87,22 @@ namespace core
                     throw new ArgumentException("teamId cannot be null when specifying squadId");
                 }
 
-                playersSubset = String.Format("sqaud {0} {1}", teamId, squadId);
+                playersSubset = "squad";
+                args["teamid"] = teamId;
+                args["squadid"] = squadId;
             }
             else if (teamId != null)
             {
-                playersSubset = String.Format("team {0}", teamId);
+                playersSubset = "team";
+                args["teamid"] = teamId;
             }
             else
             {
-                playersSubset = String.Format("all");
+                playersSubset = "all";
             }
 
-            args.Add("players", playersSubset);
-            args.Add("message", message);
+            args["players"] = playersSubset;
+            args["message"] = message;
             CommLayer.IssueRequest("admin.say", args, null);
         }
 
@@ -318,16 +325,6 @@ namespace core
                 return (ServerSettingsEntity)result.Result;
             }
             return null;
-        }
-
-        public bool ValidateUser(string token, PermissionSetEntity permissionSet)
-        {
-            return PermissionsUtil.ValidateUser(token, permissionSet);
-        }
-
-        public void AddorUpdateUser(UserEntity user)
-        {
-            PermissionsUtil.AddorUpdateUser(user);
         }
     }
 }

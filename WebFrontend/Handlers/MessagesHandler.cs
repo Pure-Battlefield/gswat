@@ -5,9 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using WebFrontend.Exceptions;
 using WebFrontend.Models;
 using WebFrontend.Utilities;
 using core;
+using core.Roles;
 using core.TableStoreEntities;
 
 namespace WebFrontend.Handlers
@@ -19,7 +21,7 @@ namespace WebFrontend.Handlers
         IEnumerable<ChatMessageEntity> RetrieveByDay(DateTimeInfo dateTime);
         HttpResponseMessage DownloadByDay(DateTimeInfo dateTime);
         void ImportMessages(IList<ChatMessageEntity> messages);
-        void AdminSay(string message, string admin, IList<string> playerNames = null, string teamId = null, string squadId = null);
+        void AdminSay(string message, string admin, AuthenticatedUser userInfo, IList<string> playerNames = null, string teamId = null, string squadId = null);
     }
     
     public class MessagesHandler : IMessagesHandler
@@ -117,9 +119,14 @@ namespace WebFrontend.Handlers
             }
         }
 
-        public void AdminSay(string message, string admin, IList<string> playerNames = null, string teamId = null, string squadId = null)
+        public void AdminSay(string message, string admin, AuthenticatedUser userInfo, IList<string> playerNames = null, string teamId = null, string squadId = null)
         {
-            //TODO: Permission checking here.  
+            if (userInfo == null || !core.PermissionsUtil.ValidateUser(userInfo.Token, userInfo.Email,
+                                                   new PermissionSetEntity("gswat", new List<string> {"admin"})))
+            {
+                throw new AuthorizationValidationException("You must be an administrator to send chat.");
+            }
+
 
             var newMsg = String.Format("[{0}]:  {1}", admin, message);
             if (playerNames != null)
