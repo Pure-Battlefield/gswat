@@ -77,7 +77,7 @@ namespace core
                 {
                     throw new ArgumentException("Cannot specify both playerName and Team/Squad.");
                 }
-                playersSubset = "players";
+                playersSubset = "player";
                 args["playername"] = playerName;
             }
             else if (squadId != null)

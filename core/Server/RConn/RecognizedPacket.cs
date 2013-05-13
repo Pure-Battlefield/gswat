@@ -162,7 +162,7 @@ namespace core.Server.RConn
                             parameters[format.Parameters[i - 1].Name] = new string(response.Words[i].Content);
                         }
 
-                        parameters["packet.Namae"] = response.FirstWord;
+                        parameters["packet.Name"] = response.FirstWord;
                         return parameters;
                     }
                 }
@@ -187,8 +187,14 @@ namespace core.Server.RConn
             List<Word> words = new List<Word>();
             words.Add(new Word(packetName));
 
-            for (int i = 0; i < parameters.Count; i++)
+            for (var i = 0; i < format.Parameters.Count; i++)
             {
+                //Skip any optional params that weren't specified.  
+                if (format.Parameters[i].IsOptional && !parameters.ContainsKey(format.Parameters[i].Name))
+                {
+                    continue;
+                }
+
                 words.Add(new Word(parameters[format.Parameters[i].Name]));
             }
 
