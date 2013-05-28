@@ -25,7 +25,10 @@
 		}),
 
 		account: Backbone.View.extend({
-			id: 'account',
+		    id: 'account',
+		    events: {
+		        "click button.submit"         : "submit"
+		    },
 
 			render: function(){
 				this.$el.html(ich.tpl_account());

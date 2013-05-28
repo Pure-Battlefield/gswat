@@ -7,6 +7,7 @@ namespace core.Roles
     public class UserEntity : TableEntity
     {
         private string _googleIdNumber;
+
         public string GoogleIDNumber { 
             get { return _googleIdNumber; }
             set 
@@ -15,6 +16,8 @@ namespace core.Roles
                 RowKey = GoogleIDNumber;
             }
         }
+
+        public string DisplayName { get; set; }
 
         public string Email { get; set; }
 
