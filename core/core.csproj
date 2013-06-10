@@ -70,6 +70,7 @@
     <Compile Include="Roles\PermissionSetEntity.cs" />
     <Compile Include="Roles\PermissionsUtility.cs" />
     <Compile Include="Roles\RoleTableStoreUtility.cs" />
+    <Compile Include="Roles\UnboundPermissionSetEntity.cs" />
     <Compile Include="TableStoreEntities\ChatMessageEntity.cs" />
     <Compile Include="ICore.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
