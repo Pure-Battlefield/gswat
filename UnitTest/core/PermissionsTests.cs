@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Hosting;
+﻿using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 using NUnit.Framework;
 using Moq;
-using WebFrontend.Controllers;
-using WebFrontend.Handlers;
-using WebFrontend.Models;
 using core;
 using core.Roles;
 using core.Utilities;
@@ -28,6 +20,11 @@ namespace UnitTest
             settingsMgr = new Mock<ICloudSettingsManager>();
             settingsMgr.Setup(manager => manager.GetConfigurationSettingValue("StorageConnectionString")).Returns("UseDevelopmentStorage=true");
             settingsMgr.Setup(manager => manager.GetConfigurationSettingValue("ServiceAdministrators")).Returns("");
+
+            var storageAccount = CloudStorageAccount.Parse(settingsMgr.Object.GetConfigurationSettingValue("StorageConnectionString"));
+            var tableClient = storageAccount.CreateCloudTableClient();
+            var tbl = tableClient.GetTableReference("users");
+            tbl.DeleteIfExists();
         }
 
         [Test]
@@ -39,9 +36,8 @@ namespace UnitTest
 
             core.PermissionsUtil.AddorUpdateUser(user);
 
-            Assert.IsTrue(core.PermissionsUtil.ValidateUser("", "mail@mail.com", new PermissionSetEntity("GSWAT", new List<string> { "admin" }), "12345"));
+            Assert.IsTrue(core.PermissionsUtil.ValidateUser("", new PermissionSetEntity("GSWAT", new List<string> { "admin" }), "12345"));
         }
-
         /*
         [Test]
         public void PermissionDeniedTest()

@@ -9,5 +9,7 @@
         void SetPermissionSetEntity(PermissionSetEntity permissionSet);
         UserEntity GetUserEntity(string nameSpace, string googleIDNumber);
         void SetUserEntity(UserEntity user);
+        UnboundPermissionSetEntity GetUnboundPermissionSetEntity(string nameSpace, string email);
+        void AddOrUpdateUnboundPermission(UnboundPermissionSetEntity user);
     }
 }

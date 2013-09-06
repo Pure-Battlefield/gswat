@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web.Script.Serialization;
-using Microsoft.WindowsAzure.ServiceRuntime;
 using core.Logging;
 using core.Utilities;
 
@@ -13,6 +12,11 @@ namespace core.Roles
 {
     public interface IPermissionsUtility
     {
+        /// <summary>
+        /// Adds or updates a user in the data store.  If a user is updated to have an empty PermissionSetEntity, 
+        /// the user will be removed from the data store.  
+        /// </summary>
+        /// <param name="user">The user to be added to the data store or updated.</param>
         void AddorUpdateUser(UserEntity user);
 
         /// <summary>
@@ -23,7 +27,7 @@ namespace core.Roles
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
         /// <param name="debugID">Only needed for debugging; leave blank.</param>
         /// <returns></returns>
-        bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID = "");
+        bool ValidateUser(string token, PermissionSetEntity permissionSet, string debugID = "");
 
         /// <summary>
         /// Loads permissions for all plugins from the global config file.
@@ -42,9 +46,28 @@ namespace core.Roles
             this.settingsManager = settingsManager;
         }
 
+        /// <summary>
+        /// Adds or updates the user in Table Store using the Role Utility.  
+        /// If the user has no Google ID, an UnboundPermissionsEntity will be created.  The permissions will be stored
+        /// in the UnboundPermissionsEntity until the user logs in for the first time, at which time the proper UserEntity
+        /// will be created.  
+        /// </summary>
+        /// <param name="user">The UserEntity to be created.</param>
         public void AddorUpdateUser(UserEntity user)
         {
-            RoleUtility.SetUserEntity(user);
+            if (user.GoogleIDNumber != null)
+            {
+                RoleUtility.SetUserEntity(user);
+            }
+            //If the GoogleID is unknown, we need to make an UnboundPermissionSet to be bound upon verification.  
+            else if (user.Email != null)
+            {
+                var ubps = new UnboundPermissionSetEntity();
+                ubps.Email = user.Email;
+                ubps.Permissions = user.Permissions;
+                ubps.Namespace = user.Permissions.Namespace;
+                RoleUtility.AddOrUpdateUnboundPermission(ubps);
+            }
         }
 
         /// <summary>
@@ -57,15 +80,15 @@ namespace core.Roles
         ///     3. If the email in the record does not match the email provided by the user parameter, the table is updated with the new email
         /// </summary>
         /// <param name="token">Google auth token</param>
-        /// <param name="email">Email of the user to be validated</param>
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
         /// <param name="debugID">Debug parameter if we want to use our own ID</param>
         /// <returns></returns>
-        public bool ValidateUser(string token, string email, PermissionSetEntity permissionSet, string debugID)
+        public bool ValidateUser(string token, PermissionSetEntity permissionSet, string debugID)
         {
             try
             {
                 string userid = "";
+                string email = "";
                 if (debugID.Equals(""))
                 {
                     var request = WebRequest.Create("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
@@ -77,6 +100,7 @@ namespace core.Roles
                             var js = new JavaScriptSerializer();
                             var obj = js.Deserialize<dynamic>(reader.ReadToEnd());
                             userid = obj["user_id"];
+                            email = obj["email"];
                         }
                     }
                 }
@@ -97,15 +121,9 @@ namespace core.Roles
                 //Resharper is amazing - this returns false if any permissions are not found or the user is null, otherwise returns true
                 var validated = existingUser != null && permissionSet.PermissionSet.All(permission => existingUser.Permissions.PermissionSet.Contains(permission));
 
-                // If that GoogleIDNumber exists, check to make sure the emails match
-                // If they don't, update the record with the new email
-                if (existingUser != null)
+                if (!validated)
                 {
-                    if (!existingUser.Email.Equals(email))
-                    {
-                        existingUser.Email = email;
-                        RoleUtility.SetUserEntity(existingUser);
-                    }
+                    
                 }
 
                 return validated;
