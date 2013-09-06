@@ -21,7 +21,5 @@
       <Setting name="StorageConnectionString" />
       <Setting name="ServiceAdministrators" />
     </ConfigurationSettings>
-    <Certificates>
-    </Certificates>
   </WebRole>
 </ServiceDefinition>
