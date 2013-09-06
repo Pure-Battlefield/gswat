@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="WebFrontend.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
   <Role name="WebFrontend">
     <Instances count="1" />
@@ -7,8 +7,5 @@
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="ServiceAdministrators" value="" />
     </ConfigurationSettings>
-    <Certificates>
-      <Certificate name="Wildcard" thumbprint="1E95BFDF7F39EA30BE92EC06E736846CB23A7D1F" thumbprintAlgorithm="sha1" />
-    </Certificates>
   </Role>
 </ServiceConfiguration>
