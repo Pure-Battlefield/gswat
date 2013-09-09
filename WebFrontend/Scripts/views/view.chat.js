@@ -4,7 +4,8 @@
 			events: {
 				'click #chat-force-refresh' : 'force_refresh',
 				'click .archive-btn'        : 'fetch_archive',
-				'click #chat-toggle-options': 'quick_settings'
+				'click #chat-toggle-options': 'quick_settings',
+				'click #chatbox-submit-btn': 'send_serverchat'
 			},
 
 			id: 'server-chat-page',
@@ -82,6 +83,13 @@
 				this.$el.html(ich.tpl_chat(data));
 				this.delegateEvents();
 				this.render_sub_views();
+			    
+			    // Bind enter key event to chatbox
+				this.$el.find("#chatbox-msgfield").keyup(function (event) {
+				    if (event.keyCode == 13) {
+				        $("#chatbox-submit-btn").click();
+				    }
+				});
 			},
 
 			render_sub_views: function(){
@@ -90,6 +98,14 @@
 					view.$el.find('#' + sub_view.id).replaceWith(sub_view.render().el);
 					sub_view.delegateEvents();
 				});
+			},
+			send_serverchat: function (event) {
+			    var msg = this.$el.find('#chatbox-msgfield').val();
+			    if (msg !== "") {
+			        this.model.serverchat(msg, "", "", "", "");
+			        // clear chatbox-field
+			        this.$el.find('#chatbox-msgfield').val("");
+			    }
 			}
 		}),
 

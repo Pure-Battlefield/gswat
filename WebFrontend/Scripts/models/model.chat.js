@@ -106,6 +106,45 @@
 					});
 				}
 			}
+		},
+		serverchat: function(msg, adminname, team, squad, players) {
+
+		    var token = gapi.auth.getToken().access_token;
+		    
+            if (token) {
+                var model = this;
+                var url = this.get('url') + '?token=' + token;
+                var data = {
+                    "Message": msg,
+                    "AdminName": "GSWAT",
+                    "Type": "say",
+                    "PlayerTargets": "",
+                    "TeamId": "0",
+                    "SquadId": "1"
+                };
+
+                $.ajax({
+                    type: 'PUT',
+                    url: url,
+                    dataType: 'json',
+                    data: data,
+                    success: function(response) {
+                        console.log("Chat message sent. Response: ", response);
+                    },
+                    error: function(error) {
+                        if (error.status == 200) {
+                            console.log("Chat message sent.");
+                        } else {
+                            console.log("There was an error sending the chatmessage. Error: ", error);
+                        }
+
+                    }
+                });
+            } else {
+                // User not authed
+                console.log("You must be logged in to send chat messages");
+            }
+
 		}
 	});
 
