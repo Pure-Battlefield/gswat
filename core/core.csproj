@@ -110,6 +110,7 @@
     <Compile Include="Roles\UserEntity.cs" />
     <Compile Include="Utilities\ChatMessageCleaner.cs" />
     <Compile Include="Utilities\ICloudSettingsManager.cs" />
+    <Compile Include="Utilities\Mailer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

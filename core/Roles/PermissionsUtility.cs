@@ -63,7 +63,7 @@ namespace core.Roles
             else if (user.Email != null)
             {
                 var ubps = new UnboundPermissionSetEntity();
-                ubps.Email = user.Email;
+                ubps.Guid = user.Email;
                 ubps.Permissions = user.Permissions;
                 ubps.Namespace = user.Permissions.Namespace;
                 RoleUtility.AddOrUpdateUnboundPermission(ubps);
@@ -87,8 +87,7 @@ namespace core.Roles
         {
             try
             {
-                string userid = "";
-                string email = "";
+                var userid = "";
                 if (debugID.Equals(""))
                 {
                     var request = WebRequest.Create("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
@@ -100,7 +99,6 @@ namespace core.Roles
                             var js = new JavaScriptSerializer();
                             var obj = js.Deserialize<dynamic>(reader.ReadToEnd());
                             userid = obj["user_id"];
-                            email = obj["email"];
                         }
                     }
                 }
@@ -120,11 +118,6 @@ namespace core.Roles
 
                 //Resharper is amazing - this returns false if any permissions are not found or the user is null, otherwise returns true
                 var validated = existingUser != null && permissionSet.PermissionSet.All(permission => existingUser.Permissions.PermissionSet.Contains(permission));
-
-                if (!validated)
-                {
-                    
-                }
 
                 return validated;
             }

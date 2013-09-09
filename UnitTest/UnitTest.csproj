@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="WebFrontend\Controllers\MessagesControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebFrontend\Controllers\RolesControllerTests.cs" />
     <Compile Include="WebFrontend\Handlers\MessagesHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup />
