@@ -5,4 +5,4 @@ Permissions must be a list of comma-separated words, no spaces or funky stuff in
 ###############################################################################################
 
 NAMESPACE: GSWAT
-PERMISSIONS: anonymous, admin
+PERMISSIONS: anonymous, admin, operations

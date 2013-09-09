@@ -6,7 +6,7 @@ namespace core.Roles
 {
     public class UnboundPermissionSetEntity : TableEntity 
     {
-        public string Email
+        public string Guid
         {
             get { return RowKey; }
             set { RowKey = value; }
@@ -26,8 +26,8 @@ namespace core.Roles
             set
             {
                 _serializedPermissionSetEntity = value;
-                StringReader righter = new StringReader(value);
-                XmlSerializer cereal = new XmlSerializer(typeof(PermissionSetEntity));
+                var righter = new StringReader(value);
+                var cereal = new XmlSerializer(typeof(PermissionSetEntity));
                 _permissions = (PermissionSetEntity)cereal.Deserialize(righter);
                 PartitionKey = _permissions.Namespace;
             }
@@ -39,8 +39,8 @@ namespace core.Roles
             set
             {
                 _permissions = value;
-                StringWriter righter = new StringWriter();
-                XmlSerializer cereal = new XmlSerializer(typeof (PermissionSetEntity));
+                var righter = new StringWriter();
+                var cereal = new XmlSerializer(typeof (PermissionSetEntity));
                 cereal.Serialize(righter, value);
                 _serializedPermissionSetEntity = righter.ToString();
                 PartitionKey = value.Namespace;

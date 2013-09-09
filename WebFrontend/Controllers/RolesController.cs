@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebFrontend.Models;
 using core;
+using core.Roles;
+using core.Utilities;
 
 namespace WebFrontend.Controllers
 {
     public class RolesController : ApiController
     {
-        private readonly ICore core;
+        private readonly ICore _core;
+        private readonly IRoleTableStoreUtility _roleUtility;
+        private readonly IMailer _mailer;
 
-        public RolesController(ICore core)
+        public RolesController(ICore core, IRoleTableStoreUtility roleUtility, IMailer mailer)
         {
-            this.core = core;
+            _core = core;
+            _roleUtility = roleUtility;
+            _mailer = mailer;
         }
 
         public HttpResponseMessage Get(AuthenticatedUser requestingUser)
@@ -30,14 +35,78 @@ namespace WebFrontend.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        public HttpResponseMessage Put(AuthenticatedUser requestingUser)
+        public HttpResponseMessage Put(HttpRequestMessage request, AuthenticatedUser requestingUser, [FromBody] User userToAdd)
         {
-            if (requestingUser == null)
+            if (requestingUser == null || !_core.PermissionsUtil.ValidateUser(requestingUser.Token,
+                                                   new PermissionSetEntity("gswat", new List<string> {"operations"})))
             {
-                return Request.CreateResponse(HttpStatusCode.Forbidden,
+                return request.CreateResponse(HttpStatusCode.Forbidden,
                                               "You must be an administrator to add or update.");
             }
-            return Request.CreateResponse(HttpStatusCode.Created);
+            var response = ValidateUserToAdd(userToAdd, request);
+            if (response != null)
+            {
+                return response;
+            }
+
+            var unboundPermissionsGuid = new Guid();
+            var permissions = new PermissionSetEntity(userToAdd.Namespace, userToAdd.Permissions);
+            var unboundPermissionSet = new UnboundPermissionSetEntity
+                                           {
+                                               Namespace = userToAdd.Namespace,
+                                               Permissions = permissions,
+                                               Guid = unboundPermissionsGuid.ToString()
+                                           };
+            try
+            {
+                _roleUtility.AddOrUpdateUnboundPermission(unboundPermissionSet);
+            }
+            catch (Exception)
+            {
+                return request.CreateResponse(HttpStatusCode.InternalServerError,
+                                              "User could not be added.");
+            }
+
+            //TODO: COMPLETE!
+            _mailer.SendMail(userToAdd.Email, "You have been granted permissions on GSWAT", "<a>Click me!</a>");
+
+            return request.CreateResponse(HttpStatusCode.Created);
+        }
+
+        private HttpResponseMessage ValidateUserToAdd(User userToAdd, HttpRequestMessage request)
+        {
+            if (userToAdd == null)
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest,
+                                              "userToAdd is null.");
+            }
+            if (string.IsNullOrEmpty(userToAdd.Email))
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest,
+                                              "User e-mail address is empty or null.");
+            }
+            if (string.IsNullOrEmpty(userToAdd.Email.Trim()))
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest,
+                                              "User e-mail address was just a bunch of spaces.  You monster.");
+            }
+
+            if (string.IsNullOrEmpty(userToAdd.Namespace))
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest,
+                                              "User Namespace is empty or null.");
+            }
+            if (string.IsNullOrEmpty(userToAdd.Namespace.Trim()))
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest,
+                                              "User Namespace was just a bunch of spaces.  You monster.");
+            }
+            if (userToAdd.Permissions == null)
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest,
+                                              "The Permissions list was null.");
+            }
+            return null;
         }
     }
 }

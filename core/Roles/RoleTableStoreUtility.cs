@@ -150,26 +150,17 @@ namespace core.Roles
         public void AddOrUpdateUnboundPermission(UnboundPermissionSetEntity user)
         {
             user.ETag = "*";
-            var existing = GetUnboundPermissionSetEntity(user.Namespace, user.Email);
-
-            if (existing == null)
+            try
             {
                 var insertOp = TableOperation.Insert(user);
                 userTable.Execute(insertOp);
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    existing.Permissions = user.Permissions;
-                    var insertOrReplaceOperation = TableOperation.InsertOrReplace(existing);
-                    unboundPermissionTable.Execute(insertOrReplaceOperation);
-                }
-                catch (Exception e)
-                {
-                    LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
-                }
+                LogUtility.Log("RoleTableStoreUtility", "AddOrUpdateUnboundPermission", e.StackTrace);
+                throw e;
             }
+            
         }
     }
 }
