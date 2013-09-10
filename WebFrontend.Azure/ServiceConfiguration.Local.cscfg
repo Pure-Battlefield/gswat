@@ -5,7 +5,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="ServiceAdministrators" value="101684455026340226995" />
+      <Setting name="ServiceAdministrators" value="" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>

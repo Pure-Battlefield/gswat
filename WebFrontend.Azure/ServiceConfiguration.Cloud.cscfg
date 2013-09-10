@@ -5,7 +5,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=devgswatenzo;AccountKey=zAm4nwdwBdH7V/2Lq61zUmy77omV3H6Y8iIqJTrNY4gI+gPWBTi1Grm4fZ3unfEqgw05fSa1rmRmugU9O6/O8A==" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="ServiceAdministrators" value="101684455026340226995" />
+      <Setting name="ServiceAdministrators" value="" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
