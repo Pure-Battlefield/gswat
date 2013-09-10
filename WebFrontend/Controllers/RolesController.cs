@@ -67,7 +67,7 @@ namespace WebFrontend.Controllers
                                               "User could not be added.");
             }
 
-            //TODO: COMPLETE!
+            //TODO: Find out what the link needs to be from frontend devs!
             _mailer.SendMail(userToAdd.Email, "You have been granted permissions on GSWAT", "<a>Click me!</a>");
 
             return request.CreateResponse(HttpStatusCode.Created);
@@ -90,7 +90,6 @@ namespace WebFrontend.Controllers
                 return request.CreateResponse(HttpStatusCode.BadRequest,
                                               "User e-mail address was just a bunch of spaces.  You monster.");
             }
-
             if (string.IsNullOrEmpty(userToAdd.Namespace))
             {
                 return request.CreateResponse(HttpStatusCode.BadRequest,

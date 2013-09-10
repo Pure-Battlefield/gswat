@@ -17,41 +17,195 @@ namespace UnitTest.WebFrontend.Controllers
     {
         #region SetUp / TearDown
 
-        [SetUp]
-        public void Init()
-        { }
-
-        [TearDown]
-        public void Dispose()
-        { }
-
         #endregion
 
         #region Tests
-
-        [Test]
-        public void DoesReturnForbiddenOnUnauthorizedUser()
+        public class ValidatesRequestingUserRolesControllerTests : RolesControllerTests
         {
-            var request = new HttpRequestMessage();
-            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
-            var fakeCore = new Mock<ICore>();
-            fakeCore.Setup(
-                x => x.PermissionsUtil.ValidateUser(
-                    It.IsAny<string>(), 
-                    It.IsAny<PermissionSetEntity>(),
-                    It.IsAny<string>())).Returns(false);
-            var fakeRoleUtil = new Mock<IRoleTableStoreUtility>();
-            var fakeMailer = new Mock<IMailer>();
-            var classUnderTest = new RolesController(fakeCore.Object, fakeRoleUtil.Object, fakeMailer.Object);
-            var requestingUser = new AuthenticatedUser
-                                     {
-                                         Token = "test"
-                                     };
+            private HttpRequestMessage _request;
+            private Mock<ICore> _fakeCore;
+            private Mock<IRoleTableStoreUtility> _fakeRoleUtil;
+            private Mock<IMailer> _fakeMailer;
+            private AuthenticatedUser _requestingUser;
 
-            var response = classUnderTest.Put(request, requestingUser, null);
+            public ValidatesRequestingUserRolesControllerTests()
+            {
+                _request = new HttpRequestMessage();
+                _request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+                _fakeCore = new Mock<ICore>();
+                _fakeCore.Setup(
+                    x => x.PermissionsUtil.ValidateUser(
+                        It.IsAny<string>(),
+                        It.IsAny<PermissionSetEntity>(),
+                        It.IsAny<string>())).Returns(false);
+                _fakeRoleUtil = new Mock<IRoleTableStoreUtility>();
+                _fakeMailer = new Mock<IMailer>();
+                
+                _requestingUser = new AuthenticatedUser
+                                      {
+                                          Token = "test"
+                                      };
+            }
+            [Test]
+            public void DoesReturnForbiddenOnUnauthorizedUser()
+            {
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
 
-            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+                var response = classUnderTest.Put(_request, _requestingUser, null);
+
+                Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            }
+
+            [Test]
+            public void DoesReturnForbiddenOnNullUser()
+            {
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, null, null);
+
+                Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            }
         }
+
+
+        public class ValidUserToAddRolesControllerTests : RolesControllerTests
+        {
+            private HttpRequestMessage _request;
+            private Mock<ICore> _fakeCore;
+            private Mock<IRoleTableStoreUtility> _fakeRoleUtil;
+            private Mock<IMailer> _fakeMailer;
+            private AuthenticatedUser _requestingUser;
+
+            public ValidUserToAddRolesControllerTests()
+            {
+                _request = new HttpRequestMessage();
+                _request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+                _fakeCore = new Mock<ICore>();
+                _fakeCore.Setup(
+                    x => x.PermissionsUtil.ValidateUser(
+                        It.IsAny<string>(),
+                        It.IsAny<PermissionSetEntity>(),
+                        It.IsAny<string>())).Returns(true);
+                _fakeRoleUtil = new Mock<IRoleTableStoreUtility>();
+                _fakeMailer = new Mock<IMailer>();
+
+                _requestingUser = new AuthenticatedUser
+                {
+                    Token = "test"
+                };
+            }
+
+            [Test]
+            public void RejectsNullUserToAdd()
+            {
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, null);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+
+            [Test]
+            public void RejectsNullEmailToAdd()
+            {
+                var user = new User
+                               {
+                                   Email = null
+                               };
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, user);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+
+            [Test]
+            public void RejectsEmptyEmailToAdd()
+            {
+                var user = new User
+                {
+                    Email = ""
+                };
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, user);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+
+            [Test]
+            public void RejectsSpacesOnlyEmailToAdd()
+            {
+                var user = new User
+                {
+                    Email = "   "
+                };
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, user);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+
+            [Test]
+            public void RejectsNullNamespaceToAdd()
+            {
+                var user = new User
+                {
+                    Email = "x",
+                    Namespace = null
+                };
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, user);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+            [Test]
+            public void RejectsEmptyNamespaceToAdd()
+            {
+                var user = new User
+                {
+                    Email = "x",
+                    Namespace = ""
+                };
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, user);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+            [Test]
+            public void RejectsSpacesOnlyNamespaceToAdd()
+            {
+                var user = new User
+                {
+                    Email = "x",
+                    Namespace = "   "
+                };
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, user);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+            [Test]
+            public void RejectsNullPermissionsToAdd()
+            {
+                var user = new User
+                {
+                    Email = "x",
+                    Namespace = "x",
+                    Permissions = null
+                };
+                var classUnderTest = new RolesController(_fakeCore.Object, _fakeRoleUtil.Object, _fakeMailer.Object);
+
+                var response = classUnderTest.Put(_request, _requestingUser, user);
+
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+        
 
         #endregion
     }
