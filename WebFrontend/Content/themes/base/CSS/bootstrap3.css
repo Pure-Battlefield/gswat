@@ -712,8 +712,8 @@ pre code {
 }
 
 .row {
-  margin-right: -10px;
-  margin-left: -10px;
+  /*margin-right: -10px;
+  margin-left: -10px;*/
 }
 
 .row:before,
@@ -827,8 +827,8 @@ pre code {
     max-width: 1170px;
   }
   .row {
-    margin-right: -15px;
-    margin-left: -15px;
+    /*margin-right: -15px;
+    margin-left: -15px;*/
   }
   [class^="span"] {
     padding-right: 15px;
