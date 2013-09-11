@@ -699,6 +699,7 @@ pre code {
 .container {
   margin-right: auto;
   margin-left: auto;
+  padding: 0 12px 0 12px;
 }
 
 .container:before,
@@ -738,6 +739,7 @@ pre code {
 @media screen and (min-width: 768px) {
   .container {
     max-width: 728px;
+    padding: 0 0px 0 0px;
   }
   [class^="span"] {
     float: left;
@@ -819,12 +821,14 @@ pre code {
 @media screen and (min-width: 992px) {
   .container {
     max-width: 940px;
+    padding: 0 0px 0 0px;
   }
 }
 
 @media screen and (min-width: 1200px) {
   .container {
     max-width: 1170px;
+    padding: 0 0px 0 0px;
   }
   .row {
     /*margin-right: -15px;
