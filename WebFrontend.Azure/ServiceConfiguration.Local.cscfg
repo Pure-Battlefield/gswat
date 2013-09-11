@@ -6,6 +6,12 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="ServiceAdministrators" value="" />
+      <Setting name="SmtpHost" value="" />
+      <Setting name="SmtpPort" value="" />
+      <Setting name="SmtpAccount" value="" />
+      <Setting name="SmtpPassword" value="" />
+      <Setting name="SmtpSender" value="" />
+      <Setting name="SmtpUseSSL" value="" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
