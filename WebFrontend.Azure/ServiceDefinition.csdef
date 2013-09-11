@@ -20,6 +20,12 @@
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
       <Setting name="ServiceAdministrators" />
+      <Setting name="SmtpHost" />
+      <Setting name="SmtpPort" />
+      <Setting name="SmtpAccount" />
+      <Setting name="SmtpPassword" />
+      <Setting name="SmtpSender" />
+      <Setting name="SmtpUseSSL" />
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
