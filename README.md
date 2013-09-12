@@ -4,15 +4,29 @@ The intent of this tool is to make administering servers a breeze without ever l
 
 ## Setup
 
-* Install Visual Studio - You can grab the free [VS Web Express version here](http://www.microsoft.com/visualstudio/eng/downloads#d-express-web)
-* Fork our repo at [GSWAT](https://github.com/Pure-Battlefield/gswat)
-* Open the project by clicking the `gswat.sln` file in the repo
+If you do NOT have any version of Visual Studio 2012 currently installed on your computer,  you can grab the free [VS Web Express version here](http://www.microsoft.com/visualstudio/eng/downloads#d-express-web), which is prepackaged with all the required Windows Azure components.
+
+* Fork our repo at [GSWAT](https://github.com/Pure-Battlefield/gswat). Choose the `develop` branch if you plan on modifying the project.
+* Open the project in VS by clicking the `gswat.sln` file in the repo.
+* If prompted to, convert the project to target Windows Azure Tools 2.1.
 * In the `Solution Explorer`, find the `WebFrontend.Azure` item, right click it, and select `Set as StartUp Project`
+
+If your version of Visual Studio 2012 is having trouble opening the Windows Azure files in the project, you will need to install some additional components.
+
+* Download and launch the [Microsoft Web Platform Installer](http://www.microsoft.com/web/downloads/platform.aspx "MS Web Platform Installer").
+* In the search box, type `azure`. Find and add the following:
+	* Windows Azure Libraries for .NET (VS 2012) - 2.1
+	* Windows Azure Libraries for .NET - 2.1
+	* Windows Azure SDK - 2.1
+* Install the components and try opening the project again.
 
 ## Run Locally
 
-* Make sure that the project is set to `Debug` mode, you can find this at the top of the toolbar
-* Click `Debug` -> `Start Debugging`, hit `F5`, or click the green arrow icon in the top toolbar
+* Visual Studio should be running with administrative privileges, or the Windows Azure emulator(s) may have trouble launching. 
+* Make sure that the project is set to `Debug` mode, you can find this at the top of the toolbar.
+* Click `Debug` -> `Start Debugging`, hit `F5`, or click the green arrow icon in the top toolbar. GSWAT will open automatically (as a new tab) in the selected browser.
+
+You may need to clear your browser's cache before you can see changes.
 
 ## Run on Windows Azure
 

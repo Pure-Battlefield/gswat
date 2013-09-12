@@ -3,6 +3,17 @@ _.extend(window,{
 	Lib: {}
 });
 
+/* Fix for Windows Phone 8 devices */
+(function() {
+    if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+        var msViewportStyle = document.createElement("style");
+        msViewportStyle.appendChild(
+            document.createTextNode("@-ms-viewport{width:auto!important}")
+        );
+        document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+    }
+})(); 
+
 (function(window,document,$,_,yepnope,undefined){
 	Lib = function(){
 		this.squads = [
