@@ -49,7 +49,7 @@ namespace WebFrontend.Controllers
                 return response;
             }
 
-            var unboundPermissionsGuid = new Guid();
+            var unboundPermissionsGuid = Guid.NewGuid();
             var permissions = new PermissionSetEntity(userToAdd.Namespace, userToAdd.Permissions);
             var unboundPermissionSet = new UnboundPermissionSetEntity
                                            {
@@ -68,9 +68,23 @@ namespace WebFrontend.Controllers
             }
 
             //TODO: Find out what the link needs to be from frontend devs!
-            _mailer.SendMail(userToAdd.Email, "You have been granted permissions on GSWAT", "<a>Click me!</a>");
+            _mailer.SendMail(userToAdd.Email, "You have been granted permissions on GSWAT", "<a>Click me!</a> (If you can't click this link, enter this special code at the given place on the site: " + unboundPermissionsGuid);
 
             return request.CreateResponse(HttpStatusCode.Created);
+        }
+
+        public HttpResponseMessage Post(HttpRequestMessage request, AuthenticatedUser requestingUser, string id, string subresource)
+        {
+            switch (subresource)
+            {
+                case "":
+                    break;
+                case "emailconfirmation":
+                    //TODO: Run e-mail confirmation logic here.  
+                    break;
+                default:
+                    return request.CreateResponse();
+            }
         }
 
         private HttpResponseMessage ValidateUserToAdd(User userToAdd, HttpRequestMessage request)
