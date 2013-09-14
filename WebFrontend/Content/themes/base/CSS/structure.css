@@ -9,45 +9,80 @@ body {
     }
 }
 
+@media (min-width: 768px) and (max-width: 979px) {
+    body {
+        /* This prevents the top bar (which has its height doubled in these dimensions)
+            from cutting off part of the page. */
+        padding-top: 104px;
+    }
+}
+
 body #logout,
 body.logged-in #login {
-	display:none;
+    display: none;
 }
 
 body.logged-in #logout,
 body #login {
-	display:block;
+    display: block;
 }
 
 table .table-status-icons {
-	font-size:20px;
-	text-align:center;
+    font-size: 20px;
+    text-align: center;
 }
 
 table .table-actions {
-	text-align:center;
+    text-align: center;
 }
 
 .table-status-icons .icon-ok-sign {
-	color:#006400;
+    color: #006400;
 }
 
 .table-status-icons .icon-remove-sign {
-	color:#ff0000;
+    color: #ff0000;
 }
 
 #header-alert .container {
-	padding:20px 0 0;
-	width:25%;
+    padding: 20px 0 0;
+    width: 25%;
 }
 
 .form-horizontal .control-group > .control-label {
-	width:auto;
+    width: auto;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.container {
+    padding: 0 12px 0 12px;
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        padding: 0 0px 0 0px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .container {
+        padding: 0 0px 0 0px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .container {
+        padding: 0 0px 0 0px;
+    }
 }
 
 /* Footer */
 #footer {
-    display:none;
+    display: none;
     padding: 30px 0;
     margin-top: 70px;
     border-top: 1px solid #e5e5e5;
@@ -59,26 +94,26 @@ table .table-actions {
     position: relative;
 }
 
-#server-chat-page .nav {
-    margin: 0;
-}
+    #server-chat-page .nav {
+        margin: 0;
+    }
 
-#server-chat-page #chat-settings h2 {
-    display:none;
-}
+    #server-chat-page #chat-settings h2 {
+        display: none;
+    }
 
 #chat-quick-settings {
-    position:absolute;
-    z-index:5;
-    display:none;
-    background:#FFF;
+    position: absolute;
+    z-index: 5;
+    display: none;
+    background: #FFF;
     border-bottom: 1px solid #e5e5e5;
-	width:100%;
-	padding-bottom:10px;
+    width: 100%;
+    padding-bottom: 10px;
 }
 
 #quick-settings {
-	padding-top:5px;
+    padding-top: 5px;
 }
 
 #server-chat-page .hide-server-msgs .server-message {
@@ -86,19 +121,19 @@ table .table-actions {
 }
 
 #server-chat-page .hide-us-msgs .team-US {
-	display: none;
+    display: none;
 }
 
 #server-chat-page .hide-ru-msgs .team-RU {
-	display: none;
+    display: none;
 }
 
 #server-chat-page .hide-global-msgs .team-all {
-	display: none;
+    display: none;
 }
 
 #server-chat-page .hide-squad-msgs .squad {
-	display: none;
+    display: none;
 }
 
 #server-chat-page .grid.page-region {
@@ -106,15 +141,15 @@ table .table-actions {
 }
 
 #chat-contents {
-    overflow:scroll;
-    overflow-x:visible;
-    overflow-y:scroll;
-	max-height:600px;
+    overflow: scroll;
+    overflow-x: visible;
+    overflow-y: scroll;
+    max-height: 600px;
 }
 
 #chat-contents-ul {
     margin: 0;
-    list-style:none;
+    list-style: none;
 }
 
 #chat-contents li {
@@ -123,20 +158,20 @@ table .table-actions {
 
 .team {
     font-weight: bold;
-    text-transform:uppercase;
+    text-transform: uppercase;
 }
 
-.team.team-US {
-    color: #0000ff;
-}
+    .team.team-US {
+        color: #0000ff;
+    }
 
-.team.team-RU {
-    color: #CE2323;
-}
+    .team.team-RU {
+        color: #CE2323;
+    }
 
-.team.squad {
-    color: #28AE00;
-}
+    .team.squad {
+        color: #28AE00;
+    }
 
 .player-name {
     font-weight: bold;
@@ -145,25 +180,25 @@ table .table-actions {
 /* Map Rotation */
 table .map-list-player-criterias,
 table .map-list-count {
-	text-align:center;
+    text-align: center;
 }
 
 #map-rotation th,
 #map-rotation td {
-	vertical-align:middle;
+    vertical-align: middle;
 }
 
 /* Forms */
 .help-block {
-	display:none;
+    display: none;
 }
 
 .has-error.number .error-number,
 .has-error.required .error-required {
-	display:block;
+    display: block;
 }
 
 /* Settings */
 #settings h2 {
-	display:none;
+    display: none;
 }
