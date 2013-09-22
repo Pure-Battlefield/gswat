@@ -182,7 +182,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\MessagesHandler.cs" />
-    <Compile Include="Models\AuthenticatedUser.cs" />
     <Compile Include="Models\DateTimeInfo.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
     <Compile Include="Models\User.cs" />

@@ -8,6 +8,7 @@ using WebFrontend.Controllers;
 using WebFrontend.Models;
 using core;
 using core.Roles;
+using core.Roles.Models;
 using core.Utilities;
 
 namespace UnitTest.WebFrontend.Controllers
@@ -35,9 +36,8 @@ namespace UnitTest.WebFrontend.Controllers
                 _fakeCore = new Mock<ICore>();
                 _fakeCore.Setup(
                     x => x.PermissionsUtil.ValidateUser(
-                        It.IsAny<string>(),
-                        It.IsAny<PermissionSetEntity>(),
-                        It.IsAny<string>())).Returns(false);
+                        It.IsAny<IValidatableUser>(),
+                        It.IsAny<PermissionSetEntity>())).Returns(false);
                 _fakeRoleUtil = new Mock<IRoleTableStoreUtility>();
                 _fakeMailer = new Mock<IMailer>();
                 
@@ -83,9 +83,9 @@ namespace UnitTest.WebFrontend.Controllers
                 _fakeCore = new Mock<ICore>();
                 _fakeCore.Setup(
                     x => x.PermissionsUtil.ValidateUser(
-                        It.IsAny<string>(),
-                        It.IsAny<PermissionSetEntity>(),
-                        It.IsAny<string>())).Returns(true);
+                        It.IsAny<IValidatableUser>(),
+                        It.IsAny<PermissionSetEntity>()))
+                        .Returns(true);
                 _fakeRoleUtil = new Mock<IRoleTableStoreUtility>();
                 _fakeMailer = new Mock<IMailer>();
 

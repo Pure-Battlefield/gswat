@@ -6,6 +6,7 @@ using System.Web.Http;
 using WebFrontend.Models;
 using core;
 using core.Roles;
+using core.Roles.Models;
 using core.Utilities;
 
 namespace WebFrontend.Controllers
@@ -37,7 +38,7 @@ namespace WebFrontend.Controllers
 
         public HttpResponseMessage Put(HttpRequestMessage request, AuthenticatedUser requestingUser, [FromBody] User userToAdd)
         {
-            if (requestingUser == null || !_core.PermissionsUtil.ValidateUser(requestingUser.Token,
+            if (requestingUser == null || !_core.PermissionsUtil.ValidateUser(requestingUser,
                                                    new PermissionSetEntity("gswat", new List<string> {"operations"})))
             {
                 return request.CreateResponse(HttpStatusCode.Forbidden,
@@ -73,18 +74,36 @@ namespace WebFrontend.Controllers
             return request.CreateResponse(HttpStatusCode.Created);
         }
 
-        public HttpResponseMessage Post(HttpRequestMessage request, AuthenticatedUser requestingUser, string id, string subresource)
+        public HttpResponseMessage Post(HttpRequestMessage request, AuthenticatedUser requestingUser, string id, string subresource, [FromBody]string confirmToken)
         {
             switch (subresource)
             {
                 case "":
+                    if (id == "me")
+                    {
+                        
+                    }
+                    else if (id == "null")
+                    {
+                        
+                    }
                     break;
                 case "emailconfirmation":
-                    //TODO: Run e-mail confirmation logic here.  
+                    if (string.IsNullOrEmpty(confirmToken))
+                    {
+                        return request.CreateResponse(HttpStatusCode.BadRequest, "No confirmation token provided.");
+                    }
+                    var confirmationToken = Guid.Parse(confirmToken);
+
+                    if (id == "me")
+                    {
+                        _roleUtility.ConfirmEmailAddress(confirmationToken, requestingUser.Token);
+                    }
                     break;
                 default:
-                    return request.CreateResponse();
+                    return request.CreateResponse(HttpStatusCode.BadRequest, "Invalid subresource specified");
             }
+            return null;
         }
 
         private HttpResponseMessage ValidateUserToAdd(User userToAdd, HttpRequestMessage request)

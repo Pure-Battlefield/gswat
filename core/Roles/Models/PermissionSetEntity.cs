@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace core.Roles
+namespace core.Roles.Models
 {
     public class PermissionSetEntity: TableEntity
     {
