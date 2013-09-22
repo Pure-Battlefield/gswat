@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 
 namespace core.Roles.Models
 {
@@ -32,10 +33,8 @@ namespace core.Roles.Models
             get { return _permissions; }
             set { 
                 _permissions = value;
-                StringWriter righter = new StringWriter();
-                XmlSerializer cereal = new XmlSerializer(typeof(PermissionSetEntity));
-                cereal.Serialize(righter, value);
-                _serializedPermissionSetEntity = righter.ToString();
+                _permissions.PermissionSetChanged += ChangedPermissionSet;
+                _serializedPermissionSetEntity = JsonConvert.SerializeObject(_permissions);
                 PartitionKey = value.Namespace;
             }
         }
@@ -47,9 +46,8 @@ namespace core.Roles.Models
             set
             {
                 _serializedPermissionSetEntity = value;
-                StringReader righter = new StringReader(value);
-                XmlSerializer cereal = new XmlSerializer(typeof(PermissionSetEntity));
-                _permissions = (PermissionSetEntity)cereal.Deserialize(righter);
+                _permissions = JsonConvert.DeserializeObject<PermissionSetEntity>(value);
+                _permissions.PermissionSetChanged += ChangedPermissionSet;
                 PartitionKey = _permissions.Namespace;
             }
         }
@@ -74,6 +72,11 @@ namespace core.Roles.Models
             Permissions = permissions;
             PartitionKey = permissions.Namespace;
             RowKey = GoogleIDNumber;
+        }
+
+        internal void ChangedPermissionSet(object sender, ChangedPermissionSetEventArgs args)
+        {
+            _serializedPermissionSetEntity = JsonConvert.SerializeObject(_permissions);
         }
     }
 }

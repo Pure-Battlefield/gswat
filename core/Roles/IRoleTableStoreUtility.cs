@@ -8,12 +8,65 @@ namespace core.Roles
     /// </summary>
     public interface IRoleTableStoreUtility
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nameSpace"></param>
+        /// <returns></returns>
         PermissionSetEntity GetPermissionSetEntity(string nameSpace);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="permissionSet"></param>
         void SetPermissionSetEntity(PermissionSetEntity permissionSet);
-        UserEntity GetUserEntity(string nameSpace, string googleIDNumber);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nameSpace"></param>
+        /// <param name="googleId"></param>
+        /// <returns></returns>
+        UserEntity GetUserEntity(string nameSpace, string googleId);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
         void SetUserEntity(UserEntity user);
-        UnboundPermissionSetEntity GetUnboundPermissionSetEntity(string nameSpace, string email);
-        void AddOrUpdateUnboundPermission(UnboundPermissionSetEntity user);
-        bool ConfirmEmailAddress(Guid permissionsToken, string googleToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        void DeleteUserEntity(UserEntity user);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nameSpace"></param>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        UnboundPermissionSetEntity GetUnboundPermissionSetEntity(string nameSpace, Guid guid);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="permissions"></param>
+        void AddOrUpdateUnboundPermission(UnboundPermissionSetEntity permissions);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="permissionsToken"></param>
+        /// <returns></returns>
+        bool ConfirmEmailToken(IValidatableUser user, Guid permissionsToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="permissions"></param>
+        void DeleteUnboundPermission(UnboundPermissionSetEntity permissions);
     }
 }

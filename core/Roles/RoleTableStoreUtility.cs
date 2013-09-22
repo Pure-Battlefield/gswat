@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -72,7 +73,7 @@ namespace core.Roles
                 try
                 {
                     permissionSetEntity.Namespace = permissionSet.Namespace;
-                    permissionSetEntity.PermissionSet = permissionSet.PermissionSet;
+                    permissionSetEntity.PermissionSet = (List<string>) permissionSet.GetPermissionSet();
                     var insertOrReplaceOperation = TableOperation.InsertOrReplace(permissionSetEntity);
                     permissionSetTable.Execute(insertOrReplaceOperation);
                 }
@@ -83,11 +84,11 @@ namespace core.Roles
             }
         }
 
-        public UserEntity GetUserEntity(string nameSpace, string googleIDNumber)
+        public UserEntity GetUserEntity(string nameSpace, string googleId)
         {
             try
             {
-                var retrieveOp = TableOperation.Retrieve<UserEntity>(nameSpace, googleIDNumber);
+                var retrieveOp = TableOperation.Retrieve<UserEntity>(nameSpace, googleId);
                 var result = userTable.Execute(retrieveOp);
 
                 if (result.Result != null)
@@ -105,35 +106,36 @@ namespace core.Roles
         public void SetUserEntity(UserEntity user)
         {
             user.ETag = "*";
-            var userEntity = GetUserEntity(user.Permissions.Namespace, user.GoogleIDNumber);
-            if (userEntity == null)
+            try
             {
-                var insertOp = TableOperation.Insert(user);
-                userTable.Execute(insertOp);
+                var setOp = TableOperation.InsertOrReplace(user);
+                userTable.Execute(setOp);
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    userEntity.BattlelogID = user.BattlelogID;
-                    userEntity.GoogleIDNumber = user.GoogleIDNumber;
-                    userEntity.AccountEnabled = user.AccountEnabled;
-                    userEntity.Permissions = user.Permissions;
-                    var insertOrReplaceOperation = TableOperation.InsertOrReplace(userEntity);
-                    userTable.Execute(insertOrReplaceOperation);
-                }
-                catch (Exception e)
-                {
-                    LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
-                }
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+                throw;
             }
         }
 
-        public UnboundPermissionSetEntity GetUnboundPermissionSetEntity(string nameSpace, string email)
+        public void DeleteUserEntity(UserEntity user)
         {
             try
             {
-                var retrieveOp = TableOperation.Retrieve<UnboundPermissionSetEntity>(nameSpace, email);
+                var deleteOp = TableOperation.Delete(user);
+                userTable.Execute(deleteOp);
+            }
+            catch (Exception e)
+            {
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+            }
+        }
+
+        public UnboundPermissionSetEntity GetUnboundPermissionSetEntity(string nameSpace, Guid guid)
+        {
+            try
+            {
+                var retrieveOp = TableOperation.Retrieve<UnboundPermissionSetEntity>(nameSpace, guid.ToString());
                 var result = unboundPermissionTable.Execute(retrieveOp);
 
                 if (result.Result != null)
@@ -148,26 +150,72 @@ namespace core.Roles
             return null;
         }
 
-        public void AddOrUpdateUnboundPermission(UnboundPermissionSetEntity user)
+        public void AddOrUpdateUnboundPermission(UnboundPermissionSetEntity permissions)
         {
-            user.ETag = "*";
+            permissions.ETag = "*";
             try
             {
-                var insertOp = TableOperation.Insert(user);
-                userTable.Execute(insertOp);
+                var insertOp = TableOperation.InsertOrReplace(permissions);
+                unboundPermissionTable.Execute(insertOp);
             }
             catch (Exception e)
             {
-                LogUtility.Log("RoleTableStoreUtility", "AddOrUpdateUnboundPermission", e.StackTrace);
-                throw e;
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+                throw;
             }
             
         }
 
-
-        public bool ConfirmEmailAddress(Guid permissionsToken, string googleToken)
+        public void DeleteUnboundPermission(UnboundPermissionSetEntity permissions)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var deleteOp = TableOperation.Delete(permissions);
+                unboundPermissionTable.Execute(deleteOp);
+            }
+            catch (Exception e)
+            {
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+            }
+        }
+
+        public bool ConfirmEmailToken(IValidatableUser user, Guid permissionsToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentException("Cannot be null", "user");
+            }
+
+            var userId = user.GetGoogleId();
+            if (userId == null)
+            {
+                throw new ArgumentException("User does not return valid token", "user");
+            }
+
+            var permissions = GetUnboundPermissionSetEntity("GSWAT", permissionsToken);
+            if (permissions == null)
+            {
+                return false;
+            }
+            else
+            {
+                //Get the user object so we don't overwrite anything unless the user doesn't exist.
+                var userEntity = GetUserEntity(permissions.Namespace, user.GetGoogleId());
+                if (userEntity == null)
+                {
+                    userEntity = new UserEntity(user.GetGoogleId(), "", "", true, permissions.Permissions)
+                                     {
+                                         ETag = Guid.NewGuid().ToString()
+                                     };
+                    SetUserEntity(userEntity);
+                }
+                else
+                {
+                    userEntity.Permissions.AddPermissions(permissions.Permissions.GetPermissionSet());
+                    SetUserEntity(userEntity);
+                }
+                return true;
+            }
         }
     }
 }
