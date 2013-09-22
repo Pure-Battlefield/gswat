@@ -1,4 +1,7 @@
-﻿namespace core.Roles
+﻿using System;
+using core.Roles.Models;
+
+namespace core.Roles
 {
     /// <summary>
     /// Interface for table store operations involving roles
@@ -11,5 +14,6 @@
         void SetUserEntity(UserEntity user);
         UnboundPermissionSetEntity GetUnboundPermissionSetEntity(string nameSpace, string email);
         void AddOrUpdateUnboundPermission(UnboundPermissionSetEntity user);
+        bool ConfirmEmailAddress(Guid permissionsToken, string googleToken);
     }
 }

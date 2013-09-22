@@ -3,6 +3,7 @@ using System.Reflection;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using core.Logging;
+using core.Roles.Models;
 using core.Utilities;
 
 namespace core.Roles
@@ -161,6 +162,12 @@ namespace core.Roles
                 throw e;
             }
             
+        }
+
+
+        public bool ConfirmEmailAddress(Guid permissionsToken, string googleToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

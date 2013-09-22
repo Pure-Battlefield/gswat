@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace core.Roles
+namespace core.Roles.Models
 {
     public class UserEntity : TableEntity
     {
@@ -24,6 +24,8 @@ namespace core.Roles
         public string BattlelogID { get; set; }
 
         public bool AccountEnabled { get; set; }
+
+        public bool EmailConfirmed { get; internal set; }
 
         private PermissionSetEntity _permissions;
         public PermissionSetEntity Permissions {

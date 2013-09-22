@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 using NUnit.Framework;
 using Moq;
 using core;
 using core.Roles;
+using core.Roles.Models;
 using core.Utilities;
 
 namespace UnitTest
@@ -33,10 +33,12 @@ namespace UnitTest
             IPermissionsUtility perm = new PermissionsUtility(new RoleTableStoreUtility(settingsMgr.Object), settingsMgr.Object);
             var core = new Core(perm, settingsMgr.Object);
             var user = new UserEntity("12345","mail@mail.com","battlelogID",true, new PermissionSetEntity("GSWAT", new List<string> {"admin"}));
+            var authedUser = new Mock<IValidatableUser>();
+            authedUser.Setup(x => x.GetGoogleId()).Returns("12345");
 
             core.PermissionsUtil.AddorUpdateUser(user);
 
-            Assert.IsTrue(core.PermissionsUtil.ValidateUser("", new PermissionSetEntity("GSWAT", new List<string> { "admin" }), "12345"));
+            Assert.IsTrue(core.PermissionsUtil.ValidateUser(authedUser.Object, new PermissionSetEntity("GSWAT", new List<string> { "admin" })));
         }
         /*
         [Test]

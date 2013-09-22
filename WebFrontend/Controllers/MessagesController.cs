@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 using WebFrontend.Exceptions;
 using WebFrontend.Handlers;
 using WebFrontend.Models;
+using core.Roles.Models;
 using core.TableStoreEntities;
 
 namespace WebFrontend.Controllers

@@ -9,7 +9,7 @@ using WebFrontend.Exceptions;
 using WebFrontend.Models;
 using WebFrontend.Utilities;
 using core;
-using core.Roles;
+using core.Roles.Models;
 using core.TableStoreEntities;
 
 namespace WebFrontend.Handlers
@@ -121,7 +121,7 @@ namespace WebFrontend.Handlers
 
         public void AdminSay(string message, string admin, AuthenticatedUser userInfo, IList<string> playerNames = null, string teamId = null, string squadId = null)
         {
-            if (userInfo == null || !core.PermissionsUtil.ValidateUser(userInfo.Token,
+            if (userInfo == null || !core.PermissionsUtil.ValidateUser(userInfo,
                                                    new PermissionSetEntity("gswat", new List<string> {"admin"})))
             {
                 throw new AuthorizationValidationException("You must be an administrator to send chat.");

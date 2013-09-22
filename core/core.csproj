@@ -66,11 +66,12 @@
   <ItemGroup>
     <Compile Include="CoreDependencyModule.cs" />
     <Compile Include="Logging\LogUtility.cs" />
+    <Compile Include="Roles\Models\AuthenticatedUser.cs" />
     <Compile Include="Roles\IRoleTableStoreUtility.cs" />
-    <Compile Include="Roles\PermissionSetEntity.cs" />
+    <Compile Include="Roles\Models\PermissionSetEntity.cs" />
     <Compile Include="Roles\PermissionsUtility.cs" />
     <Compile Include="Roles\RoleTableStoreUtility.cs" />
-    <Compile Include="Roles\UnboundPermissionSetEntity.cs" />
+    <Compile Include="Roles\Models\UnboundPermissionSetEntity.cs" />
     <Compile Include="TableStoreEntities\ChatMessageEntity.cs" />
     <Compile Include="ICore.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -107,7 +108,7 @@
     <Compile Include="Server\RConn\PlayerSubset.cs" />
     <Compile Include="Server\RConn\Protocol.cs" />
     <Compile Include="Server\RConn\Word.cs" />
-    <Compile Include="Roles\UserEntity.cs" />
+    <Compile Include="Roles\Models\UserEntity.cs" />
     <Compile Include="Utilities\ChatMessageCleaner.cs" />
     <Compile Include="Utilities\ICloudSettingsManager.cs" />
     <Compile Include="Utilities\Mailer.cs" />
@@ -134,7 +135,9 @@
     <Content Include="Roles\readme.txt" />
     <Content Include="Server\RConn\BF3_formatted_scrape.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

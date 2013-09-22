@@ -6,6 +6,7 @@ using System.Net;
 using System.Reflection;
 using System.Web.Script.Serialization;
 using core.Logging;
+using core.Roles.Models;
 using core.Utilities;
 
 namespace core.Roles
@@ -23,11 +24,10 @@ namespace core.Roles
         /// Attemps to validate a user given his OpenID token as well as a PermissionSet
         /// Every permission in the permissionSet parameter must be present in the user's permission set for the function to return true
         /// </summary>
-        /// <param name="token">OpenID token of the user to be validated</param>
+        /// <param name="user">AuthenticatedUser object which contains the user token to validate</param>
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
-        /// <param name="debugID">Only needed for debugging; leave blank.</param>
         /// <returns></returns>
-        bool ValidateUser(string token, PermissionSetEntity permissionSet, string debugID = "");
+        bool ValidateUser(IValidatableUser user, PermissionSetEntity permissionSet);
 
         /// <summary>
         /// Loads permissions for all plugins from the global config file.
@@ -81,31 +81,12 @@ namespace core.Roles
         /// </summary>
         /// <param name="token">Google auth token</param>
         /// <param name="permissionSet">PermissionSet containing all permissions for which the user is to be validated</param>
-        /// <param name="debugID">Debug parameter if we want to use our own ID</param>
         /// <returns></returns>
-        public bool ValidateUser(string token, PermissionSetEntity permissionSet, string debugID)
+        public bool ValidateUser(IValidatableUser user, PermissionSetEntity permissionSet)
         {
             try
             {
-                var userid = "";
-                if (debugID.Equals(""))
-                {
-                    var request = WebRequest.Create("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
-                    request.Method = "GET";
-                    using (var response = (HttpWebResponse) request.GetResponse())
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-                            var js = new JavaScriptSerializer();
-                            var obj = js.Deserialize<dynamic>(reader.ReadToEnd());
-                            userid = obj["user_id"];
-                        }
-                    }
-                }
-                else
-                {
-                    userid = debugID;
-                }
+                var userid = user.GetGoogleId();
 
                 //First check to see if the user is a Service Administrator (All permissions).  If so, validate as true.  
                 var serviceAdmins = settingsManager.GetConfigurationSettingValue("ServiceAdministrators").Split(',');
