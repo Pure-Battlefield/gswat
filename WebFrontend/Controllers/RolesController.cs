@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -76,34 +77,47 @@ namespace WebFrontend.Controllers
 
         public HttpResponseMessage Post(HttpRequestMessage request, AuthenticatedUser requestingUser, string id, string subresource, [FromBody]string confirmToken)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest,
+                                              "Updaing a user requires an id.  Specify 'me' for the current user.");
+            }
+            if (requestingUser == null)
+            {
+                request.CreateResponse(HttpStatusCode.BadRequest, "RequestingUser (with Token) must be specified.");
+            }
+
+            id = requestingUser.GetGoogleId();
+
+            if (string.IsNullOrEmpty(id))
+            {
+                request.CreateResponse(HttpStatusCode.BadRequest,
+                                       "Invalid Google user token.");
+            }
+
             switch (subresource)
             {
                 case "":
-                    if (id == "me")
-                    {
-                        
-                    }
-                    else if (id == "null")
-                    {
-                        
-                    }
-                    break;
+                    throw new NotImplementedException();
                 case "emailconfirmation":
+
                     if (string.IsNullOrEmpty(confirmToken))
                     {
                         return request.CreateResponse(HttpStatusCode.BadRequest, "No confirmation token provided.");
                     }
                     var confirmationToken = Guid.Parse(confirmToken);
 
-                    if (id == "me")
+                    var success = _roleUtility.ConfirmEmailToken(requestingUser, confirmationToken);
+
+                    if (!success)
                     {
-                        _roleUtility.ConfirmEmailAddress(confirmationToken, requestingUser.Token);
+                        return request.CreateResponse(HttpStatusCode.BadRequest, "Invalid confirmation token.");
                     }
-                    break;
+
+                    return request.CreateResponse(HttpStatusCode.OK);
                 default:
                     return request.CreateResponse(HttpStatusCode.BadRequest, "Invalid subresource specified");
             }
-            return null;
         }
 
         private HttpResponseMessage ValidateUserToAdd(User userToAdd, HttpRequestMessage request)

@@ -26,20 +26,6 @@ namespace UnitTest
             var tbl = tableClient.GetTableReference("users");
             tbl.DeleteIfExists();
         }
-
-        [Test]
-        public void CreateandValidateNewUserTest()
-        {
-            IPermissionsUtility perm = new PermissionsUtility(new RoleTableStoreUtility(settingsMgr.Object), settingsMgr.Object);
-            var core = new Core(perm, settingsMgr.Object);
-            var user = new UserEntity("12345","mail@mail.com","battlelogID",true, new PermissionSetEntity("GSWAT", new List<string> {"admin"}));
-            var authedUser = new Mock<IValidatableUser>();
-            authedUser.Setup(x => x.GetGoogleId()).Returns("12345");
-
-            core.PermissionsUtil.AddorUpdateUser(user);
-
-            Assert.IsTrue(core.PermissionsUtil.ValidateUser(authedUser.Object, new PermissionSetEntity("GSWAT", new List<string> { "admin" })));
-        }
         /*
         [Test]
         public void PermissionDeniedTest()

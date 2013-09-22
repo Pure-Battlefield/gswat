@@ -14,13 +14,6 @@ namespace core.Roles
     public interface IPermissionsUtility
     {
         /// <summary>
-        /// Adds or updates a user in the data store.  If a user is updated to have an empty PermissionSetEntity, 
-        /// the user will be removed from the data store.  
-        /// </summary>
-        /// <param name="user">The user to be added to the data store or updated.</param>
-        void AddorUpdateUser(UserEntity user);
-
-        /// <summary>
         /// Attemps to validate a user given his OpenID token as well as a PermissionSet
         /// Every permission in the permissionSet parameter must be present in the user's permission set for the function to return true
         /// </summary>
@@ -44,30 +37,6 @@ namespace core.Roles
         {
             RoleUtility = roleUtility;
             this.settingsManager = settingsManager;
-        }
-
-        /// <summary>
-        /// Adds or updates the user in Table Store using the Role Utility.  
-        /// If the user has no Google ID, an UnboundPermissionsEntity will be created.  The permissions will be stored
-        /// in the UnboundPermissionsEntity until the user logs in for the first time, at which time the proper UserEntity
-        /// will be created.  
-        /// </summary>
-        /// <param name="user">The UserEntity to be created.</param>
-        public void AddorUpdateUser(UserEntity user)
-        {
-            if (user.GoogleIDNumber != null)
-            {
-                RoleUtility.SetUserEntity(user);
-            }
-            //If the GoogleID is unknown, we need to make an UnboundPermissionSet to be bound upon verification.  
-            else if (user.Email != null)
-            {
-                var ubps = new UnboundPermissionSetEntity();
-                ubps.Guid = user.Email;
-                ubps.Permissions = user.Permissions;
-                ubps.Namespace = user.Permissions.Namespace;
-                RoleUtility.AddOrUpdateUnboundPermission(ubps);
-            }
         }
 
         /// <summary>
@@ -98,7 +67,7 @@ namespace core.Roles
                 var existingUser = RoleUtility.GetUserEntity(permissionSet.Namespace, userid);
 
                 //Resharper is amazing - this returns false if any permissions are not found or the user is null, otherwise returns true
-                var validated = existingUser != null && permissionSet.PermissionSet.All(permission => existingUser.Permissions.PermissionSet.Contains(permission));
+                var validated = existingUser != null && permissionSet.GetPermissionSet().All(permission => existingUser.Permissions.GetPermissionSet().Contains(permission));
 
                 return validated;
             }
