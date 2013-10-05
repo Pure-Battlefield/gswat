@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 
 namespace core.Roles.Models
 {
@@ -26,9 +27,7 @@ namespace core.Roles.Models
             set
             {
                 _serializedPermissionSetEntity = value;
-                var righter = new StringReader(value);
-                var cereal = new XmlSerializer(typeof(PermissionSetEntity));
-                _permissions = (PermissionSetEntity)cereal.Deserialize(righter);
+                _permissions = JsonConvert.DeserializeObject<PermissionSetEntity>(value);
                 PartitionKey = _permissions.Namespace;
             }
         }
@@ -39,10 +38,7 @@ namespace core.Roles.Models
             set
             {
                 _permissions = value;
-                var righter = new StringWriter();
-                var cereal = new XmlSerializer(typeof (PermissionSetEntity));
-                cereal.Serialize(righter, value);
-                _serializedPermissionSetEntity = righter.ToString();
+                _serializedPermissionSetEntity = JsonConvert.SerializeObject(_permissions);
                 PartitionKey = value.Namespace;
             }
         } 
