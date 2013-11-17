@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Net;
+using System.Web.Mvc;
+using WebFrontend.Exceptions;
+using WebFrontend.Utilities;
 
 namespace WebFrontend
 {
@@ -6,7 +9,6 @@ namespace WebFrontend
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
         }
     }
 }

@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web;
+using System.Web.Helpers;
 using System.Web.Http;
+using System.Web.Mvc;
+using Newtonsoft.Json;
+using WebFrontend.Exceptions;
 using WebFrontend.Models;
 using core;
 using core.Roles;
 using core.Roles.Models;
 using core.Utilities;
+using WebFrontend.Utilities;
 
 namespace WebFrontend.Controllers
 {
+    [HandleFrontendExceptions]
     public class RolesController : ApiController
     {
         private readonly ICore _core;
@@ -25,27 +33,47 @@ namespace WebFrontend.Controllers
             _mailer = mailer;
         }
 
-        public HttpResponseMessage Get(AuthenticatedUser requestingUser)
+        public JsonResult Get(AuthenticatedUser requestingUser, string id = null)
         {
-            if(requestingUser == null)
+            
+            if(requestingUser == null || !_core.PermissionsUtil.ValidateUser(requestingUser,
+                                                new PermissionSetEntity("gswat", new List<string> {"operations"})))
             {
-                return Request.CreateResponse(HttpStatusCode.Forbidden,
-                                              "You must be an administrator to view user roles.");
+                throw new UnauthorizedException("You must be a member of operations to view users.");
             }
 
+            if (id != null)
+            {
+                var userEntity = _roleUtility.GetUserEntity("gswat", id);
+                if (userEntity == null)
+                {
+                    throw new UserNotFoundException(String.Format("User with id {0} not found", id));
+                }
+                //TODO: namespace change when multi-server/plugin support added
+                var user = new User
+                           {
+                               Email = userEntity.Email,
+                               GoogleId = Int64.Parse(userEntity.GoogleIDNumber),
+                               Namespace = "gswat",
+                               Permissions = new List<string>(userEntity.Permissions.GetPermissionSet())
+                           };
+
+                var result = new JsonResult {Data = user};
+                return result;
+            }
             //TODO:  Fill in when PermissionsUtility has code to get all users.  
-            return Request.CreateResponse(HttpStatusCode.OK);
+            throw new NotImplementedException();
+            
         }
 
-        public HttpResponseMessage Put(HttpRequestMessage request, AuthenticatedUser requestingUser, [FromBody] User userToAdd)
+        public HttpStatusCodeResult Put(HttpRequestMessage request, AuthenticatedUser requestingUser, [FromBody] User userToAdd)
         {
             if (requestingUser == null || !_core.PermissionsUtil.ValidateUser(requestingUser,
                                                    new PermissionSetEntity("gswat", new List<string> {"operations"})))
             {
-                return request.CreateResponse(HttpStatusCode.Forbidden,
-                                              "You must be an administrator to add or update.");
+                throw new UnauthorizedException("You must be an administrator to add or update.");
             }
-            var response = ValidateUserToAdd(userToAdd, request);
+            var response = ValidateUserToAdd(userToAdd);
             if (response != null)
             {
                 return response;
@@ -65,14 +93,15 @@ namespace WebFrontend.Controllers
             }
             catch (Exception)
             {
-                return request.CreateResponse(HttpStatusCode.InternalServerError,
+                
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError,
                                               "User could not be added.");
             }
 
             //TODO: Find out what the link needs to be from frontend devs!
             _mailer.SendMail(userToAdd.Email, "You have been granted permissions on GSWAT", "<a>Click me!</a> (If you can't click this link, enter this special code at the given place on the site: " + unboundPermissionsGuid);
 
-            return request.CreateResponse(HttpStatusCode.Created);
+            return new HttpStatusCodeResult(HttpStatusCode.Created);
         }
 
         public HttpResponseMessage Post(HttpRequestMessage request, AuthenticatedUser requestingUser, string id, string subresource, [FromBody]string confirmToken)
@@ -120,36 +149,36 @@ namespace WebFrontend.Controllers
             }
         }
 
-        private HttpResponseMessage ValidateUserToAdd(User userToAdd, HttpRequestMessage request)
+        private HttpStatusCodeResult ValidateUserToAdd(User userToAdd)
         {
             if (userToAdd == null)
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest,
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,
                                               "userToAdd is null.");
             }
             if (string.IsNullOrEmpty(userToAdd.Email))
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest,
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,
                                               "User e-mail address is empty or null.");
             }
             if (string.IsNullOrEmpty(userToAdd.Email.Trim()))
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest,
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,
                                               "User e-mail address was just a bunch of spaces.  You monster.");
             }
             if (string.IsNullOrEmpty(userToAdd.Namespace))
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest,
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,
                                               "User Namespace is empty or null.");
             }
             if (string.IsNullOrEmpty(userToAdd.Namespace.Trim()))
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest,
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,
                                               "User Namespace was just a bunch of spaces.  You monster.");
             }
             if (userToAdd.Permissions == null)
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest,
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,
                                               "The Permissions list was null.");
             }
             return null;

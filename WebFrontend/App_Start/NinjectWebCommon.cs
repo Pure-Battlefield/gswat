@@ -1,5 +1,11 @@
 using System.Web.Http;
+using System.Web.Mvc;
 using core;
+using core.Roles;
+using core.Utilities;
+using Ninject.Web.Mvc.FilterBindingSyntax;
+using WebFrontend.Handlers;
+using WebFrontend.Utilities;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(WebFrontend.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(WebFrontend.App_Start.NinjectWebCommon), "Stop")]

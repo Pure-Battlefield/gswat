@@ -69,9 +69,6 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\packages\ninject.extensions.conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject.Web.Common">
       <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
@@ -178,6 +175,8 @@
     <Compile Include="Controllers\ServerInfoController.cs" />
     <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Exceptions\AuthorizationValidationException.cs" />
+    <Compile Include="Exceptions\UnauthorizedException.cs" />
+    <Compile Include="Exceptions\UserNotFoundException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -191,6 +190,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\HandleFrontendExceptionsAttribute.cs" />
     <Compile Include="Utilities\SquadNameConverter.cs" />
     <Compile Include="Utilities\TeamNameConverter.cs" />
     <Content Include="Content\themes\base\CSS\bootstrap3.css" />
@@ -262,6 +262,7 @@
     <Content Include="Scripts\models\model.server.js" />
     <Content Include="Scripts\libraries\tinycon-0.5.min.js" />
     <Content Include="Scripts\libraries\underscore-1.4.3.min.js" />
+    <Content Include="Scripts\models\model.users.js" />
     <Content Include="Scripts\router.js" />
     <Content Include="Scripts\tests\account.js" />
     <Content Include="Scripts\tests\chat.js" />
@@ -275,6 +276,7 @@
     <Content Include="Scripts\views\view.chat.js" />
     <Content Include="Scripts\views\view.globals.js" />
     <Content Include="Scripts\views\view.home.js" />
+    <Content Include="Scripts\views\view.users.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

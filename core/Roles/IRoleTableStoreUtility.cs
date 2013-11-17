@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using core.Roles.Models;
 
 namespace core.Roles
@@ -28,6 +30,13 @@ namespace core.Roles
         /// <param name="googleId"></param>
         /// <returns></returns>
         UserEntity GetUserEntity(string nameSpace, string googleId);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nameSpace"></param>
+        /// <returns></returns>
+        IEnumerable<UserEntity> GetUserEntitiesInNamespace(string nameSpace);
 
         /// <summary>
         /// 

@@ -1,6 +1,4 @@
-﻿using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using WebFrontend.Handlers;
 using core;
 using core.Roles;
@@ -17,6 +15,7 @@ namespace WebFrontend.App_Start
             this.Bind<IMessagesHandler>().To<MessagesHandler>();
             this.Bind<IPermissionsUtility>().To<PermissionsUtility>();
             this.Bind<IRoleTableStoreUtility>().To<RoleTableStoreUtility>();
+            this.Bind<IMailer>().To<Mailer>().InSingletonScope();
         }
     }
 }

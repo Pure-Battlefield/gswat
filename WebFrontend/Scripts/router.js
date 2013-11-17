@@ -154,6 +154,18 @@
 			});
 		},
 
+		render_users: function(){
+		    var files = [
+		        PBF.CDN + 'Scripts/models/model.users.js',
+                PBF.CDN + 'Scripts/views/view.users.js'
+		    ];
+		    PBF.load(files, function () {
+		        var users = PBF.get({ model: { name: 'users_model' } });
+		        var users_view = PBF.get({ view: { name: 'users' }, model: users });
+		        PBF.render(users_view);
+		    });
+		},
+
 		routes:{
 			'home'                 :'render_home',
 			'login'                :'render_login',
@@ -166,7 +178,8 @@
 			'coming-soon'          :'render_coming_soon',
 			'map-rotation'         :'render_map_rotation',
 			'map-rotation/new'     :'render_map_rotation_form',
-			'map-rotation/edit/:id':'render_map_rotation_form'
+			'map-rotation/edit/:id':'render_map_rotation_form',
+            'users'                :'render_users'
 		}
 	});
 }(window,jQuery));

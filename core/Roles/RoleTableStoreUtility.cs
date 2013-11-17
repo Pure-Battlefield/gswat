@@ -98,6 +98,26 @@ namespace core.Roles
             }
             catch (Exception e)
             {
+                //TODO: Improve this pokemon exception handling.
+                LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
+            }
+            return null;
+        }
+
+        public IEnumerable<UserEntity> GetUserEntitiesInNamespace(string nameSpace)
+        {
+            try
+            {
+                var query =
+                    new TableQuery<UserEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey",
+                        QueryComparisons.Equal, nameSpace));
+                var result = userTable.ExecuteQuery(query);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                //TODO: Improve this pokemon exception handling.
                 LogUtility.Log(GetType().Name, MethodBase.GetCurrentMethod().Name, e.Message);
             }
             return null;

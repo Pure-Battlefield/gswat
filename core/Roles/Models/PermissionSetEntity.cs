@@ -36,7 +36,7 @@ namespace core.Roles.Models
             }
         }
 
-        public IEnumerable<string> GetPermissionSet()
+        public IList<string> GetPermissionSet()
         {
             return _permissionSet.AsReadOnly();
         }
@@ -95,7 +95,7 @@ namespace core.Roles.Models
             return false;
         }
 
-        internal void SerializePermissionSet()
+        private void SerializePermissionSet()
         {
             _serializedPermissionSet = JsonConvert.SerializeObject(_permissionSet);
 
