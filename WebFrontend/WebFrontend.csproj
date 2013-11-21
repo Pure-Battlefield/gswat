@@ -322,6 +322,14 @@
     <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.ttf" />
     <Content Include="Content\themes\base\fonts\glyphiconshalflings-regular.woff" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="AppInsightsAgent\UnifiedBootstrap.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AppInsightsAgent\UnifiedBootstrap.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

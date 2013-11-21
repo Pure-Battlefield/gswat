@@ -12,6 +12,11 @@
       <Setting name="SmtpPassword" value="" />
       <Setting name="SmtpSender" value="" />
       <Setting name="SmtpUseSSL" value="" />
+      <Setting name="Microsoft.AppInsights.AccountId" value="" />
+      <Setting name="Microsoft.AppInsights.InstrumentationKey" value="" />
+      <Setting name="Microsoft.AppInsights.EnableMonitoring" value="false" />
+      <!-- Uncomment the following section if you want to change the Display Name of your application on the Application Insights Portal. (Default is your WebRole Name)-->
+      <Setting name="Microsoft.AppInsights.DisplayName" value="GSWAT Dev" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

@@ -8,6 +8,10 @@
         </Bindings>
       </Site>
     </Sites>
+    <Startup>
+      <Task commandLine="AppInsightsAgent\UnifiedBootstrap.bat" executionContext="elevated" taskType="background">
+      </Task>
+    </Startup>
     <Endpoints>
       <InputEndpoint name="HTTP" protocol="http" port="80" />
     </Endpoints>
@@ -26,6 +30,11 @@
       <Setting name="SmtpPassword" />
       <Setting name="SmtpSender" />
       <Setting name="SmtpUseSSL" />
+      <Setting name="Microsoft.AppInsights.AccountId" />
+      <Setting name="Microsoft.AppInsights.InstrumentationKey" />
+      <Setting name="Microsoft.AppInsights.EnableMonitoring" />
+      <!-- Uncomment the following section if you want to change the Display Name of your application on the Application Insights Portal. (Default is your WebRole Name)-->
+      <Setting name="Microsoft.AppInsights.DisplayName" />
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
