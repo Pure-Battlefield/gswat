@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -50,20 +51,13 @@ namespace WebFrontend.Controllers
                     throw new UserNotFoundException(String.Format("User with id {0} not found", id));
                 }
                 //TODO: namespace change when multi-server/plugin support added
-                var user = new User
-                           {
-                               Email = userEntity.Email,
-                               GoogleId = Int64.Parse(userEntity.GoogleIDNumber),
-                               Namespace = "gswat",
-                               Permissions = new List<string>(userEntity.Permissions.GetPermissionSet())
-                           };
-
+                var user = UserEntityToUser(userEntity);
                 var result = new JsonResult {Data = user};
                 return result;
             }
-            //TODO:  Fill in when PermissionsUtility has code to get all users.  
-            throw new NotImplementedException();
-            
+            //TODO:  Update with correct namespace.  See previous TODO.  
+            var users = new JsonResult { Data =UserEntityToUser(_roleUtility.GetUserEntitiesInNamespace("gswat")) };
+            return users;
         }
 
         public HttpStatusCodeResult Put(HttpRequestMessage request, AuthenticatedUser requestingUser, [FromBody] User userToAdd)
@@ -183,5 +177,23 @@ namespace WebFrontend.Controllers
             }
             return null;
         }
+
+        private User UserEntityToUser(UserEntity userEntity)
+        {
+            var user = new User
+            {
+                Email = userEntity.Email,
+                GoogleId = Int64.Parse(userEntity.GoogleIDNumber),
+                Namespace = "gswat",
+                Permissions = new List<string>(userEntity.Permissions.GetPermissionSet())
+            };
+            return user;
+        }
+
+        private List<User> UserEntityToUser(IEnumerable<UserEntity> userEntities)
+        {
+            var users = userEntities.Select(UserEntityToUser).ToList();
+            return users;
+        } 
     }
 }

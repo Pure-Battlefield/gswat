@@ -10,7 +10,7 @@ using WebFrontend.Handlers;
 using WebFrontend.Models;
 using core.TableStoreEntities;
 
-namespace UnitTest
+namespace UnitTest.WebFrontend.Controllers.Messages
 {
     [TestFixture]
     public class MessagesControllerTests
