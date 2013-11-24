@@ -37,6 +37,21 @@
 			render: function(){
 				this.$el.html(ich.tpl_account());
 			}
-		})
+		}),
+		
+        emailconfirmation: Backbone.View.extend({
+            id: 'emailconfirmation',
+            events: {
+                
+            },
+            
+            initialize: function() {
+                
+            },
+            
+            render: function() {
+                this.$el.html(ich.tpl_emailconfirmation(this.model.toJSON()));
+            }
+        })
 	});
 }(window,jQuery,_,ich));

@@ -211,6 +211,7 @@
     <Content Include="Scripts\libraries\keyboard-0.4.1.min.js" />
     <Content Include="Scripts\libraries\moment-2.0.0.min.js" />
     <Content Include="Scripts\libraries\mustache-0.7.3.js" />
+    <Content Include="Scripts\libraries\purl.js" />
     <Content Include="Scripts\libraries\sinon-1.6.0.js" />
     <Content Include="Scripts\libraries\toe-1.2.min.js" />
     <Content Include="Content\themes\base\CSS\structure.css" />
